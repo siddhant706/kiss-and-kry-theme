@@ -39,6 +39,11 @@
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
 
 {% style %}
+  .shopify-block:has(> .ai-trust-section-{{ ai_gen_id }}) {
+    width: 100%;
+    align-self: stretch;
+  }
+
   .ai-trust-section-{{ ai_gen_id }} {
     position: relative;
     width: 100%;

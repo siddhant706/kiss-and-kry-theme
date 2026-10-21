@@ -47,6 +47,11 @@
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
 
 {% style %}
+  .shopify-block:has(> .ai-hero-section-{{ ai_gen_id }}) {
+    width: 100%;
+    align-self: stretch;
+  }
+
   .ai-hero-section-{{ ai_gen_id }} {
     position: relative;
     width: 100%;
@@ -109,6 +114,13 @@
     gap: 40px;
     align-items: center;
   }
+
+  {% if block.settings.show_event_card == false %}
+    .ai-hero-container-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      max-width: 800px;
+    }
+  {% endif %}
 
   .ai-hero-left-{{ ai_gen_id }} {
     display: flex;
@@ -376,82 +388,98 @@
     {% endif %}
   </div>
 
-  <div class="ai-hero-overlay-{{ ai_gen_id }}"></div>
+  {% if block.settings.show_overlay != false and block.settings.overlay_opacity > 0 %}
+    <div class="ai-hero-overlay-{{ ai_gen_id }}"></div>
+  {% endif %}
 
   <div class="ai-hero-container-{{ ai_gen_id }}">
     <div class="ai-hero-left-{{ ai_gen_id }}">
-      {% if block.settings.eyebrow != blank %}
+      {% if block.settings.show_eyebrow != false and block.settings.eyebrow != blank %}
         <div class="ai-hero-eyebrow-{{ ai_gen_id }}">{{ block.settings.eyebrow }}</div>
       {% endif %}
 
-      {% if block.settings.title != blank %}
+      {% if block.settings.show_title != false and block.settings.title != blank %}
         <div class="ai-hero-title-{{ ai_gen_id }}">{{ block.settings.title }}</div>
       {% endif %}
 
-      {% if block.settings.subheading != blank %}
+      {% if block.settings.show_subheading != false and block.settings.subheading != blank %}
         <div class="ai-hero-subheading-{{ ai_gen_id }}">{{ block.settings.subheading }}</div>
       {% endif %}
 
-      {% if block.settings.content != blank %}
+      {% if block.settings.show_content != false and block.settings.content != blank %}
         <div class="ai-hero-content-{{ ai_gen_id }}">{{ block.settings.content }}</div>
       {% endif %}
 
-      {% if block.settings.button_text != blank %}
+      {% if block.settings.show_button != false and block.settings.button_text != blank %}
         <a href="{{ block.settings.button_link }}" class="ai-hero-cta-{{ ai_gen_id }}">
           {{ block.settings.button_text }}
         </a>
       {% endif %}
 
-      <div class="ai-hero-trust-indicators-{{ ai_gen_id }}">
-        {% for i in (1..4) %}
-          {% liquid
-            assign icon_key = 'trust_icon_' | append: i
-            assign text_key = 'trust_text_' | append: i
-            assign icon = block.settings[icon_key]
-            assign text = block.settings[text_key]
-          %}
+      {% if block.settings.show_trust_indicators != false %}
+        <div class="ai-hero-trust-indicators-{{ ai_gen_id }}">
+          {% for i in (1..4) %}
+            {% liquid
+              assign show_item_key = 'show_trust_item_' | append: i
+              assign show_item = block.settings[show_item_key]
+              assign icon_key = 'trust_icon_' | append: i
+              assign text_key = 'trust_text_' | append: i
+              assign icon = block.settings[icon_key]
+              assign text = block.settings[text_key]
+            %}
 
-          <div class="ai-hero-trust-item-{{ ai_gen_id }}">
-            <div class="ai-hero-trust-icon-{{ ai_gen_id }}">
-              {% if icon %}
-                <img src="{{ icon | image_url: width: 200 }}" alt="{{ text | escape }}" loading="lazy">
-              {% else %}
-                <div class="ai-hero-trust-icon-placeholder-{{ ai_gen_id }}">
-                  {{ 'image' | placeholder_svg_tag }}
+            {% if show_item != false %}
+              <div class="ai-hero-trust-item-{{ ai_gen_id }}">
+                <div class="ai-hero-trust-icon-{{ ai_gen_id }}">
+                  {% if icon %}
+                    <img
+                      src="{{ icon | image_url: width: 200 }}"
+                      alt="{{ text | escape }}"
+                      loading="lazy"
+                      width="{{ icon.width }}"
+                      height="{{ icon.height }}"
+                    >
+                  {% else %}
+                    <div class="ai-hero-trust-icon-placeholder-{{ ai_gen_id }}">
+                      {{ 'image' | placeholder_svg_tag }}
+                    </div>
+                  {% endif %}
                 </div>
-              {% endif %}
-            </div>
-            {% if text != blank %}
-              <div class="ai-hero-trust-text-{{ ai_gen_id }}">{{ text }}</div>
+                {% if text != blank %}
+                  <div class="ai-hero-trust-text-{{ ai_gen_id }}">{{ text }}</div>
+                {% endif %}
+              </div>
             {% endif %}
-          </div>
-        {% endfor %}
-      </div>
+          {% endfor %}
+        </div>
+      {% endif %}
     </div>
 
-    <div class="ai-hero-right-{{ ai_gen_id }}">
-      <div class="ai-hero-event-card-{{ ai_gen_id }}">
-        {% if block.settings.event_label != blank %}
-          <div class="ai-hero-event-label-{{ ai_gen_id }}">{{ block.settings.event_label }}</div>
-        {% endif %}
+    {% if block.settings.show_event_card != false %}
+      <div class="ai-hero-right-{{ ai_gen_id }}">
+        <div class="ai-hero-event-card-{{ ai_gen_id }}">
+          {% if block.settings.show_event_label != false and block.settings.event_label != blank %}
+            <div class="ai-hero-event-label-{{ ai_gen_id }}">{{ block.settings.event_label }}</div>
+          {% endif %}
 
-        {% if block.settings.event_name != blank %}
-          <div class="ai-hero-event-name-{{ ai_gen_id }}">{{ block.settings.event_name }}</div>
-        {% endif %}
+          {% if block.settings.show_event_name != false and block.settings.event_name != blank %}
+            <div class="ai-hero-event-name-{{ ai_gen_id }}">{{ block.settings.event_name }}</div>
+          {% endif %}
 
-        {% if block.settings.event_date != blank %}
-          <div class="ai-hero-event-date-{{ ai_gen_id }}">{{ block.settings.event_date }}</div>
-        {% endif %}
+          {% if block.settings.show_event_date != false and block.settings.event_date != blank %}
+            <div class="ai-hero-event-date-{{ ai_gen_id }}">{{ block.settings.event_date }}</div>
+          {% endif %}
 
-        {% if block.settings.event_location != blank %}
-          <div class="ai-hero-event-location-{{ ai_gen_id }}">{{ block.settings.event_location }}</div>
-        {% endif %}
+          {% if block.settings.show_event_location != false and block.settings.event_location != blank %}
+            <div class="ai-hero-event-location-{{ ai_gen_id }}">{{ block.settings.event_location }}</div>
+          {% endif %}
 
-        {% if block.settings.event_stall != blank %}
-          <div class="ai-hero-event-stall-{{ ai_gen_id }}">{{ block.settings.event_stall }}</div>
-        {% endif %}
+          {% if block.settings.show_event_stall != false and block.settings.event_stall != blank %}
+            <div class="ai-hero-event-stall-{{ ai_gen_id }}">{{ block.settings.event_stall }}</div>
+          {% endif %}
+        </div>
       </div>
-    </div>
+    {% endif %}
   </div>
 </div>
 
@@ -467,6 +495,12 @@
       "type": "image_picker",
       "id": "background_image",
       "label": "Background image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay",
+      "label": "Show overlay",
+      "default": true
     },
     {
       "type": "color",
@@ -519,6 +553,12 @@
       "content": "Left content"
     },
     {
+      "type": "checkbox",
+      "id": "show_eyebrow",
+      "label": "Show eyebrow",
+      "default": true
+    },
+    {
       "type": "richtext",
       "id": "eyebrow",
       "label": "Eyebrow text",
@@ -539,6 +579,12 @@
       "id": "eyebrow_color",
       "label": "Eyebrow color",
       "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Show title",
+      "default": true
     },
     {
       "type": "richtext",
@@ -563,6 +609,12 @@
       "default": "#ffffff"
     },
     {
+      "type": "checkbox",
+      "id": "show_subheading",
+      "label": "Show subheading",
+      "default": true
+    },
+    {
       "type": "richtext",
       "id": "subheading",
       "label": "Subheading",
@@ -583,6 +635,12 @@
       "id": "subheading_color",
       "label": "Subheading color",
       "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_content",
+      "label": "Show content",
+      "default": true
     },
     {
       "type": "richtext",
@@ -609,6 +667,12 @@
     {
       "type": "header",
       "content": "CTA button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button",
+      "label": "Show button",
+      "default": true
     },
     {
       "type": "text",
@@ -710,6 +774,12 @@
       "content": "Trust indicators"
     },
     {
+      "type": "checkbox",
+      "id": "show_trust_indicators",
+      "label": "Show trust indicators",
+      "default": true
+    },
+    {
       "type": "range",
       "id": "trust_icon_size",
       "label": "Icon size",
@@ -736,6 +806,12 @@
       "default": "#ffffff"
     },
     {
+      "type": "checkbox",
+      "id": "show_trust_item_1",
+      "label": "Show trust item 1",
+      "default": true
+    },
+    {
       "type": "image_picker",
       "id": "trust_icon_1",
       "label": "Icon 1"
@@ -745,6 +821,12 @@
       "id": "trust_text_1",
       "label": "Text 1",
       "default": "<p>BAMBOO VISCOSE</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_item_2",
+      "label": "Show trust item 2",
+      "default": true
     },
     {
       "type": "image_picker",
@@ -758,6 +840,12 @@
       "default": "<p>ULTRA SOFT</p>"
     },
     {
+      "type": "checkbox",
+      "id": "show_trust_item_3",
+      "label": "Show trust item 3",
+      "default": true
+    },
+    {
       "type": "image_picker",
       "id": "trust_icon_3",
       "label": "Icon 3"
@@ -767,6 +855,12 @@
       "id": "trust_text_3",
       "label": "Text 3",
       "default": "<p>BREATHABLE & GENTLE</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_item_4",
+      "label": "Show trust item 4",
+      "default": true
     },
     {
       "type": "image_picker",
@@ -782,6 +876,18 @@
     {
       "type": "header",
       "content": "Event card"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_event_card",
+      "label": "Show event card",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_event_label",
+      "label": "Show event label",
+      "default": true
     },
     {
       "type": "richtext",
@@ -806,6 +912,12 @@
       "default": "#ffffff"
     },
     {
+      "type": "checkbox",
+      "id": "show_event_name",
+      "label": "Show event name",
+      "default": true
+    },
+    {
       "type": "richtext",
       "id": "event_name",
       "label": "Event name",
@@ -826,6 +938,12 @@
       "id": "event_name_color",
       "label": "Event name color",
       "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_event_date",
+      "label": "Show event date",
+      "default": true
     },
     {
       "type": "richtext",
@@ -850,6 +968,12 @@
       "default": "#ffffff"
     },
     {
+      "type": "checkbox",
+      "id": "show_event_location",
+      "label": "Show event location",
+      "default": true
+    },
+    {
       "type": "richtext",
       "id": "event_location",
       "label": "Location",
@@ -870,6 +994,12 @@
       "id": "event_location_color",
       "label": "Location color",
       "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_event_stall",
+      "label": "Show event stall",
+      "default": true
     },
     {
       "type": "richtext",
