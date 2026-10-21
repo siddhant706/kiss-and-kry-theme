@@ -1,0 +1,1644 @@
+{% doc %}
+  @prompt
+    generate a full page width section with a background image, on which add eyebrow text, title, subheading, context , CTA Button, 4 trust indicators with icons, then on right bottom an event card as event name , date, location and stall no. follow glassmorphism for each element., remove glassmorph from title , eyebrow, sub heading , context and CTA Buttons as well then align all this elements in this section on left and event card on right , now allow me change size , corners, font size, color , font of every element in this section also align all this elements perfectly in this section., fix the position of each element correctly in this section every element must be aligned perfectly , paralelled, align event card paralally with trust indicators also add pulse glow on boarder of event card to highlight it also allow me to manager spacing between each and every element in this section also add hover to glow corners of every eleemnt in this section as CTA , trust indicators., make all this text as rich text in this section.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-hero-glassmorphism-{{ ai_gen_id }} {
+    display: block;
+    position: relative;
+    width: 100%;
+    min-height: {{ block.settings.section_height }}px;
+    overflow: hidden;
+  }
+
+  .ai-hero-glassmorphism-background-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .ai-hero-glassmorphism-background-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-hero-glassmorphism-background-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ai-hero-glassmorphism-background-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 500px;
+    max-height: 500px;
+  }
+
+  .ai-hero-glassmorphism-empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .ai-hero-glassmorphism-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: {{ block.settings.overlay_color }};
+    opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};
+    z-index: 2;
+  }
+
+  .ai-hero-glassmorphism-content-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 3;
+    padding: {{ block.settings.section_padding }}px 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: {{ block.settings.content_gap }}px;
+    align-items: {{ block.settings.vertical_alignment }};
+    min-height: {{ block.settings.section_height }}px;
+  }
+
+  .ai-hero-glassmorphism-main-content-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .ai-hero-glassmorphism-text-wrapper-{{ ai_gen_id }} {
+    max-width: {{ block.settings.text_max_width }}px;
+  }
+
+  .ai-hero-glassmorphism-eyebrow-{{ ai_gen_id }} {
+    font-family: {{ block.settings.eyebrow_font.family }}, {{ block.settings.eyebrow_font.fallback_families }};
+    font-weight: {{ block.settings.eyebrow_font.weight }};
+    font-size: {{ block.settings.eyebrow_size }}px;
+    color: {{ block.settings.eyebrow_color }};
+    margin: 0 0 {{ block.settings.eyebrow_spacing }}px 0;
+    text-transform: uppercase;
+    letter-spacing: {{ block.settings.eyebrow_letter_spacing }}px;
+    line-height: {{ block.settings.eyebrow_line_height }};
+  }
+
+  .ai-hero-glassmorphism-title-{{ ai_gen_id }} {
+    font-family: {{ block.settings.title_font.family }}, {{ block.settings.title_font.fallback_families }};
+    font-weight: {{ block.settings.title_font.weight }};
+    font-size: {{ block.settings.title_size }}px;
+    color: {{ block.settings.title_color }};
+    margin: 0 0 {{ block.settings.title_spacing }}px 0;
+    line-height: {{ block.settings.title_line_height }};
+    letter-spacing: {{ block.settings.title_letter_spacing }}px;
+  }
+
+  .ai-hero-glassmorphism-subheading-{{ ai_gen_id }} {
+    font-family: {{ block.settings.subheading_font.family }}, {{ block.settings.subheading_font.fallback_families }};
+    font-weight: {{ block.settings.subheading_font.weight }};
+    font-size: {{ block.settings.subheading_size }}px;
+    color: {{ block.settings.subheading_color }};
+    margin: 0 0 {{ block.settings.subheading_spacing }}px 0;
+    line-height: {{ block.settings.subheading_line_height }};
+    letter-spacing: {{ block.settings.subheading_letter_spacing }}px;
+  }
+
+  .ai-hero-glassmorphism-context-{{ ai_gen_id }} {
+    font-family: {{ block.settings.context_font.family }}, {{ block.settings.context_font.fallback_families }};
+    font-weight: {{ block.settings.context_font.weight }};
+    font-size: {{ block.settings.context_size }}px;
+    color: {{ block.settings.context_color }};
+    line-height: {{ block.settings.context_line_height }};
+    letter-spacing: {{ block.settings.context_letter_spacing }}px;
+    margin: 0 0 {{ block.settings.context_spacing }}px 0;
+  }
+
+  .ai-hero-glassmorphism-cta-wrapper-{{ ai_gen_id }} {
+    margin-top: {{ block.settings.cta_spacing }}px;
+  }
+
+  .ai-hero-glassmorphism-cta-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: {{ block.settings.cta_padding_vertical }}px {{ block.settings.cta_padding_horizontal }}px;
+    background-color: {{ block.settings.cta_bg_color }};
+    color: {{ block.settings.cta_text_color }};
+    text-decoration: none;
+    border-radius: {{ block.settings.cta_border_radius }}px;
+    font-family: {{ block.settings.cta_font.family }}, {{ block.settings.cta_font.fallback_families }};
+    font-weight: {{ block.settings.cta_font.weight }};
+    font-size: {{ block.settings.cta_font_size }}px;
+    letter-spacing: {{ block.settings.cta_letter_spacing }}px;
+    transition: all 0.3s ease;
+    border: {{ block.settings.cta_border_width }}px solid {{ block.settings.cta_border_color }};
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-hero-glassmorphism-cta-{{ ai_gen_id }}::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: {{ block.settings.cta_border_radius }}px;
+    padding: {{ block.settings.cta_glow_width }}px;
+    background: linear-gradient(45deg, {{ block.settings.cta_glow_color }}, transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .ai-hero-glassmorphism-cta-{{ ai_gen_id }}:hover::before {
+    opacity: {{ block.settings.cta_glow_opacity | divided_by: 100.0 }};
+  }
+
+  .ai-hero-glassmorphism-cta-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.cta_hover_bg_color }};
+    color: {{ block.settings.cta_hover_text_color }};
+    transform: translateY(-2px);
+  }
+
+  .ai-hero-glassmorphism-trust-indicators-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.trust_columns }}, 1fr);
+    gap: {{ block.settings.trust_gap }}px;
+    max-width: {{ block.settings.text_max_width }}px;
+    margin-top: {{ block.settings.trust_spacing }}px;
+  }
+
+  .ai-hero-glassmorphism-trust-item-{{ ai_gen_id }} {
+    background: rgba(255, 255, 255, {{ block.settings.glass_opacity | divided_by: 100.0 }});
+    backdrop-filter: blur({{ block.settings.glass_blur }}px);
+    border: {{ block.settings.trust_border_width }}px solid rgba(255, 255, 255, {{ block.settings.glass_border_opacity | divided_by: 100.0 }});
+    border-radius: {{ block.settings.trust_border_radius }}px;
+    padding: {{ block.settings.trust_padding }}px;
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.trust_icon_gap }}px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .ai-hero-glassmorphism-trust-item-{{ ai_gen_id }}::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: {{ block.settings.trust_border_radius }}px;
+    padding: {{ block.settings.trust_glow_width }}px;
+    background: linear-gradient(45deg, {{ block.settings.trust_glow_color }}, transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .ai-hero-glassmorphism-trust-item-{{ ai_gen_id }}:hover::before {
+    opacity: {{ block.settings.trust_glow_opacity | divided_by: 100.0 }};
+  }
+
+  .ai-hero-glassmorphism-trust-icon-{{ ai_gen_id }} {
+    width: {{ block.settings.trust_icon_size }}px;
+    height: {{ block.settings.trust_icon_size }}px;
+    flex-shrink: 0;
+    color: {{ block.settings.trust_icon_color }};
+  }
+
+  .ai-hero-glassmorphism-trust-text-{{ ai_gen_id }} {
+    font-family: {{ block.settings.trust_font.family }}, {{ block.settings.trust_font.fallback_families }};
+    font-weight: {{ block.settings.trust_font.weight }};
+    font-size: {{ block.settings.trust_text_size }}px;
+    color: {{ block.settings.trust_text_color }};
+    line-height: {{ block.settings.trust_line_height }};
+    letter-spacing: {{ block.settings.trust_letter_spacing }}px;
+  }
+
+  .ai-hero-glassmorphism-right-section-{{ ai_gen_id }} {
+    display: flex;
+    align-items: {{ block.settings.event_vertical_position }};
+    justify-content: {{ block.settings.event_horizontal_position }};
+  }
+
+  .ai-hero-glassmorphism-event-card-{{ ai_gen_id }} {
+    background: rgba(255, 255, 255, {{ block.settings.event_glass_opacity | divided_by: 100.0 }});
+    backdrop-filter: blur({{ block.settings.event_glass_blur }}px);
+    border: {{ block.settings.event_border_width }}px solid rgba(255, 255, 255, {{ block.settings.event_glass_border_opacity | divided_by: 100.0 }});
+    border-radius: {{ block.settings.event_border_radius }}px;
+    padding: {{ block.settings.event_padding }}px;
+    width: {{ block.settings.event_card_width }}px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  {% if block.settings.event_pulse_enabled %}
+  .ai-hero-glassmorphism-event-card-{{ ai_gen_id }}::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: {{ block.settings.event_border_radius }}px;
+    padding: {{ block.settings.event_pulse_width }}px;
+    background: linear-gradient(45deg, {{ block.settings.event_pulse_color }}, transparent, {{ block.settings.event_pulse_color }});
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: ai-pulse-glow-{{ ai_gen_id }} {{ block.settings.event_pulse_speed }}s ease-in-out infinite;
+  }
+
+  @keyframes ai-pulse-glow-{{ ai_gen_id }} {
+    0%, 100% {
+      opacity: {{ block.settings.event_pulse_opacity_min | divided_by: 100.0 }};
+    }
+    50% {
+      opacity: {{ block.settings.event_pulse_opacity_max | divided_by: 100.0 }};
+    }
+  }
+  {% endif %}
+
+  .ai-hero-glassmorphism-event-name-{{ ai_gen_id }} {
+    font-family: {{ block.settings.event_name_font.family }}, {{ block.settings.event_name_font.fallback_families }};
+    font-weight: {{ block.settings.event_name_font.weight }};
+    font-size: {{ block.settings.event_name_size }}px;
+    color: {{ block.settings.event_name_color }};
+    margin: 0 0 {{ block.settings.event_name_spacing }}px 0;
+    line-height: {{ block.settings.event_name_line_height }};
+    letter-spacing: {{ block.settings.event_name_letter_spacing }}px;
+  }
+
+  .ai-hero-glassmorphism-event-detail-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.event_icon_gap }}px;
+    margin: 0 0 {{ block.settings.event_detail_spacing }}px 0;
+    font-family: {{ block.settings.event_detail_font.family }}, {{ block.settings.event_detail_font.fallback_families }};
+    font-weight: {{ block.settings.event_detail_font.weight }};
+    font-size: {{ block.settings.event_detail_size }}px;
+    color: {{ block.settings.event_detail_color }};
+    line-height: {{ block.settings.event_detail_line_height }};
+    letter-spacing: {{ block.settings.event_detail_letter_spacing }}px;
+  }
+
+  .ai-hero-glassmorphism-event-detail-{{ ai_gen_id }}:last-child {
+    margin-bottom: 0;
+  }
+
+  .ai-hero-glassmorphism-event-icon-{{ ai_gen_id }} {
+    width: {{ block.settings.event_icon_size }}px;
+    height: {{ block.settings.event_icon_size }}px;
+    flex-shrink: 0;
+    color: {{ block.settings.event_icon_color }};
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-hero-glassmorphism-{{ ai_gen_id }} {
+      min-height: {{ block.settings.section_height_mobile }}px;
+    }
+
+    .ai-hero-glassmorphism-content-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      min-height: {{ block.settings.section_height_mobile }}px;
+      gap: 40px;
+      padding: {{ block.settings.section_padding }}px 20px;
+    }
+
+    .ai-hero-glassmorphism-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size_mobile }}px;
+    }
+
+    .ai-hero-glassmorphism-subheading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.subheading_size_mobile }}px;
+    }
+
+    .ai-hero-glassmorphism-trust-indicators-{{ ai_gen_id }} {
+      grid-template-columns: repeat({{ block.settings.trust_columns_mobile }}, 1fr);
+    }
+
+    .ai-hero-glassmorphism-right-section-{{ ai_gen_id }} {
+      justify-content: center;
+    }
+
+    .ai-hero-glassmorphism-event-card-{{ ai_gen_id }} {
+      width: 100%;
+      max-width: 400px;
+    }
+  }
+{% endstyle %}
+
+<glassmorphism-hero-{{ ai_gen_id }} class="ai-hero-glassmorphism-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-hero-glassmorphism-background-{{ ai_gen_id }}">
+    {% if block.settings.background_image %}
+      <img
+        src="{{ block.settings.background_image | image_url: width: 2000 }}"
+        alt="{{ block.settings.background_image.alt | escape }}"
+        loading="lazy"
+        width="{{ block.settings.background_image.width }}"
+        height="{{ block.settings.background_image.height }}"
+      >
+    {% else %}
+      <div class="ai-hero-glassmorphism-background-placeholder-{{ ai_gen_id }}">
+        {{ 'hero-apparel-1' | placeholder_svg_tag }}
+        <div class="ai-hero-glassmorphism-empty-state-{{ ai_gen_id }}">
+          Add a background image to get started
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="ai-hero-glassmorphism-overlay-{{ ai_gen_id }}"></div>
+
+  <div class="ai-hero-glassmorphism-content-{{ ai_gen_id }}">
+    <div class="ai-hero-glassmorphism-main-content-{{ ai_gen_id }}">
+      <div class="ai-hero-glassmorphism-text-wrapper-{{ ai_gen_id }}">
+        {% if block.settings.eyebrow_text != blank %}
+          <div class="ai-hero-glassmorphism-eyebrow-{{ ai_gen_id }}">
+            {{ block.settings.eyebrow_text }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.title != blank %}
+          <div class="ai-hero-glassmorphism-title-{{ ai_gen_id }}">
+            {{ block.settings.title }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.subheading != blank %}
+          <div class="ai-hero-glassmorphism-subheading-{{ ai_gen_id }}">
+            {{ block.settings.subheading }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.context != blank %}
+          <div class="ai-hero-glassmorphism-context-{{ ai_gen_id }}">
+            {{ block.settings.context }}
+          </div>
+        {% endif %}
+      </div>
+
+      {% if block.settings.cta_text != blank %}
+        <div class="ai-hero-glassmorphism-cta-wrapper-{{ ai_gen_id }}">
+          <a href="{{ block.settings.cta_link }}" class="ai-hero-glassmorphism-cta-{{ ai_gen_id }}">
+            {{ block.settings.cta_text }}
+          </a>
+        </div>
+      {% endif %}
+
+      <div class="ai-hero-glassmorphism-trust-indicators-{{ ai_gen_id }}">
+        {% if block.settings.trust_1_text != blank %}
+          <div class="ai-hero-glassmorphism-trust-item-{{ ai_gen_id }}">
+            <div class="ai-hero-glassmorphism-trust-icon-{{ ai_gen_id }}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+            </div>
+            <div class="ai-hero-glassmorphism-trust-text-{{ ai_gen_id }}">
+              {{ block.settings.trust_1_text }}
+            </div>
+          </div>
+        {% endif %}
+
+        {% if block.settings.trust_2_text != blank %}
+          <div class="ai-hero-glassmorphism-trust-item-{{ ai_gen_id }}">
+            <div class="ai-hero-glassmorphism-trust-icon-{{ ai_gen_id }}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <div class="ai-hero-glassmorphism-trust-text-{{ ai_gen_id }}">
+              {{ block.settings.trust_2_text }}
+            </div>
+          </div>
+        {% endif %}
+
+        {% if block.settings.trust_3_text != blank %}
+          <div class="ai-hero-glassmorphism-trust-item-{{ ai_gen_id }}">
+            <div class="ai-hero-glassmorphism-trust-icon-{{ ai_gen_id }}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+            </div>
+            <div class="ai-hero-glassmorphism-trust-text-{{ ai_gen_id }}">
+              {{ block.settings.trust_3_text }}
+            </div>
+          </div>
+        {% endif %}
+
+        {% if block.settings.trust_4_text != blank %}
+          <div class="ai-hero-glassmorphism-trust-item-{{ ai_gen_id }}">
+            <div class="ai-hero-glassmorphism-trust-icon-{{ ai_gen_id }}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+              </svg>
+            </div>
+            <div class="ai-hero-glassmorphism-trust-text-{{ ai_gen_id }}">
+              {{ block.settings.trust_4_text }}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="ai-hero-glassmorphism-right-section-{{ ai_gen_id }}">
+      <div class="ai-hero-glassmorphism-event-card-{{ ai_gen_id }}">
+        {% if block.settings.event_name != blank %}
+          <div class="ai-hero-glassmorphism-event-name-{{ ai_gen_id }}">
+            {{ block.settings.event_name }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.event_date != blank %}
+          <div class="ai-hero-glassmorphism-event-detail-{{ ai_gen_id }}">
+            <div class="ai-hero-glassmorphism-event-icon-{{ ai_gen_id }}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+            </div>
+            <span>{{ block.settings.event_date }}</span>
+          </div>
+        {% endif %}
+
+        {% if block.settings.event_location != blank %}
+          <div class="ai-hero-glassmorphism-event-detail-{{ ai_gen_id }}">
+            <div class="ai-hero-glassmorphism-event-icon-{{ ai_gen_id }}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+            </div>
+            <span>{{ block.settings.event_location }}</span>
+          </div>
+        {% endif %}
+
+        {% if block.settings.event_stall != blank %}
+          <div class="ai-hero-glassmorphism-event-detail-{{ ai_gen_id }}">
+            <div class="ai-hero-glassmorphism-event-icon-{{ ai_gen_id }}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+            </div>
+            <span>{{ block.settings.event_stall }}</span>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</glassmorphism-hero-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class GlassmorphismHero{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.style.display = 'block';
+      }
+    }
+
+    customElements.define('glassmorphism-hero-{{ ai_gen_id }}', GlassmorphismHero{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Glassmorphism hero",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "label": "Desktop height",
+      "min": 400,
+      "max": 1000,
+      "step": 50,
+      "unit": "px",
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "section_height_mobile",
+      "label": "Mobile height",
+      "min": 400,
+      "max": 800,
+      "step": 50,
+      "unit": "px",
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "content_gap",
+      "label": "Content gap",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "select",
+      "id": "vertical_alignment",
+      "label": "Vertical alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "text_max_width",
+      "label": "Text max width",
+      "min": 400,
+      "max": 1000,
+      "step": 50,
+      "unit": "px",
+      "default": 700
+    },
+    {
+      "type": "header",
+      "content": "Background overlay"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Glassmorphism style"
+    },
+    {
+      "type": "range",
+      "id": "glass_opacity",
+      "label": "Glass opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "glass_blur",
+      "label": "Glass blur",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "glass_border_opacity",
+      "label": "Glass border opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Eyebrow text"
+    },
+    {
+      "type": "richtext",
+      "id": "eyebrow_text",
+      "label": "Text",
+      "default": "<p>New Collection</p>"
+    },
+    {
+      "type": "font_picker",
+      "id": "eyebrow_font",
+      "label": "Font",
+      "default": "inter_n4"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_color",
+      "label": "Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_letter_spacing",
+      "label": "Letter spacing",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_line_height",
+      "label": "Line height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.4
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_spacing",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "title",
+      "label": "Text",
+      "default": "<p>Discover Our Latest Collection</p>"
+    },
+    {
+      "type": "font_picker",
+      "id": "title_font",
+      "label": "Font",
+      "default": "inter_n7"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Desktop font size",
+      "min": 24,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "title_size_mobile",
+      "label": "Mobile font size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "title_letter_spacing",
+      "label": "Letter spacing",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "title_line_height",
+      "label": "Line height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.2
+    },
+    {
+      "type": "range",
+      "id": "title_spacing",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Subheading"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Text",
+      "default": "<p>Premium quality products for modern living</p>"
+    },
+    {
+      "type": "font_picker",
+      "id": "subheading_font",
+      "label": "Font",
+      "default": "inter_n4"
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "label": "Desktop font size",
+      "min": 14,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "subheading_size_mobile",
+      "label": "Mobile font size",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "subheading_letter_spacing",
+      "label": "Letter spacing",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "subheading_line_height",
+      "label": "Line height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.4
+    },
+    {
+      "type": "range",
+      "id": "subheading_spacing",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Context"
+    },
+    {
+      "type": "richtext",
+      "id": "context",
+      "label": "Text",
+      "default": "<p>Explore our curated selection of premium products designed to elevate your everyday experience.</p>"
+    },
+    {
+      "type": "font_picker",
+      "id": "context_font",
+      "label": "Font",
+      "default": "inter_n4"
+    },
+    {
+      "type": "range",
+      "id": "context_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "context_color",
+      "label": "Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "context_letter_spacing",
+      "label": "Letter spacing",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "context_line_height",
+      "label": "Line height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.6
+    },
+    {
+      "type": "range",
+      "id": "context_spacing",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "CTA button"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "cta_text",
+      "label": "Text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Link"
+    },
+    {
+      "type": "font_picker",
+      "id": "cta_font",
+      "label": "Font",
+      "default": "inter_n5"
+    },
+    {
+      "type": "range",
+      "id": "cta_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "cta_letter_spacing",
+      "label": "Letter spacing",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "cta_padding_vertical",
+      "label": "Vertical padding",
+      "min": 8,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "cta_padding_horizontal",
+      "label": "Horizontal padding",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "color",
+      "id": "cta_bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "cta_text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "cta_hover_bg_color",
+      "label": "Hover background",
+      "default": "#f0f0f0"
+    },
+    {
+      "type": "color",
+      "id": "cta_hover_text_color",
+      "label": "Hover text",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "cta_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "cta_border_width",
+      "label": "Border width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "cta_border_color",
+      "label": "Border color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "cta_spacing",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "CTA hover glow"
+    },
+    {
+      "type": "color",
+      "id": "cta_glow_color",
+      "label": "Glow color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "cta_glow_width",
+      "label": "Glow width",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "cta_glow_opacity",
+      "label": "Glow opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Trust indicators"
+    },
+    {
+      "type": "richtext",
+      "id": "trust_1_text",
+      "label": "Indicator 1",
+      "default": "<p>Free Shipping</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "trust_2_text",
+      "label": "Indicator 2",
+      "default": "<p>Secure Payment</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "trust_3_text",
+      "label": "Indicator 3",
+      "default": "<p>Quality Guaranteed</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "trust_4_text",
+      "label": "Indicator 4",
+      "default": "<p>24/7 Support</p>"
+    },
+    {
+      "type": "font_picker",
+      "id": "trust_font",
+      "label": "Font",
+      "default": "inter_n4"
+    },
+    {
+      "type": "range",
+      "id": "trust_text_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "trust_text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "trust_letter_spacing",
+      "label": "Letter spacing",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "trust_line_height",
+      "label": "Line height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.4
+    },
+    {
+      "type": "range",
+      "id": "trust_icon_size",
+      "label": "Icon size",
+      "min": 20,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "color",
+      "id": "trust_icon_color",
+      "label": "Icon color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "trust_icon_gap",
+      "label": "Icon gap",
+      "min": 8,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "trust_padding",
+      "label": "Padding",
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "trust_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "trust_border_width",
+      "label": "Border width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "trust_gap",
+      "label": "Gap between items",
+      "min": 8,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "trust_spacing",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "select",
+      "id": "trust_columns",
+      "label": "Desktop columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "trust_columns_mobile",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "header",
+      "content": "Trust hover glow"
+    },
+    {
+      "type": "color",
+      "id": "trust_glow_color",
+      "label": "Glow color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "trust_glow_width",
+      "label": "Glow width",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "trust_glow_opacity",
+      "label": "Glow opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Event card"
+    },
+    {
+      "type": "richtext",
+      "id": "event_name",
+      "label": "Event name",
+      "default": "<p>Summer Trade Show 2026</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "event_date",
+      "label": "Event date",
+      "default": "<p>July 31 - August 2, 2026</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "event_location",
+      "label": "Event location",
+      "default": "<p>New York Convention Center</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "event_stall",
+      "label": "Stall number",
+      "default": "<p>Stall No. A-42</p>"
+    },
+    {
+      "type": "range",
+      "id": "event_card_width",
+      "label": "Card width",
+      "min": 250,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "default": 350
+    },
+    {
+      "type": "range",
+      "id": "event_padding",
+      "label": "Card padding",
+      "min": 15,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "event_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "event_border_width",
+      "label": "Border width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "event_glass_opacity",
+      "label": "Glass opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "event_glass_blur",
+      "label": "Glass blur",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "event_glass_border_opacity",
+      "label": "Glass border opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "select",
+      "id": "event_vertical_position",
+      "label": "Vertical position",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "flex-end"
+    },
+    {
+      "type": "select",
+      "id": "event_horizontal_position",
+      "label": "Horizontal position",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Right"
+        }
+      ],
+      "default": "flex-end"
+    },
+    {
+      "type": "header",
+      "content": "Event pulse glow"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_pulse_enabled",
+      "label": "Enable pulse glow",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "event_pulse_color",
+      "label": "Pulse color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "event_pulse_width",
+      "label": "Pulse width",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "event_pulse_opacity_min",
+      "label": "Min opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "event_pulse_opacity_max",
+      "label": "Max opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "event_pulse_speed",
+      "label": "Pulse speed",
+      "min": 1,
+      "max": 5,
+      "step": 0.5,
+      "unit": "s",
+      "default": 2
+    },
+    {
+      "type": "header",
+      "content": "Event name style"
+    },
+    {
+      "type": "font_picker",
+      "id": "event_name_font",
+      "label": "Font",
+      "default": "inter_n7"
+    },
+    {
+      "type": "range",
+      "id": "event_name_size",
+      "label": "Font size",
+      "min": 14,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "event_name_color",
+      "label": "Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "event_name_letter_spacing",
+      "label": "Letter spacing",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "event_name_line_height",
+      "label": "Line height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.4
+    },
+    {
+      "type": "range",
+      "id": "event_name_spacing",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Event details style"
+    },
+    {
+      "type": "font_picker",
+      "id": "event_detail_font",
+      "label": "Font",
+      "default": "inter_n4"
+    },
+    {
+      "type": "range",
+      "id": "event_detail_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "event_detail_color",
+      "label": "Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "event_detail_letter_spacing",
+      "label": "Letter spacing",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "event_detail_line_height",
+      "label": "Line height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.4
+    },
+    {
+      "type": "range",
+      "id": "event_icon_size",
+      "label": "Icon size",
+      "min": 14,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "event_icon_color",
+      "label": "Icon color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "event_icon_gap",
+      "label": "Icon gap",
+      "min": 4,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "event_detail_spacing",
+      "label": "Detail spacing",
+      "min": 4,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Glassmorphism hero"
+    }
+  ]
+}
+{% endschema %}

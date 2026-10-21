@@ -1,0 +1,945 @@
+{% doc %}
+  @prompt
+    Generate a full page width section with a background image 
+    Left Align : 
+    Eyebrow 
+    title
+    subheading
+    content
+    CTA button glassmorphic style
+    4 trust indicators with png icons so that I can change
+    Right Align :
+    an event card event name , date and day , location and stall no. in glassmorphic style , NATURE’S SOFTEST GIFT
+    Born From Bamboo.
+    Made For Baby.
+    
+    Ultra soft. Naturally breathable.
+    Thoughtfully made for your little one.
+    
+    CTA Button:
+    SHOP COLLECTION →
+    
+    Trust Indicators
+    
+    BAMBOO VISCOSE
+    
+    ULTRA SOFT
+    
+    BREATHABLE & GENTLE
+    
+    HYPOALLERGENIC & SAFE
+    
+    Event Card
+    
+    VISIT US AT
+    
+    Udaan 2.0
+    
+    1–2 AUGUST 2026
+    
+    EPICENTRE, APPAREL HOUSE,
+    SECTOR 44, GURUGRAM
+    
+    STALL G86
+    
+    add this content in this section accordingly, Make all this text in this section rich text  also , allow me to change CTA Button size as width and height , allow me change all text color in this section as well
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-hero-section-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    min-height: {{ block.settings.section_height }}px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .ai-hero-background-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .ai-hero-background-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-hero-background-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-hero-background-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-hero-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: {{ block.settings.overlay_color }};
+    opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};
+    z-index: 1;
+  }
+
+  .ai-hero-container-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: {{ block.settings.section_padding_vertical }}px {{ block.settings.section_padding_horizontal }}px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .ai-hero-left-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .ai-hero-eyebrow-{{ ai_gen_id }} {
+    font-size: {{ block.settings.eyebrow_size }}px;
+    color: {{ block.settings.eyebrow_color }};
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .ai-hero-eyebrow-{{ ai_gen_id }} p {
+    margin: 0;
+  }
+
+  .ai-hero-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    color: {{ block.settings.title_color }};
+    line-height: 1.2;
+  }
+
+  .ai-hero-title-{{ ai_gen_id }} p,
+  .ai-hero-title-{{ ai_gen_id }} h1,
+  .ai-hero-title-{{ ai_gen_id }} h2,
+  .ai-hero-title-{{ ai_gen_id }} h3,
+  .ai-hero-title-{{ ai_gen_id }} h4,
+  .ai-hero-title-{{ ai_gen_id }} h5,
+  .ai-hero-title-{{ ai_gen_id }} h6 {
+    margin: 0;
+  }
+
+  .ai-hero-subheading-{{ ai_gen_id }} {
+    font-size: {{ block.settings.subheading_size }}px;
+    color: {{ block.settings.subheading_color }};
+    line-height: 1.4;
+  }
+
+  .ai-hero-subheading-{{ ai_gen_id }} p,
+  .ai-hero-subheading-{{ ai_gen_id }} h1,
+  .ai-hero-subheading-{{ ai_gen_id }} h2,
+  .ai-hero-subheading-{{ ai_gen_id }} h3,
+  .ai-hero-subheading-{{ ai_gen_id }} h4,
+  .ai-hero-subheading-{{ ai_gen_id }} h5,
+  .ai-hero-subheading-{{ ai_gen_id }} h6 {
+    margin: 0;
+  }
+
+  .ai-hero-content-{{ ai_gen_id }} {
+    font-size: {{ block.settings.content_size }}px;
+    color: {{ block.settings.content_color }};
+    line-height: 1.6;
+  }
+
+  .ai-hero-content-{{ ai_gen_id }} p {
+    margin: 0;
+  }
+
+  .ai-hero-cta-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: {{ block.settings.button_width }}px;
+    height: {{ block.settings.button_height }}px;
+    font-size: {{ block.settings.button_size }}px;
+    color: {{ block.settings.button_text_color }};
+    text-decoration: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    background: {{ block.settings.button_background }};
+    backdrop-filter: blur({{ block.settings.button_blur }}px);
+    border: {{ block.settings.button_border_width }}px solid {{ block.settings.button_border_color }};
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .ai-hero-cta-{{ ai_gen_id }}:hover {
+    background: {{ block.settings.button_hover_background }};
+    transform: translateY(-2px);
+  }
+
+  .ai-hero-trust-indicators-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .ai-hero-trust-item-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .ai-hero-trust-icon-{{ ai_gen_id }} {
+    width: {{ block.settings.trust_icon_size }}px;
+    height: {{ block.settings.trust_icon_size }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-hero-trust-icon-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .ai-hero-trust-icon-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #e0e0e0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-hero-trust-icon-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+  }
+
+  .ai-hero-trust-text-{{ ai_gen_id }} {
+    font-size: {{ block.settings.trust_text_size }}px;
+    color: {{ block.settings.trust_text_color }};
+  }
+
+  .ai-hero-trust-text-{{ ai_gen_id }} p {
+    margin: 0;
+  }
+
+  .ai-hero-right-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .ai-hero-event-card-{{ ai_gen_id }} {
+    background: {{ block.settings.card_background }};
+    backdrop-filter: blur({{ block.settings.card_blur }}px);
+    border: {{ block.settings.card_border_width }}px solid {{ block.settings.card_border_color }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    padding: 32px;
+    max-width: 400px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .ai-hero-event-label-{{ ai_gen_id }} {
+    font-size: {{ block.settings.event_label_size }}px;
+    color: {{ block.settings.event_label_color }};
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.8;
+  }
+
+  .ai-hero-event-label-{{ ai_gen_id }} p {
+    margin: 0;
+  }
+
+  .ai-hero-event-name-{{ ai_gen_id }} {
+    font-size: {{ block.settings.event_name_size }}px;
+    color: {{ block.settings.event_name_color }};
+    font-weight: 600;
+  }
+
+  .ai-hero-event-name-{{ ai_gen_id }} p,
+  .ai-hero-event-name-{{ ai_gen_id }} h1,
+  .ai-hero-event-name-{{ ai_gen_id }} h2,
+  .ai-hero-event-name-{{ ai_gen_id }} h3,
+  .ai-hero-event-name-{{ ai_gen_id }} h4,
+  .ai-hero-event-name-{{ ai_gen_id }} h5,
+  .ai-hero-event-name-{{ ai_gen_id }} h6 {
+    margin: 0;
+  }
+
+  .ai-hero-event-date-{{ ai_gen_id }} {
+    font-size: {{ block.settings.event_date_size }}px;
+    color: {{ block.settings.event_date_color }};
+  }
+
+  .ai-hero-event-date-{{ ai_gen_id }} p {
+    margin: 0;
+  }
+
+  .ai-hero-event-location-{{ ai_gen_id }} {
+    font-size: {{ block.settings.event_location_size }}px;
+    color: {{ block.settings.event_location_color }};
+    line-height: 1.5;
+  }
+
+  .ai-hero-event-location-{{ ai_gen_id }} p {
+    margin: 0;
+  }
+
+  .ai-hero-event-stall-{{ ai_gen_id }} {
+    font-size: {{ block.settings.event_stall_size }}px;
+    color: {{ block.settings.event_stall_color }};
+    padding-top: 12px;
+    border-top: 1px solid {{ block.settings.card_border_color }};
+    font-weight: 600;
+  }
+
+  .ai-hero-event-stall-{{ ai_gen_id }} p {
+    margin: 0;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-hero-container-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+
+    .ai-hero-right-{{ ai_gen_id }} {
+      justify-content: center;
+    }
+
+    .ai-hero-trust-indicators-{{ ai_gen_id }} {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ai-hero-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.7 }}px;
+    }
+
+    .ai-hero-subheading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.subheading_size | times: 0.85 }}px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-hero-section-{{ ai_gen_id }} {
+      min-height: auto;
+    }
+
+    .ai-hero-container-{{ ai_gen_id }} {
+      padding: {{ block.settings.section_padding_vertical | times: 0.6 }}px {{ block.settings.section_padding_horizontal | times: 0.6 }}px;
+    }
+
+    .ai-hero-event-card-{{ ai_gen_id }} {
+      padding: 24px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-hero-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-hero-background-{{ ai_gen_id }}">
+    {% if block.settings.background_image %}
+      <img
+        src="{{ block.settings.background_image | image_url: width: 2000 }}"
+        alt="{{ block.settings.background_image.alt | escape }}"
+        loading="lazy"
+        width="{{ block.settings.background_image.width }}"
+        height="{{ block.settings.background_image.height }}"
+      >
+    {% else %}
+      <div class="ai-hero-background-placeholder-{{ ai_gen_id }}">
+        {{ 'hero-apparel-1' | placeholder_svg_tag }}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="ai-hero-overlay-{{ ai_gen_id }}"></div>
+
+  <div class="ai-hero-container-{{ ai_gen_id }}">
+    <div class="ai-hero-left-{{ ai_gen_id }}">
+      {% if block.settings.eyebrow != blank %}
+        <div class="ai-hero-eyebrow-{{ ai_gen_id }}">{{ block.settings.eyebrow }}</div>
+      {% endif %}
+
+      {% if block.settings.title != blank %}
+        <div class="ai-hero-title-{{ ai_gen_id }}">{{ block.settings.title }}</div>
+      {% endif %}
+
+      {% if block.settings.subheading != blank %}
+        <div class="ai-hero-subheading-{{ ai_gen_id }}">{{ block.settings.subheading }}</div>
+      {% endif %}
+
+      {% if block.settings.content != blank %}
+        <div class="ai-hero-content-{{ ai_gen_id }}">{{ block.settings.content }}</div>
+      {% endif %}
+
+      {% if block.settings.button_text != blank %}
+        <a href="{{ block.settings.button_link }}" class="ai-hero-cta-{{ ai_gen_id }}">
+          {{ block.settings.button_text }}
+        </a>
+      {% endif %}
+
+      <div class="ai-hero-trust-indicators-{{ ai_gen_id }}">
+        {% for i in (1..4) %}
+          {% liquid
+            assign icon_key = 'trust_icon_' | append: i
+            assign text_key = 'trust_text_' | append: i
+            assign icon = block.settings[icon_key]
+            assign text = block.settings[text_key]
+          %}
+
+          <div class="ai-hero-trust-item-{{ ai_gen_id }}">
+            <div class="ai-hero-trust-icon-{{ ai_gen_id }}">
+              {% if icon %}
+                <img src="{{ icon | image_url: width: 200 }}" alt="{{ text | escape }}" loading="lazy">
+              {% else %}
+                <div class="ai-hero-trust-icon-placeholder-{{ ai_gen_id }}">
+                  {{ 'image' | placeholder_svg_tag }}
+                </div>
+              {% endif %}
+            </div>
+            {% if text != blank %}
+              <div class="ai-hero-trust-text-{{ ai_gen_id }}">{{ text }}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="ai-hero-right-{{ ai_gen_id }}">
+      <div class="ai-hero-event-card-{{ ai_gen_id }}">
+        {% if block.settings.event_label != blank %}
+          <div class="ai-hero-event-label-{{ ai_gen_id }}">{{ block.settings.event_label }}</div>
+        {% endif %}
+
+        {% if block.settings.event_name != blank %}
+          <div class="ai-hero-event-name-{{ ai_gen_id }}">{{ block.settings.event_name }}</div>
+        {% endif %}
+
+        {% if block.settings.event_date != blank %}
+          <div class="ai-hero-event-date-{{ ai_gen_id }}">{{ block.settings.event_date }}</div>
+        {% endif %}
+
+        {% if block.settings.event_location != blank %}
+          <div class="ai-hero-event-location-{{ ai_gen_id }}">{{ block.settings.event_location }}</div>
+        {% endif %}
+
+        {% if block.settings.event_stall != blank %}
+          <div class="ai-hero-event-stall-{{ ai_gen_id }}">{{ block.settings.event_stall }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Hero with event card",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "label": "Section height",
+      "min": 400,
+      "max": 900,
+      "step": 50,
+      "unit": "px",
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "section_padding_vertical",
+      "label": "Vertical padding",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "section_padding_horizontal",
+      "label": "Horizontal padding",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Left content"
+    },
+    {
+      "type": "richtext",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "<p>NATURE'S SOFTEST GIFT</p>"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size",
+      "label": "Eyebrow size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_color",
+      "label": "Eyebrow color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "<p>Born From Bamboo. Made For Baby.</p>"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Ultra soft. Naturally breathable.</p>"
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "label": "Subheading size",
+      "min": 14,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "default": "<p>Thoughtfully made for your little one.</p>"
+    },
+    {
+      "type": "range",
+      "id": "content_size",
+      "label": "Content size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "content_color",
+      "label": "Content color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "CTA button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "SHOP COLLECTION →"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "range",
+      "id": "button_width",
+      "label": "Button width",
+      "min": 100,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "default": 220
+    },
+    {
+      "type": "range",
+      "id": "button_height",
+      "label": "Button height",
+      "min": 40,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 55
+    },
+    {
+      "type": "range",
+      "id": "button_size",
+      "label": "Button text size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Background",
+      "default": "rgba(255, 255, 255, 0.2)"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_background",
+      "label": "Hover background",
+      "default": "rgba(255, 255, 255, 0.3)"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_border_color",
+      "label": "Border color",
+      "default": "rgba(255, 255, 255, 0.4)"
+    },
+    {
+      "type": "range",
+      "id": "button_border_width",
+      "label": "Border width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "button_blur",
+      "label": "Blur effect",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Trust indicators"
+    },
+    {
+      "type": "range",
+      "id": "trust_icon_size",
+      "label": "Icon size",
+      "min": 30,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "trust_text_size",
+      "label": "Text size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "trust_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "image_picker",
+      "id": "trust_icon_1",
+      "label": "Icon 1"
+    },
+    {
+      "type": "richtext",
+      "id": "trust_text_1",
+      "label": "Text 1",
+      "default": "<p>BAMBOO VISCOSE</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "trust_icon_2",
+      "label": "Icon 2"
+    },
+    {
+      "type": "richtext",
+      "id": "trust_text_2",
+      "label": "Text 2",
+      "default": "<p>ULTRA SOFT</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "trust_icon_3",
+      "label": "Icon 3"
+    },
+    {
+      "type": "richtext",
+      "id": "trust_text_3",
+      "label": "Text 3",
+      "default": "<p>BREATHABLE & GENTLE</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "trust_icon_4",
+      "label": "Icon 4"
+    },
+    {
+      "type": "richtext",
+      "id": "trust_text_4",
+      "label": "Text 4",
+      "default": "<p>HYPOALLERGENIC & SAFE</p>"
+    },
+    {
+      "type": "header",
+      "content": "Event card"
+    },
+    {
+      "type": "richtext",
+      "id": "event_label",
+      "label": "Event label",
+      "default": "<p>VISIT US AT</p>"
+    },
+    {
+      "type": "range",
+      "id": "event_label_size",
+      "label": "Label size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "event_label_color",
+      "label": "Label color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "richtext",
+      "id": "event_name",
+      "label": "Event name",
+      "default": "<p>Udaan 2.0</p>"
+    },
+    {
+      "type": "range",
+      "id": "event_name_size",
+      "label": "Event name size",
+      "min": 18,
+      "max": 36,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "event_name_color",
+      "label": "Event name color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "richtext",
+      "id": "event_date",
+      "label": "Event date",
+      "default": "<p>1–2 AUGUST 2026</p>"
+    },
+    {
+      "type": "range",
+      "id": "event_date_size",
+      "label": "Date size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "event_date_color",
+      "label": "Date color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "richtext",
+      "id": "event_location",
+      "label": "Location",
+      "default": "<p>EPICENTRE, APPAREL HOUSE, SECTOR 44, GURUGRAM</p>"
+    },
+    {
+      "type": "range",
+      "id": "event_location_size",
+      "label": "Location size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "event_location_color",
+      "label": "Location color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "richtext",
+      "id": "event_stall",
+      "label": "Stall number",
+      "default": "<p>STALL G86</p>"
+    },
+    {
+      "type": "range",
+      "id": "event_stall_size",
+      "label": "Stall size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "event_stall_color",
+      "label": "Stall color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "rgba(255, 255, 255, 0.15)"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card border color",
+      "default": "rgba(255, 255, 255, 0.3)"
+    },
+    {
+      "type": "range",
+      "id": "card_border_width",
+      "label": "Card border width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_blur",
+      "label": "Card blur effect",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 10
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero with event card"
+    }
+  ]
+}
+{% endschema %}

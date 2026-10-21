@@ -1,0 +1,999 @@
+{% doc %}
+  @prompt
+    generate a full page width section with background image eyebrow, title, subheading , context 5 trust indicators with PNG icons to change all equal size and text must be just below of icons not on any other sides then at the bottom a quote line with a PNG icon on left on glassmorphic style circle, WHY BAMBOO?
+    Why Bamboo.
+    Nature’s Softest Gift
+    
+    Bamboo is a naturally renewable resource that grows without harmful pesticides and uses 30% less water than cotton.
+    
+    It’s gentle on your baby’s skin and gentle on our planet.
+    
+    Ultra Soft
+    
+    Silky smooth fibers that feel like a gentle hug on delicate skin.
+    
+    Breathable
+    
+    Highly breathable fabric that keeps baby cool and comfortable.
+    
+    Thermoregulating
+    
+    Naturally adapts to your baby’s body temperature in every season.
+    
+    Hypoallergenic
+    
+    Naturally hypoallergenic and antibacterial, perfect for sensitive skin.
+    
+    Sustainable
+    
+    Eco-friendly and biodegradable.
+    
+    Better for your baby, better for our Earth.
+    
+    “From the forest to your baby, with love.”
+    
+    SUSTAINABLE BY NATURE. SAFE BY CHOICE. MADE FOR YOUR LITTLE ONE.
+    
+    add this content in this section accordingly, now make all the text is rich text in this section
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-trust-section-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    display: block;
+    overflow: hidden;
+  }
+
+  .ai-trust-section-bg-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .ai-trust-section-bg-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-trust-section-bg-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-trust-section-bg-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 500px;
+    max-height: 500px;
+  }
+
+  .ai-trust-section-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: {{ block.settings.overlay_color }};
+    opacity: {{ block.settings.overlay_opacity }};
+    z-index: 1;
+  }
+
+  .ai-trust-section-content-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 2;
+    padding: {{ block.settings.section_padding_top }}px 20px {{ block.settings.section_padding_bottom }}px;
+    max-width: {{ block.settings.content_max_width }}px;
+    margin: 0 auto;
+  }
+
+  .ai-trust-section-header-{{ ai_gen_id }} {
+    text-align: {{ block.settings.text_alignment }};
+    margin-bottom: {{ block.settings.header_spacing }}px;
+  }
+
+  .ai-trust-section-eyebrow-{{ ai_gen_id }} {
+    font-size: {{ block.settings.eyebrow_size }}px;
+    color: {{ block.settings.eyebrow_color }};
+    margin-bottom: {{ block.settings.eyebrow_spacing }}px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  .ai-trust-section-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    color: {{ block.settings.title_color }};
+    margin: 0 0 {{ block.settings.title_spacing }}px;
+    line-height: 1.2;
+    font-weight: 700;
+  }
+
+  .ai-trust-section-subheading-{{ ai_gen_id }} {
+    font-size: {{ block.settings.subheading_size }}px;
+    color: {{ block.settings.subheading_color }};
+    margin-bottom: {{ block.settings.subheading_spacing }}px;
+    line-height: 1.5;
+  }
+
+  .ai-trust-section-context-{{ ai_gen_id }} {
+    font-size: {{ block.settings.context_size }}px;
+    color: {{ block.settings.context_color }};
+    margin-bottom: {{ block.settings.context_spacing }}px;
+    line-height: 1.6;
+  }
+
+  .ai-trust-indicators-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: {{ block.settings.indicators_gap }}px;
+    margin-bottom: {{ block.settings.indicators_spacing }}px;
+  }
+
+  .ai-trust-indicator-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .ai-trust-indicator-icon-wrapper-{{ ai_gen_id }} {
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    margin-bottom: {{ block.settings.icon_text_spacing }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-trust-indicator-icon-wrapper-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .ai-trust-indicator-icon-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-trust-indicator-icon-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.5;
+  }
+
+  .ai-trust-indicator-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.indicator_title_size }}px;
+    color: {{ block.settings.indicator_title_color }};
+    font-weight: 700;
+    margin-bottom: {{ block.settings.indicator_title_spacing }}px;
+    line-height: 1.3;
+  }
+
+  .ai-trust-indicator-text-{{ ai_gen_id }} {
+    font-size: {{ block.settings.indicator_text_size }}px;
+    color: {{ block.settings.indicator_text_color }};
+    line-height: 1.4;
+  }
+
+  .ai-trust-quote-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: {{ block.settings.quote_icon_spacing }}px;
+    padding: {{ block.settings.quote_padding }}px;
+    margin-bottom: {{ block.settings.quote_spacing }}px;
+  }
+
+  .ai-trust-quote-icon-{{ ai_gen_id }} {
+    flex-shrink: 0;
+    width: {{ block.settings.quote_icon_size }}px;
+    height: {{ block.settings.quote_icon_size }}px;
+    border-radius: 50%;
+    background: {{ block.settings.glassmorphic_background }};
+    backdrop-filter: blur({{ block.settings.glassmorphic_blur }}px);
+    border: {{ block.settings.glassmorphic_border_width }}px solid {{ block.settings.glassmorphic_border_color }};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: {{ block.settings.quote_icon_padding }}px;
+  }
+
+  .ai-trust-quote-icon-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .ai-trust-quote-icon-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-trust-quote-icon-placeholder-{{ ai_gen_id }} svg {
+    width: 70%;
+    height: 70%;
+    opacity: 0.6;
+  }
+
+  .ai-trust-quote-text-{{ ai_gen_id }} {
+    font-size: {{ block.settings.quote_text_size }}px;
+    color: {{ block.settings.quote_text_color }};
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  .ai-trust-footer-{{ ai_gen_id }} {
+    text-align: center;
+    font-size: {{ block.settings.footer_text_size }}px;
+    color: {{ block.settings.footer_text_color }};
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-trust-indicators-{{ ai_gen_id }} {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .ai-trust-section-title-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.title_size }}px * 0.7);
+    }
+
+    .ai-trust-section-content-{{ ai_gen_id }} {
+      padding: {{ block.settings.section_padding_top | times: 0.7 }}px 20px {{ block.settings.section_padding_bottom | times: 0.7 }}px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-trust-indicators-{{ ai_gen_id }} {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ai-trust-section-title-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.title_size }}px * 0.5);
+    }
+
+    .ai-trust-section-eyebrow-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.eyebrow_size }}px * 0.9);
+    }
+
+    .ai-trust-section-subheading-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.subheading_size }}px * 0.9);
+    }
+
+    .ai-trust-section-context-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.context_size }}px * 0.9);
+    }
+
+    .ai-trust-quote-{{ ai_gen_id }} {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .ai-trust-section-content-{{ ai_gen_id }} {
+      padding: {{ block.settings.section_padding_top | times: 0.5 }}px 15px {{ block.settings.section_padding_bottom | times: 0.5 }}px;
+    }
+
+    .ai-trust-footer-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.footer_text_size }}px * 0.8);
+    }
+  }
+{% endstyle %}
+
+<trust-section-{{ ai_gen_id }} class="ai-trust-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-trust-section-bg-{{ ai_gen_id }}">
+    {% if block.settings.background_image %}
+      <img
+        src="{{ block.settings.background_image | image_url: width: 2000 }}"
+        alt="{{ block.settings.background_image.alt | escape }}"
+        loading="lazy"
+        width="{{ block.settings.background_image.width }}"
+        height="{{ block.settings.background_image.height }}"
+      >
+    {% else %}
+      <div class="ai-trust-section-bg-placeholder-{{ ai_gen_id }}">
+        {{ 'hero-apparel-1' | placeholder_svg_tag }}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="ai-trust-section-overlay-{{ ai_gen_id }}"></div>
+
+  <div class="ai-trust-section-content-{{ ai_gen_id }}">
+    <div class="ai-trust-section-header-{{ ai_gen_id }}">
+      {% if block.settings.eyebrow != blank %}
+        <div class="ai-trust-section-eyebrow-{{ ai_gen_id }}">{{ block.settings.eyebrow }}</div>
+      {% endif %}
+
+      {% if block.settings.title != blank %}
+        <h2 class="ai-trust-section-title-{{ ai_gen_id }}">{{ block.settings.title }}</h2>
+      {% endif %}
+
+      {% if block.settings.subheading != blank %}
+        <div class="ai-trust-section-subheading-{{ ai_gen_id }}">{{ block.settings.subheading }}</div>
+      {% endif %}
+
+      {% if block.settings.context != blank %}
+        <div class="ai-trust-section-context-{{ ai_gen_id }}">{{ block.settings.context }}</div>
+      {% endif %}
+    </div>
+
+    <div class="ai-trust-indicators-{{ ai_gen_id }}">
+      {% for i in (1..5) %}
+        {% liquid
+          assign icon_key = 'indicator_' | append: i | append: '_icon'
+          assign title_key = 'indicator_' | append: i | append: '_title'
+          assign text_key = 'indicator_' | append: i | append: '_text'
+          assign icon = block.settings[icon_key]
+          assign title = block.settings[title_key]
+          assign text = block.settings[text_key]
+        %}
+
+        <div class="ai-trust-indicator-{{ ai_gen_id }}">
+          <div class="ai-trust-indicator-icon-wrapper-{{ ai_gen_id }}">
+            {% if icon %}
+              <img
+                src="{{ icon | image_url: width: 200 }}"
+                alt="{{ title | escape }}"
+                loading="lazy"
+                width="200"
+                height="200"
+              >
+            {% else %}
+              <div class="ai-trust-indicator-icon-placeholder-{{ ai_gen_id }}">
+                {{ 'image' | placeholder_svg_tag }}
+              </div>
+            {% endif %}
+          </div>
+          {% if title != blank %}
+            <div class="ai-trust-indicator-title-{{ ai_gen_id }}">{{ title }}</div>
+          {% endif %}
+          {% if text != blank %}
+            <div class="ai-trust-indicator-text-{{ ai_gen_id }}">{{ text }}</div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="ai-trust-quote-{{ ai_gen_id }}">
+      <div class="ai-trust-quote-icon-{{ ai_gen_id }}">
+        {% if block.settings.quote_icon %}
+          <img
+            src="{{ block.settings.quote_icon | image_url: width: 100 }}"
+            alt="Quote icon"
+            loading="lazy"
+            width="100"
+            height="100"
+          >
+        {% else %}
+          <div class="ai-trust-quote-icon-placeholder-{{ ai_gen_id }}">
+            {{ 'image' | placeholder_svg_tag }}
+          </div>
+        {% endif %}
+      </div>
+      {% if block.settings.quote_text != blank %}
+        <div class="ai-trust-quote-text-{{ ai_gen_id }}">{{ block.settings.quote_text }}</div>
+      {% endif %}
+    </div>
+
+    {% if block.settings.footer_text != blank %}
+      <div class="ai-trust-footer-{{ ai_gen_id }}">{{ block.settings.footer_text }}</div>
+    {% endif %}
+  </div>
+</trust-section-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class TrustSection{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.style.display = 'block';
+      }
+    }
+
+    customElements.define('trust-section-{{ ai_gen_id }}', TrustSection{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Trust section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.5
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "label": "Content max width",
+      "min": 600,
+      "max": 1400,
+      "step": 50,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Top padding",
+      "min": 20,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Bottom padding",
+      "min": 20,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Eyebrow"
+    },
+    {
+      "type": "richtext",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "<p>Why Bamboo?</p>"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_color",
+      "label": "Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_spacing",
+      "label": "Bottom spacing",
+      "min": 5,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "<p>Why Bamboo. Nature's Softest Gift</p>"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Font size",
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "title_spacing",
+      "label": "Bottom spacing",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Subheading"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Bamboo is a naturally renewable resource that grows without harmful pesticides and uses 30% less water than cotton.</p>"
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "label": "Font size",
+      "min": 14,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "subheading_spacing",
+      "label": "Bottom spacing",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Context"
+    },
+    {
+      "type": "richtext",
+      "id": "context",
+      "label": "Context text",
+      "default": "<p>It's gentle on your baby's skin and gentle on our planet.</p>"
+    },
+    {
+      "type": "range",
+      "id": "context_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "context_color",
+      "label": "Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "context_spacing",
+      "label": "Bottom spacing",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "header_spacing",
+      "label": "Header bottom spacing",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Trust indicators"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 40,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "icon_text_spacing",
+      "label": "Icon to text spacing",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "indicators_gap",
+      "label": "Gap between indicators",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "indicators_spacing",
+      "label": "Bottom spacing",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "indicator_title_size",
+      "label": "Title size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "indicator_title_color",
+      "label": "Title color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "indicator_title_spacing",
+      "label": "Title bottom spacing",
+      "min": 5,
+      "max": 20,
+      "step": 5,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "indicator_text_size",
+      "label": "Text size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "indicator_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Indicator 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "indicator_1_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "richtext",
+      "id": "indicator_1_title",
+      "label": "Title",
+      "default": "<p>Ultra Soft</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "indicator_1_text",
+      "label": "Description",
+      "default": "<p>Silky smooth fibers that feel like a gentle hug on delicate skin.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Indicator 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "indicator_2_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "richtext",
+      "id": "indicator_2_title",
+      "label": "Title",
+      "default": "<p>Breathable</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "indicator_2_text",
+      "label": "Description",
+      "default": "<p>Highly breathable fabric that keeps baby cool and comfortable.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Indicator 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "indicator_3_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "richtext",
+      "id": "indicator_3_title",
+      "label": "Title",
+      "default": "<p>Thermoregulating</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "indicator_3_text",
+      "label": "Description",
+      "default": "<p>Naturally adapts to your baby's body temperature in every season.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Indicator 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "indicator_4_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "richtext",
+      "id": "indicator_4_title",
+      "label": "Title",
+      "default": "<p>Hypoallergenic</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "indicator_4_text",
+      "label": "Description",
+      "default": "<p>Naturally hypoallergenic and antibacterial, perfect for sensitive skin.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Indicator 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "indicator_5_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "richtext",
+      "id": "indicator_5_title",
+      "label": "Title",
+      "default": "<p>Sustainable</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "indicator_5_text",
+      "label": "Description",
+      "default": "<p>Eco-friendly and biodegradable. Better for your baby, better for our Earth.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Quote section"
+    },
+    {
+      "type": "image_picker",
+      "id": "quote_icon",
+      "label": "Quote icon"
+    },
+    {
+      "type": "richtext",
+      "id": "quote_text",
+      "label": "Quote text",
+      "default": "<p>From the forest to your baby, with love.</p>"
+    },
+    {
+      "type": "range",
+      "id": "quote_text_size",
+      "label": "Text size",
+      "min": 14,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "quote_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "quote_icon_size",
+      "label": "Icon circle size",
+      "min": 40,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "quote_icon_padding",
+      "label": "Icon padding",
+      "min": 5,
+      "max": 25,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "quote_icon_spacing",
+      "label": "Icon to text spacing",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "quote_padding",
+      "label": "Quote section padding",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "quote_spacing",
+      "label": "Quote bottom spacing",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Glassmorphic style"
+    },
+    {
+      "type": "color",
+      "id": "glassmorphic_background",
+      "label": "Background",
+      "default": "rgba(255, 255, 255, 0.1)"
+    },
+    {
+      "type": "range",
+      "id": "glassmorphic_blur",
+      "label": "Blur amount",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "color",
+      "id": "glassmorphic_border_color",
+      "label": "Border color",
+      "default": "rgba(255, 255, 255, 0.3)"
+    },
+    {
+      "type": "range",
+      "id": "glassmorphic_border_width",
+      "label": "Border width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Footer text"
+    },
+    {
+      "type": "richtext",
+      "id": "footer_text",
+      "label": "Footer text",
+      "default": "<p>Sustainable by nature. Safe by choice. Made for your little one.</p>"
+    },
+    {
+      "type": "range",
+      "id": "footer_text_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "footer_text_color",
+      "label": "Color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust section"
+    }
+  ]
+}
+{% endschema %}
