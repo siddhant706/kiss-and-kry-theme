@@ -1,3 +1,11 @@
+## Kiss & Kry working rules (read first)
+- Find involved files with `graphify query "<question>"`, then read those files fully. Don't scan the whole repo.
+- Ignore minified assets, settings_data.json and other-language locale files. When adding text, edit only locales/en.default.json and en.default.schema.json.
+- Smallest possible edit. No full-file rewrites or reformatting of untouched code.
+- Put section CSS in the owning section's {% stylesheet %}. Use the theme's existing CSS variables and settings, never hardcoded colors or spacing.
+- Homepage is JSON-driven: check templates/index.json for the section list, and keep section IDs stable.
+- Visual targets: header, hero, content sections and footer share one container width and side padding. Mobile-first, breakpoints at 768px and 1024px.
+
 # Theme authoring guide
 
 Use this guide when editing this theme. It describes the technical contracts for
