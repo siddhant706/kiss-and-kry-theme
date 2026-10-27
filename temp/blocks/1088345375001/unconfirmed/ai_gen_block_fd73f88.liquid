@@ -1,6 +1,127 @@
+{% doc %}
+  @prompt
+    Generate a NEW trust strip. Colour scheme: Sage mist.
+    Four tiles. 2 by 2 on mobile, 4 across on desktop. Each tile: a 64px Milk circle, a 32px icon, a label of 4 words at most.
+    Generate four matching line icons: a delivery box, a returns arrow, a rupee note, a bamboo leaf.
+    Labels: "Free delivery", "[7]-day returns", "Cash on delivery", "Bamboo viscose".
+    Link Free delivery and Returns to the shipping and returns policy pages.
+    Add a "Show this section" checkbox, on by default.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-trust-strip-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    padding: 18px 16px;
+    background: #e5ebe1;
+    color: #344536;
+    font-family: inherit;
+  }
+  .ai-trust-strip-{{ ai_gen_id }}[hidden] { display: none; }
+  .ai-trust-strip-{{ ai_gen_id }}__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    width: 100%;
+  }
+  .ai-trust-strip-{{ ai_gen_id }}__tile {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    text-align: center;
+    text-decoration: none;
+    color: #344536;
+  }
+  .ai-trust-strip-{{ ai_gen_id }}__circle {
+    display: flex;
+    width: 64px;
+    height: 64px;
+    flex: 0 0 64px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f7f5ec;
+    color: #344536;
+  }
+  .ai-trust-strip-{{ ai_gen_id }}__circle svg {
+    display: block;
+    width: 32px;
+    height: 32px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .ai-trust-strip-{{ ai_gen_id }}__label {
+    font-size: 14px;
+    line-height: 1.35;
+    font-weight: 600;
+  }
+  .ai-trust-strip-{{ ai_gen_id }}__tile:focus-visible {
+    outline: 2px solid #344536;
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+  @media screen and (max-width: 749px) {
+    .ai-trust-strip-{{ ai_gen_id }}__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 10px; }
+  }
+{% endstyle %}
+
+<div class="ai-trust-strip-{{ ai_gen_id }}" {% unless block.settings.show_section %}hidden{% endunless %} {{ block.shopify_attributes }}>
+  <div class="ai-trust-strip-{{ ai_gen_id }}__grid">
+    {% if shop.shipping_policy != blank and shop.shipping_policy.url != blank %}
+      <a class="ai-trust-strip-{{ ai_gen_id }}__tile" href="{{ shop.shipping_policy.url }}" aria-label="Free delivery — shipping policy">
+    {% else %}
+      <div class="ai-trust-strip-{{ ai_gen_id }}__tile">
+    {% endif %}
+      <span class="ai-trust-strip-{{ ai_gen_id }}__circle" aria-hidden="true">
+        <svg viewBox="0 0 32 32"><path d="M4 10.5 16 4l12 6.5v13L16 30 4 23.5z"/><path d="m4 10.5 12 7 12-7M16 17.5V30M10 7.2l12 7M9 13.5v5l4 2.3"/></svg>
+      </span>
+      <span class="ai-trust-strip-{{ ai_gen_id }}__label">Free delivery</span>
+    {% if shop.shipping_policy != blank and shop.shipping_policy.url != blank %}</a>{% else %}</div>{% endif %}
+
+    {% if shop.refund_policy != blank and shop.refund_policy.url != blank %}
+      <a class="ai-trust-strip-{{ ai_gen_id }}__tile" href="{{ shop.refund_policy.url }}" aria-label="7-day returns — returns policy">
+    {% else %}
+      <div class="ai-trust-strip-{{ ai_gen_id }}__tile">
+    {% endif %}
+      <span class="ai-trust-strip-{{ ai_gen_id }}__circle" aria-hidden="true">
+        <svg viewBox="0 0 32 32"><path d="M8 10H4V6"/><path d="M4.5 10A12 12 0 1 1 4 19"/><path d="M4 10l5-5"/></svg>
+      </span>
+      <span class="ai-trust-strip-{{ ai_gen_id }}__label">7-day returns</span>
+    {% if shop.refund_policy != blank and shop.refund_policy.url != blank %}</a>{% else %}</div>{% endif %}
+
+    <div class="ai-trust-strip-{{ ai_gen_id }}__tile">
+      <span class="ai-trust-strip-{{ ai_gen_id }}__circle" aria-hidden="true">
+        <svg viewBox="0 0 32 32"><rect x="5" y="7" width="22" height="18" rx="2"/><path d="M10 12h12M10 20h12M16 11v10"/><path d="M14 14c0-1 1-2 2-2s2 1 2 2-1 1.5-2 2-2 1-2 2 1 2 2 2 2-1 2-2"/></svg>
+      </span>
+      <span class="ai-trust-strip-{{ ai_gen_id }}__label">Cash on delivery</span>
+    </div>
+
+    <div class="ai-trust-strip-{{ ai_gen_id }}__tile">
+      <span class="ai-trust-strip-{{ ai_gen_id }}__circle" aria-hidden="true">
+        <svg viewBox="0 0 32 32"><path d="M26.5 5.5C16 5 7 9.5 7 19c0 4 2.5 7 6 7 7 0 13-8 13.5-20.5Z"/><path d="M5 28c3-8 8-13 16-18M13 19l-1-5M17 15l5 1"/></svg>
+      </span>
+      <span class="ai-trust-strip-{{ ai_gen_id }}__label">Bamboo viscose</span>
+    </div>
+  </div>
+</div>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Sage mist trust strip",
+  "settings": [
+    { "type": "checkbox", "id": "show_section", "label": "Show this section", "default": true },
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 }
+  ],
+  "presets": [{ "name": "Sage mist trust strip" }],
+  "tag": null,
+  "class": "sage-mist-trust-strip"
+}
 {% endschema %}
