@@ -1,6 +1,101 @@
+{% doc %}
+  @prompt
+    Generate a NEW comparison section. Colour scheme: Milk.
+    Heading: "Bamboo viscose or cotton?" Support line: "Here is where bamboo viscose helps."
+    Two cards, stacked on mobile and side by side on desktop, 28px radius. Left card (Sage mist): a bamboo leaf icon and the title "Bamboo viscose". Right card (Oat): a cotton boll icon and the title "Cotton".
+    Three rows in each: Feel, Breathability, Care. Each row is a small label and one short line.
+    Use only these facts: Feel: [fact]. Breathability: [fact]. Care: [fact]. If a fact is missing, leave that row out.
+    Generate two icons: a bamboo leaf and a cotton boll, 1.5px line, olive. No fabric close-ups, no percentages, no health words.
+    Add a "Show this section" checkbox, on by default.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% if block.settings.show_section %}
+  {% style %}
+    .ai-fabric-compare-{{ ai_gen_id }} {
+      display: block;
+      width: {{ block.settings.desktop_width_percent }}%;
+      max-width: 100%;
+      box-sizing: border-box;
+      background: {{ block.settings.milk_color }};
+      color: {{ block.settings.olive_color }};
+      padding: 42px 24px;
+    }
+    .ai-fabric-compare-{{ ai_gen_id }} *,
+    .ai-fabric-compare-{{ ai_gen_id }} *::before,
+    .ai-fabric-compare-{{ ai_gen_id }} *::after { box-sizing: border-box; }
+    .ai-fabric-compare-{{ ai_gen_id }}__inner { width: 100%; max-width: 1120px; margin: 0 auto; }
+    .ai-fabric-compare-{{ ai_gen_id }}__heading { margin: 0; color: {{ block.settings.olive_color }}; font-size: clamp(28px, 4vw, 44px); line-height: 1.12; text-align: center; }
+    .ai-fabric-compare-{{ ai_gen_id }}__support { margin: 12px 0 30px; text-align: center; color: {{ block.settings.olive_color }}; font-size: 16px; line-height: 1.5; }
+    .ai-fabric-compare-{{ ai_gen_id }}__cards { display: grid; grid-template-columns: 1fr; gap: 18px; }
+    .ai-fabric-compare-{{ ai_gen_id }}__card { min-width: 0; padding: 28px; border-radius: 28px; }
+    .ai-fabric-compare-{{ ai_gen_id }}__card--bamboo { background: {{ block.settings.sage_color }}; }
+    .ai-fabric-compare-{{ ai_gen_id }}__card--cotton { background: {{ block.settings.oat_color }}; }
+    .ai-fabric-compare-{{ ai_gen_id }}__card-head { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+    .ai-fabric-compare-{{ ai_gen_id }}__icon { display: block; flex: 0 0 42px; width: 42px; height: 42px; fill: none; stroke: {{ block.settings.olive_color }}; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .ai-fabric-compare-{{ ai_gen_id }}__title { margin: 0; color: {{ block.settings.olive_color }}; font-size: 22px; line-height: 1.25; }
+    .ai-fabric-compare-{{ ai_gen_id }}__row { padding: 14px 0; border-top: 1px solid {{ block.settings.olive_color }}; }
+    .ai-fabric-compare-{{ ai_gen_id }}__label { display: block; margin-bottom: 4px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+    .ai-fabric-compare-{{ ai_gen_id }}__fact { margin: 0; font-size: 15px; line-height: 1.5; }
+    @media screen and (min-width: 750px) {
+      .ai-fabric-compare-{{ ai_gen_id }} { padding: 60px 32px; }
+      .ai-fabric-compare-{{ ai_gen_id }}__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+      .ai-fabric-compare-{{ ai_gen_id }}__card { padding: 34px; }
+    }
+  {% endstyle %}
+  <section class="ai-fabric-compare-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+    <div class="ai-fabric-compare-{{ ai_gen_id }}__inner">
+      {% if block.settings.heading != blank %}<h2 class="ai-fabric-compare-{{ ai_gen_id }}__heading">{{ block.settings.heading | escape }}</h2>{% endif %}
+      {% if block.settings.support_line != blank %}<p class="ai-fabric-compare-{{ ai_gen_id }}__support">{{ block.settings.support_line | escape }}</p>{% endif %}
+      <div class="ai-fabric-compare-{{ ai_gen_id }}__cards">
+        <article class="ai-fabric-compare-{{ ai_gen_id }}__card ai-fabric-compare-{{ ai_gen_id }}__card--bamboo">
+          <div class="ai-fabric-compare-{{ ai_gen_id }}__card-head">
+            <svg class="ai-fabric-compare-{{ ai_gen_id }}__icon" viewBox="0 0 48 48" role="img" aria-label="Bamboo leaf"><path d="M8 38C18 34 27 25 39 9M15 32c-6-1-9-6-9-12 7 0 12 3 13 9M23 24c-1-7 2-12 8-16 4 6 4 12-1 17M30 17c1 7 5 10 11 11-2-7-6-11-11-11"/><path d="M11 35c3-6 6-10 10-14"/></svg>
+            <h3 class="ai-fabric-compare-{{ ai_gen_id }}__title">{{ block.settings.bamboo_title | escape }}</h3>
+          </div>
+          {% if block.settings.bamboo_feel != blank %}<div class="ai-fabric-compare-{{ ai_gen_id }}__row"><span class="ai-fabric-compare-{{ ai_gen_id }}__label">Feel</span><p class="ai-fabric-compare-{{ ai_gen_id }}__fact">{{ block.settings.bamboo_feel | escape }}</p></div>{% endif %}
+          {% if block.settings.bamboo_breathability != blank %}<div class="ai-fabric-compare-{{ ai_gen_id }}__row"><span class="ai-fabric-compare-{{ ai_gen_id }}__label">Breathability</span><p class="ai-fabric-compare-{{ ai_gen_id }}__fact">{{ block.settings.bamboo_breathability | escape }}</p></div>{% endif %}
+          {% if block.settings.bamboo_care != blank %}<div class="ai-fabric-compare-{{ ai_gen_id }}__row"><span class="ai-fabric-compare-{{ ai_gen_id }}__label">Care</span><p class="ai-fabric-compare-{{ ai_gen_id }}__fact">{{ block.settings.bamboo_care | escape }}</p></div>{% endif %}
+        </article>
+        <article class="ai-fabric-compare-{{ ai_gen_id }}__card ai-fabric-compare-{{ ai_gen_id }}__card--cotton">
+          <div class="ai-fabric-compare-{{ ai_gen_id }}__card-head">
+            <svg class="ai-fabric-compare-{{ ai_gen_id }}__icon" viewBox="0 0 48 48" role="img" aria-label="Cotton boll"><path d="M24 39V24M24 31c-5 0-9-3-9-8 0-3 2-6 5-7 0-5 3-8 7-8s7 3 7 8c3 1 5 4 5 7 0 5-4 8-9 8M19 16c-2-3-1-7 2-9M29 15c3-2 4-5 3-8M18 28c-2 5-6 7-11 7 1-4 4-7 9-8M30 28c2 5 6 7 11 7-1-4-4-7-9-8M18 39h12"/></svg>
+            <h3 class="ai-fabric-compare-{{ ai_gen_id }}__title">{{ block.settings.cotton_title | escape }}</h3>
+          </div>
+          {% if block.settings.cotton_feel != blank %}<div class="ai-fabric-compare-{{ ai_gen_id }}__row"><span class="ai-fabric-compare-{{ ai_gen_id }}__label">Feel</span><p class="ai-fabric-compare-{{ ai_gen_id }}__fact">{{ block.settings.cotton_feel | escape }}</p></div>{% endif %}
+          {% if block.settings.cotton_breathability != blank %}<div class="ai-fabric-compare-{{ ai_gen_id }}__row"><span class="ai-fabric-compare-{{ ai_gen_id }}__label">Breathability</span><p class="ai-fabric-compare-{{ ai_gen_id }}__fact">{{ block.settings.cotton_breathability | escape }}</p></div>{% endif %}
+          {% if block.settings.cotton_care != blank %}<div class="ai-fabric-compare-{{ ai_gen_id }}__row"><span class="ai-fabric-compare-{{ ai_gen_id }}__label">Care</span><p class="ai-fabric-compare-{{ ai_gen_id }}__fact">{{ block.settings.cotton_care | escape }}</p></div>{% endif %}
+        </article>
+      </div>
+    </div>
+  </section>
+{% endif %}
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Fabric comparison",
+  "settings": [
+    { "type": "checkbox", "id": "show_section", "label": "Show this section", "default": true },
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Bamboo viscose or cotton?" },
+    { "type": "text", "id": "support_line", "label": "Support line", "default": "Here is where bamboo viscose helps." },
+    { "type": "header", "content": "Card titles" },
+    { "type": "text", "id": "bamboo_title", "label": "Bamboo card", "default": "Bamboo viscose" },
+    { "type": "text", "id": "cotton_title", "label": "Cotton card", "default": "Cotton" },
+    { "type": "header", "content": "Bamboo viscose facts" },
+    { "type": "text", "id": "bamboo_feel", "label": "Feel" },
+    { "type": "text", "id": "bamboo_breathability", "label": "Breathability" },
+    { "type": "text", "id": "bamboo_care", "label": "Care" },
+    { "type": "header", "content": "Cotton facts" },
+    { "type": "text", "id": "cotton_feel", "label": "Feel" },
+    { "type": "text", "id": "cotton_breathability", "label": "Breathability" },
+    { "type": "text", "id": "cotton_care", "label": "Care" },
+    { "type": "header", "content": "Milk color scheme" },
+    { "type": "color", "id": "milk_color", "label": "Milk", "default": "#F7F5EE" },
+    { "type": "color", "id": "sage_color", "label": "Sage mist", "default": "#E1E7DA" },
+    { "type": "color", "id": "oat_color", "label": "Oat", "default": "#E9DFCF" },
+    { "type": "color", "id": "olive_color", "label": "Olive", "default": "#5E6539" }
+  ],
+  "presets": [{ "name": "Fabric comparison" }],
+  "tag": null,
+  "class": "fabric-comparison-block"
+}
 {% endschema %}
