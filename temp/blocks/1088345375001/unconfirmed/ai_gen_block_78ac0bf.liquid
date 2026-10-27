@@ -1,6 +1,238 @@
+{% doc %}
+  @prompt
+    generate a full page width section with background color eyebrow, title, subheading , context 5 trust indicators with PNG icons to change all equal size and text must be just below of icons not on any other sides then at the bottom a quote line with a PNG icon on left on glassmorphic style circle, WHY BAMBOO?
+    Why Bamboo.
+    Nature’s Softest Gift
+    
+    Bamboo is a naturally renewable resource that grows without harmful pesticides and uses 30% less water than cotton.
+    
+    It’s gentle on your baby’s skin and gentle on our planet.
+    
+    Ultra Soft
+    
+    Silky smooth fibers that feel like a gentle hug on delicate skin.
+    
+    Breathable
+    
+    Highly breathable fabric that keeps baby cool and comfortable.
+    
+    Thermoregulating
+    
+    Naturally adapts to your baby’s body temperature in every season.
+    
+    Hypoallergenic
+    
+    Naturally hypoallergenic and antibacterial, perfect for sensitive skin.
+    
+    Sustainable
+    
+    Eco-friendly and biodegradable.
+    
+    Better for your baby, better for our Earth.
+    
+    “From the forest to your baby, with love.”
+    
+    SUSTAINABLE BY NATURE. SAFE BY CHOICE. MADE FOR YOUR LITTLE ONE.
+    
+    add this content in this section accordingly, now make all the text is rich text in this section
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-bamboo-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: {{ block.settings.section_padding }}px 24px;
+    background: {{ block.settings.background_color }};
+    color: {{ block.settings.text_color }};
+    text-align: center;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }} *,
+  .ai-bamboo-{{ ai_gen_id }} *::before,
+  .ai-bamboo-{{ ai_gen_id }} *::after { box-sizing: border-box; }
+
+  .ai-bamboo-{{ ai_gen_id }}__inner {
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__eyebrow,
+  .ai-bamboo-{{ ai_gen_id }}__title,
+  .ai-bamboo-{{ ai_gen_id }}__subtitle,
+  .ai-bamboo-{{ ai_gen_id }}__intro,
+  .ai-bamboo-{{ ai_gen_id }}__closing { margin: 0; }
+
+  .ai-bamboo-{{ ai_gen_id }}__eyebrow { margin-bottom: 10px; color: {{ block.settings.accent_color }}; }
+  .ai-bamboo-{{ ai_gen_id }}__title { margin-bottom: 8px; }
+  .ai-bamboo-{{ ai_gen_id }}__subtitle { margin-bottom: 20px; }
+  .ai-bamboo-{{ ai_gen_id }}__intro { max-width: 760px; margin: 0 auto 34px; }
+  .ai-bamboo-{{ ai_gen_id }}__intro p:last-child,
+  .ai-bamboo-{{ ai_gen_id }}__eyebrow p:last-child,
+  .ai-bamboo-{{ ai_gen_id }}__title p:last-child,
+  .ai-bamboo-{{ ai_gen_id }}__subtitle p:last-child,
+  .ai-bamboo-{{ ai_gen_id }}__closing p:last-child { margin-bottom: 0; }
+
+  .ai-bamboo-{{ ai_gen_id }}__indicators {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 24px;
+    align-items: start;
+    margin: 0 auto 38px;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__indicator { min-width: 0; text-align: center; }
+  .ai-bamboo-{{ ai_gen_id }}__icon-wrap {
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ai-bamboo-{{ ai_gen_id }}__icon-wrap img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .ai-bamboo-{{ ai_gen_id }}__icon-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: {{ block.settings.accent_color }};
+  }
+  .ai-bamboo-{{ ai_gen_id }}__icon-placeholder svg { width: 100%; height: 100%; }
+  .ai-bamboo-{{ ai_gen_id }}__indicator-copy > :first-child { margin-top: 0; }
+  .ai-bamboo-{{ ai_gen_id }}__indicator-copy > :last-child { margin-bottom: 0; }
+
+  .ai-bamboo-{{ ai_gen_id }}__quote {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    max-width: 760px;
+    margin: 0 auto 24px;
+    padding: 18px 24px;
+    border: 1px solid {{ block.settings.glass_border_color }};
+    border-radius: 999px;
+    background: {{ block.settings.glass_background_color }};
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+  .ai-bamboo-{{ ai_gen_id }}__quote-icon {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid {{ block.settings.glass_border_color }};
+    border-radius: 50%;
+    background: {{ block.settings.glass_background_color }};
+  }
+  .ai-bamboo-{{ ai_gen_id }}__quote-icon img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .ai-bamboo-{{ ai_gen_id }}__quote-icon svg { width: 26px; height: 26px; color: {{ block.settings.accent_color }}; }
+  .ai-bamboo-{{ ai_gen_id }}__quote-text { margin: 0; }
+  .ai-bamboo-{{ ai_gen_id }}__closing { color: {{ block.settings.accent_color }}; }
+
+  @media screen and (max-width: 749px) {
+    .ai-bamboo-{{ ai_gen_id }} { padding: {{ block.settings.section_padding | divided_by: 2 }}px 18px; }
+    .ai-bamboo-{{ ai_gen_id }}__inner { width: 100%; }
+    .ai-bamboo-{{ ai_gen_id }}__indicators { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 18px; }
+    .ai-bamboo-{{ ai_gen_id }}__indicator:last-child { grid-column: 1 / -1; }
+    .ai-bamboo-{{ ai_gen_id }}__quote { border-radius: 22px; padding: 16px; }
+    .ai-bamboo-{{ ai_gen_id }}__icon-wrap { width: {{ block.settings.icon_size | at_most: 80 }}px; height: {{ block.settings.icon_size | at_most: 80 }}px; }
+  }
+{% endstyle %}
+
+<section class="ai-bamboo-{{ ai_gen_id }}" style="width: 100%;" {{ block.shopify_attributes }}>
+  <div class="ai-bamboo-{{ ai_gen_id }}__inner">
+    {% if block.settings.eyebrow != blank %}<div class="ai-bamboo-{{ ai_gen_id }}__eyebrow">{{ block.settings.eyebrow }}</div>{% endif %}
+    {% if block.settings.title != blank %}<div class="ai-bamboo-{{ ai_gen_id }}__title">{{ block.settings.title }}</div>{% endif %}
+    {% if block.settings.subtitle != blank %}<div class="ai-bamboo-{{ ai_gen_id }}__subtitle">{{ block.settings.subtitle }}</div>{% endif %}
+    {% if block.settings.intro != blank %}<div class="ai-bamboo-{{ ai_gen_id }}__intro">{{ block.settings.intro }}</div>{% endif %}
+
+    <div class="ai-bamboo-{{ ai_gen_id }}__indicators">
+      {% for i in (1..5) %}
+        {% assign icon_key = 'icon_' | append: i %}
+        {% assign copy_key = 'indicator_' | append: i %}
+        {% assign icon_image = block.settings[icon_key] %}
+        {% assign indicator_copy = block.settings[copy_key] %}
+        <article class="ai-bamboo-{{ ai_gen_id }}__indicator">
+          <div class="ai-bamboo-{{ ai_gen_id }}__icon-wrap">
+            {% if icon_image != blank %}
+              <img src="{{ icon_image | image_url: width: 240 }}" alt="" loading="lazy" width="{{ icon_image.width }}" height="{{ icon_image.height }}">
+            {% else %}
+              <div class="ai-bamboo-{{ ai_gen_id }}__icon-placeholder">{{ 'image' | placeholder_svg_tag }}</div>
+            {% endif %}
+          </div>
+          <div class="ai-bamboo-{{ ai_gen_id }}__indicator-copy">{{ indicator_copy }}</div>
+        </article>
+      {% endfor %}
+    </div>
+
+    <div class="ai-bamboo-{{ ai_gen_id }}__quote">
+      <span class="ai-bamboo-{{ ai_gen_id }}__quote-icon" aria-hidden="true">
+        {% if block.settings.quote_icon != blank %}
+          <img src="{{ block.settings.quote_icon | image_url: width: 120 }}" alt="" loading="lazy" width="{{ block.settings.quote_icon.width }}" height="{{ block.settings.quote_icon.height }}">
+        {% else %}
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.2 5.5A5.2 5.2 0 0 0 2 10.7v7.8h8.1v-8H6.5a2.7 2.7 0 0 1 2.7-2.4V5.5Zm12 0a5.2 5.2 0 0 0-5.2 5.2v7.8h8.1v-8h-3.6a2.7 2.7 0 0 1 2.7-2.4V5.5Z"/></svg>
+        {% endif %}
+      </span>
+      <div class="ai-bamboo-{{ ai_gen_id }}__quote-text">{{ block.settings.quote_text }}</div>
+    </div>
+    {% if block.settings.closing_line != blank %}<div class="ai-bamboo-{{ ai_gen_id }}__closing">{{ block.settings.closing_line }}</div>{% endif %}
+  </div>
+</section>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Why bamboo",
+  "settings": [
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "section_padding", "label": "Section padding", "min": 20, "max": 100, "step": 5, "unit": "px", "default": 60 },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#F2F4EC" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#333333" },
+    { "type": "color", "id": "accent_color", "label": "Accent", "default": "#5E6539" },
+    { "type": "range", "id": "icon_size", "label": "Indicator icon size", "min": 40, "max": 120, "step": 5, "unit": "px", "default": 70 },
+    { "type": "color", "id": "glass_background_color", "label": "Quote glass background", "default": "#FFFFFF" },
+    { "type": "color", "id": "glass_border_color", "label": "Quote glass border", "default": "#DFDFDF" },
+    { "type": "header", "content": "Section copy" },
+    { "type": "richtext", "id": "eyebrow", "label": "Eyebrow", "default": "<p>WHY BAMBOO?</p>" },
+    { "type": "richtext", "id": "title", "label": "Title", "default": "<h2>Why Bamboo.</h2>" },
+    { "type": "richtext", "id": "subtitle", "label": "Subheading", "default": "<p>Nature’s Softest Gift</p>" },
+    { "type": "richtext", "id": "intro", "label": "Introduction", "default": "<p>Bamboo is a naturally renewable resource that grows without harmful pesticides and uses 30% less water than cotton.</p><p>It’s gentle on your baby’s skin and gentle on our planet.</p>" },
+    { "type": "header", "content": "Indicator one" },
+    { "type": "image_picker", "id": "icon_1", "label": "PNG icon" },
+    { "type": "richtext", "id": "indicator_1", "label": "Text", "default": "<h3>Ultra Soft</h3><p>Silky smooth fibers that feel like a gentle hug on delicate skin.</p>" },
+    { "type": "header", "content": "Indicator two" },
+    { "type": "image_picker", "id": "icon_2", "label": "PNG icon" },
+    { "type": "richtext", "id": "indicator_2", "label": "Text", "default": "<h3>Breathable</h3><p>Highly breathable fabric that keeps baby cool and comfortable.</p>" },
+    { "type": "header", "content": "Indicator three" },
+    { "type": "image_picker", "id": "icon_3", "label": "PNG icon" },
+    { "type": "richtext", "id": "indicator_3", "label": "Text", "default": "<h3>Thermoregulating</h3><p>Naturally adapts to your baby’s body temperature in every season.</p>" },
+    { "type": "header", "content": "Indicator four" },
+    { "type": "image_picker", "id": "icon_4", "label": "PNG icon" },
+    { "type": "richtext", "id": "indicator_4", "label": "Text", "default": "<h3>Hypoallergenic</h3><p>Naturally hypoallergenic and antibacterial, perfect for sensitive skin.</p>" },
+    { "type": "header", "content": "Indicator five" },
+    { "type": "image_picker", "id": "icon_5", "label": "PNG icon" },
+    { "type": "richtext", "id": "indicator_5", "label": "Text", "default": "<h3>Sustainable</h3><p>Eco-friendly and biodegradable.</p>" },
+    { "type": "header", "content": "Closing quote" },
+    { "type": "image_picker", "id": "quote_icon", "label": "Quote PNG icon" },
+    { "type": "richtext", "id": "quote_text", "label": "Quote", "default": "<p>“From the forest to your baby, with love.”</p>" },
+    { "type": "richtext", "id": "closing_line", "label": "Closing line", "default": "<p>Better for your baby, better for our Earth.<br>SUSTAINABLE BY NATURE. SAFE BY CHOICE. MADE FOR YOUR LITTLE ONE.</p>" }
+  ],
+  "presets": [
+    { "name": "Why bamboo" }
+  ],
+  "tag": null,
+  "class": "why-bamboo-block"
+}
 {% endschema %}
