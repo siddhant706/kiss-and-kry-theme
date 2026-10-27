@@ -1,6 +1,114 @@
+{% doc %}
+  @prompt
+    Generate a NEW section "Shop by age" using hang tags. Colour scheme: Oat.
+    Heading: "Shop by age". Support line: "Not sure? Try the size helper." (links to #size-helper)
+    Five tags: Newborn, 0–3 months, 3–6 months, 6–12 months, 12–24 months. Each tag is a Milk card, 20px radius, olive-tinted shadow, with an icon on top and the label below. The whole tag is the link.
+    Generate five matching line icons that show a bamboo shoot growing from a tiny sprout to a taller stalk, one step per age.
+    A thin copper line runs across the top of the row, and each tag hangs from it on a short thread.
+    Mobile: snap-scroll row, tags 170px wide, a peek of the next tag. Desktop: five across.
+    Links: the five age collections. If they do not exist, create automatic collections from product tags or titles and tell me the rule you used.
+    Add a "Show this section" checkbox, on by default.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-age-section-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    padding: 32px 0;
+    background: #f3eee2;
+    color: #41452b;
+  }
+  .ai-age-inner-{{ ai_gen_id }} { width: 100%; }
+  .ai-age-heading-{{ ai_gen_id }} { margin: 0 0 8px; color: #41452b; font-size: clamp(26px, 3vw, 40px); line-height: 1.15; }
+  .ai-age-support-{{ ai_gen_id }} { margin: 0 0 26px; font-size: 15px; color: #41452b; }
+  .ai-age-support-{{ ai_gen_id }} a { color: #41452b; text-underline-offset: 3px; }
+  .ai-age-track-{{ ai_gen_id }} { position: relative; }
+  .ai-age-track-{{ ai_gen_id }}::before { content: ''; position: absolute; top: 8px; left: 0; right: 0; height: 1px; background: #a86b49; }
+  .ai-age-list-{{ ai_gen_id }} { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px; padding: 0; margin: 0; list-style: none; }
+  .ai-age-item-{{ ai_gen_id }} { min-width: 0; padding-top: 8px; }
+  .ai-age-link-{{ ai_gen_id }} { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-height: 186px; padding: 20px 12px 18px; border-radius: 20px; background: #fffdf7; color: #41452b; text-align: center; text-decoration: none; box-shadow: 0 5px 13px rgba(94, 101, 57, .20); }
+  .ai-age-link-{{ ai_gen_id }}::before { content: ''; position: absolute; width: 1px; height: 19px; top: -19px; left: 50%; background: #a86b49; }
+  .ai-age-link-{{ ai_gen_id }}:hover { box-shadow: 0 7px 17px rgba(94, 101, 57, .28); }
+  .ai-age-link-{{ ai_gen_id }}:focus-visible, .ai-age-support-{{ ai_gen_id }} a:focus-visible { outline: 3px solid #41452b; outline-offset: 3px; }
+  .ai-age-icon-{{ ai_gen_id }} { width: 68px; height: 78px; color: #5e6539; }
+  .ai-age-label-{{ ai_gen_id }} { font-size: 15px; line-height: 1.3; font-weight: 600; }
+  @media screen and (max-width: 749px) {
+    .ai-age-section-{{ ai_gen_id }} { padding: 26px 0; }
+    .ai-age-track-{{ ai_gen_id }} { overflow: visible; }
+    .ai-age-track-{{ ai_gen_id }}::before { right: 0; }
+    .ai-age-list-{{ ai_gen_id }} { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; padding: 0 18px 12px 2px; }
+    .ai-age-item-{{ ai_gen_id }} { flex: 0 0 170px; scroll-snap-align: start; }
+    .ai-age-link-{{ ai_gen_id }} { min-height: 176px; }
+  }
+{% endstyle %}
+
+{% if block.settings.show_section %}
+  <section class="ai-age-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+    <div class="ai-age-inner-{{ ai_gen_id }}">
+      <h2 class="ai-age-heading-{{ ai_gen_id }}">{{ block.settings.heading | escape }}</h2>
+      <p class="ai-age-support-{{ ai_gen_id }}">{{ block.settings.support_text | escape }} <a href="#size-helper">{{ block.settings.support_link_label | escape }}</a></p>
+      <div class="ai-age-track-{{ ai_gen_id }}">
+        <ul class="ai-age-list-{{ ai_gen_id }}">
+          {% for i in (1..5) %}
+            {% liquid
+              assign collection_key = 'age_collection_' | append: i
+              assign collection_obj = block.settings[collection_key]
+              assign title_key = 'age_label_' | append: i
+              assign age_label = block.settings[title_key]
+              assign fallback_slug = age_label | handleize
+              assign age_link = '/collections/' | append: fallback_slug
+              if collection_obj != blank
+                assign age_link = collection_obj.url
+              endif
+            %}
+            <li class="ai-age-item-{{ ai_gen_id }}">
+              <a class="ai-age-link-{{ ai_gen_id }}" href="{{ age_link }}" aria-label="Shop {{ age_label | escape }}">
+                <svg class="ai-age-icon-{{ ai_gen_id }}" viewBox="0 0 72 84" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M36 74V56" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+                  <path d="M36 58C29 56 26 51 27 46C33 47 37 51 36 58Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  {% if i >= 2 %}<path d="M36 51C42 49 45 45 44 40C39 41 35 45 36 51Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>{% endif %}
+                  {% if i >= 3 %}<path d="M36 43C29 41 26 36 27 31C33 32 37 36 36 43Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>{% endif %}
+                  {% if i >= 4 %}<path d="M36 35C42 33 45 29 44 24C39 25 35 29 36 35Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>{% endif %}
+                  {% if i >= 5 %}<path d="M36 27C29 25 27 20 28 15C33 16 37 20 36 27Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>{% endif %}
+                  <path d="M24 74H48" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M31 74C31 70 33 68 36 68C39 68 41 70 41 74" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  {% if i == 1 %}<circle cx="36" cy="62" r="2" fill="currentColor"/>{% endif %}
+                </svg>
+                <span class="ai-age-label-{{ ai_gen_id }}">{{ age_label | escape }}</span>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </section>
+{% endif %}
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Shop by age",
+  "tag": null,
+  "class": "shop-by-age-block",
+  "settings": [
+    { "type": "checkbox", "id": "show_section", "label": "Show this section", "default": true },
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by age" },
+    { "type": "text", "id": "support_text", "label": "Support line", "default": "Not sure?" },
+    { "type": "text", "id": "support_link_label", "label": "Support link label", "default": "Try the size helper." },
+    { "type": "header", "content": "Age collections" },
+    { "type": "text", "id": "age_label_1", "label": "Age 1 label", "default": "Newborn" },
+    { "type": "collection", "id": "age_collection_1", "label": "Newborn collection" },
+    { "type": "text", "id": "age_label_2", "label": "Age 2 label", "default": "0–3 months" },
+    { "type": "collection", "id": "age_collection_2", "label": "0–3 months collection" },
+    { "type": "text", "id": "age_label_3", "label": "Age 3 label", "default": "3–6 months" },
+    { "type": "collection", "id": "age_collection_3", "label": "3–6 months collection" },
+    { "type": "text", "id": "age_label_4", "label": "Age 4 label", "default": "6–12 months" },
+    { "type": "collection", "id": "age_collection_4", "label": "6–12 months collection" },
+    { "type": "text", "id": "age_label_5", "label": "Age 5 label", "default": "12–24 months" },
+    { "type": "collection", "id": "age_collection_5", "label": "12–24 months collection" }
+  ],
+  "presets": [{ "name": "Shop by age" }]
+}
 {% endschema %}
