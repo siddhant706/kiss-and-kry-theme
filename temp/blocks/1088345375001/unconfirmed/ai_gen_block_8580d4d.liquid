@@ -1,6 +1,221 @@
+{% doc %}
+  @prompt
+    generate a full page width section with background color eyebrow, title, subheading , context 5 trust indicators with PNG icons to change all equal size and text must be just below of icons not on any other sides then at the bottom a quote line with a PNG icon on left on glassmorphic style circle, WHY BAMBOO?
+    Why Bamboo.
+    Nature’s Softest Gift
+    
+    Bamboo is a naturally renewable resource that grows without harmful pesticides and uses 30% less water than cotton.
+    
+    It’s gentle on your baby’s skin and gentle on our planet.
+    
+    Ultra Soft
+    
+    Silky smooth fibers that feel like a gentle hug on delicate skin.
+    
+    Breathable
+    
+    Highly breathable fabric that keeps baby cool and comfortable.
+    
+    Thermoregulating
+    
+    Naturally adapts to your baby’s body temperature in every season.
+    
+    Hypoallergenic
+    
+    Naturally hypoallergenic and antibacterial, perfect for sensitive skin.
+    
+    Sustainable
+    
+    Eco-friendly and biodegradable.
+    
+    Better for your baby, better for our Earth.
+    
+    “From the forest to your baby, with love.”
+    
+    SUSTAINABLE BY NATURE. SAFE BY CHOICE. MADE FOR YOUR LITTLE ONE.
+    
+    add this content in this section accordingly, now make all the text is rich text in this section
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-bamboo-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin-inline: auto;
+    padding: clamp(36px, 6vw, 76px) 24px;
+    color: {{ block.settings.text_color }};
+    background: {{ block.settings.background_color }};
+    box-sizing: border-box;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }} * { box-sizing: border-box; }
+
+  .ai-bamboo-{{ ai_gen_id }}__inner {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__intro { max-width: 760px; margin: 0 auto 38px; }
+  .ai-bamboo-{{ ai_gen_id }}__eyebrow { color: {{ block.settings.accent_color }}; margin: 0 0 12px; }
+  .ai-bamboo-{{ ai_gen_id }}__title { color: {{ block.settings.text_color }}; margin: 0 0 12px; }
+  .ai-bamboo-{{ ai_gen_id }}__subheading { margin: 0; }
+  .ai-bamboo-{{ ai_gen_id }}__description { max-width: 720px; margin: 18px auto 0; }
+
+  .ai-bamboo-{{ ai_gen_id }}__indicators {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 26px;
+    margin: 0 auto 42px;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__item { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .ai-bamboo-{{ ai_gen_id }}__icon-wrap {
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    flex: 0 0 {{ block.settings.icon_size }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+  .ai-bamboo-{{ ai_gen_id }}__icon-wrap img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .ai-bamboo-{{ ai_gen_id }}__icon-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+  .ai-bamboo-{{ ai_gen_id }}__icon-placeholder svg { width: 100%; height: 100%; color: {{ block.settings.accent_color }}; }
+  .ai-bamboo-{{ ai_gen_id }}__item-title { margin: 0 0 8px; color: {{ block.settings.text_color }}; }
+  .ai-bamboo-{{ ai_gen_id }}__item-copy { margin: 0; }
+
+  .ai-bamboo-{{ ai_gen_id }}__quote {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 14px 24px 14px 14px;
+    border: 1px solid {{ block.settings.glass_border }};
+    border-radius: 999px;
+    background: {{ block.settings.glass_color }};
+    box-shadow: 0 8px 24px rgba(35, 45, 25, 0.08);
+    backdrop-filter: blur(12px);
+  }
+  .ai-bamboo-{{ ai_gen_id }}__quote-icon {
+    width: {{ block.settings.quote_icon_size }}px;
+    height: {{ block.settings.quote_icon_size }}px;
+    flex: 0 0 {{ block.settings.quote_icon_size }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid {{ block.settings.glass_border }};
+    border-radius: 50%;
+    background: {{ block.settings.glass_color }};
+  }
+  .ai-bamboo-{{ ai_gen_id }}__quote-icon img { width: 68%; height: 68%; object-fit: contain; }
+  .ai-bamboo-{{ ai_gen_id }}__quote-icon svg { width: 58%; height: 58%; color: {{ block.settings.accent_color }}; }
+  .ai-bamboo-{{ ai_gen_id }}__quote-text { margin: 0; text-align: left; }
+  .ai-bamboo-{{ ai_gen_id }}__tagline { margin: 24px 0 0; color: {{ block.settings.accent_color }}; }
+
+  @media screen and (max-width: 749px) {
+    .ai-bamboo-{{ ai_gen_id }} { padding: 38px 18px; }
+    .ai-bamboo-{{ ai_gen_id }}__indicators { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 18px; }
+    .ai-bamboo-{{ ai_gen_id }}__item:last-child { grid-column: 1 / -1; }
+    .ai-bamboo-{{ ai_gen_id }}__quote { border-radius: 24px; text-align: left; }
+  }
+{% endstyle %}
+
+<section class="ai-bamboo-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-bamboo-{{ ai_gen_id }}__inner">
+    <header class="ai-bamboo-{{ ai_gen_id }}__intro">
+      {% if block.settings.eyebrow != blank %}<div class="ai-bamboo-{{ ai_gen_id }}__eyebrow">{{ block.settings.eyebrow }}</div>{% endif %}
+      {% if block.settings.title != blank %}<div class="ai-bamboo-{{ ai_gen_id }}__title">{{ block.settings.title }}</div>{% endif %}
+      {% if block.settings.subheading != blank %}<div class="ai-bamboo-{{ ai_gen_id }}__subheading">{{ block.settings.subheading }}</div>{% endif %}
+      {% if block.settings.description != blank %}<div class="ai-bamboo-{{ ai_gen_id }}__description">{{ block.settings.description }}</div>{% endif %}
+    </header>
+
+    <div class="ai-bamboo-{{ ai_gen_id }}__indicators">
+      {% for i in (1..5) %}
+        {% liquid
+          assign icon_key = 'indicator_' | append: i | append: '_icon'
+          assign heading_key = 'indicator_' | append: i | append: '_heading'
+          assign copy_key = 'indicator_' | append: i | append: '_copy'
+          assign indicator_icon = block.settings[icon_key]
+          assign indicator_heading = block.settings[heading_key]
+          assign indicator_copy = block.settings[copy_key]
+        %}
+        <article class="ai-bamboo-{{ ai_gen_id }}__item">
+          <div class="ai-bamboo-{{ ai_gen_id }}__icon-wrap">
+            {% if indicator_icon != blank %}
+              <img src="{{ indicator_icon | image_url: width: 240 }}" alt="" loading="lazy" width="{{ indicator_icon.width }}" height="{{ indicator_icon.height }}">
+            {% else %}
+              <div class="ai-bamboo-{{ ai_gen_id }}__icon-placeholder">{{ 'image' | placeholder_svg_tag }}</div>
+            {% endif %}
+          </div>
+          {% if indicator_heading != blank %}<div class="ai-bamboo-{{ ai_gen_id }}__item-title">{{ indicator_heading }}</div>{% endif %}
+          {% if indicator_copy != blank %}<div class="ai-bamboo-{{ ai_gen_id }}__item-copy">{{ indicator_copy }}</div>{% endif %}
+        </article>
+      {% endfor %}
+    </div>
+
+    <div class="ai-bamboo-{{ ai_gen_id }}__quote">
+      <div class="ai-bamboo-{{ ai_gen_id }}__quote-icon">
+        {% if block.settings.quote_icon != blank %}
+          <img src="{{ block.settings.quote_icon | image_url: width: 160 }}" alt="" loading="lazy" width="{{ block.settings.quote_icon.width }}" height="{{ block.settings.quote_icon.height }}">
+        {% else %}
+          {{ 'image' | placeholder_svg_tag }}
+        {% endif %}
+      </div>
+      {% if block.settings.quote_text != blank %}<div class="ai-bamboo-{{ ai_gen_id }}__quote-text">{{ block.settings.quote_text }}</div>{% endif %}
+    </div>
+    {% if block.settings.tagline != blank %}<div class="ai-bamboo-{{ ai_gen_id }}__tagline">{{ block.settings.tagline }}</div>{% endif %}
+  </div>
+</section>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Bamboo trust section",
+  "settings": [
+    { "type": "header", "content": "Section content" },
+    { "type": "richtext", "id": "eyebrow", "label": "Eyebrow", "default": "<p>WHY BAMBOO?</p>" },
+    { "type": "richtext", "id": "title", "label": "Title", "default": "<h2>Why Bamboo.</h2>" },
+    { "type": "richtext", "id": "subheading", "label": "Subheading", "default": "<p>Nature’s Softest Gift</p>" },
+    { "type": "richtext", "id": "description", "label": "Intro text", "default": "<p>Bamboo is a naturally renewable resource that grows without harmful pesticides and uses 30% less water than cotton.</p><p>It’s gentle on your baby’s skin and gentle on our planet.</p>" },
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "header", "content": "Trust indicators" },
+    { "type": "image_picker", "id": "indicator_1_icon", "label": "Ultra soft icon" },
+    { "type": "richtext", "id": "indicator_1_heading", "label": "Ultra soft heading", "default": "<p>Ultra Soft</p>" },
+    { "type": "richtext", "id": "indicator_1_copy", "label": "Ultra soft text", "default": "<p>Silky smooth fibers that feel like a gentle hug on delicate skin.</p>" },
+    { "type": "image_picker", "id": "indicator_2_icon", "label": "Breathable icon" },
+    { "type": "richtext", "id": "indicator_2_heading", "label": "Breathable heading", "default": "<p>Breathable</p>" },
+    { "type": "richtext", "id": "indicator_2_copy", "label": "Breathable text", "default": "<p>Highly breathable fabric that keeps baby cool and comfortable.</p>" },
+    { "type": "image_picker", "id": "indicator_3_icon", "label": "Thermoregulating icon" },
+    { "type": "richtext", "id": "indicator_3_heading", "label": "Thermoregulating heading", "default": "<p>Thermoregulating</p>" },
+    { "type": "richtext", "id": "indicator_3_copy", "label": "Thermoregulating text", "default": "<p>Naturally adapts to your baby’s body temperature in every season.</p>" },
+    { "type": "image_picker", "id": "indicator_4_icon", "label": "Hypoallergenic icon" },
+    { "type": "richtext", "id": "indicator_4_heading", "label": "Hypoallergenic heading", "default": "<p>Hypoallergenic</p>" },
+    { "type": "richtext", "id": "indicator_4_copy", "label": "Hypoallergenic text", "default": "<p>Naturally hypoallergenic and antibacterial, perfect for sensitive skin.</p>" },
+    { "type": "image_picker", "id": "indicator_5_icon", "label": "Sustainable icon" },
+    { "type": "richtext", "id": "indicator_5_heading", "label": "Sustainable heading", "default": "<p>Sustainable</p>" },
+    { "type": "richtext", "id": "indicator_5_copy", "label": "Sustainable text", "default": "<p>Eco-friendly and biodegradable.</p>" },
+    { "type": "header", "content": "Closing message" },
+    { "type": "image_picker", "id": "quote_icon", "label": "Quote icon" },
+    { "type": "richtext", "id": "quote_text", "label": "Quote text", "default": "<p>“From the forest to your baby, with love.”</p>" },
+    { "type": "richtext", "id": "tagline", "label": "Closing tagline", "default": "<p>SUSTAINABLE BY NATURE. SAFE BY CHOICE. MADE FOR YOUR LITTLE ONE.</p>" },
+    { "type": "header", "content": "Colors and sizing" },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#F4F6EF" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#26311F" },
+    { "type": "color", "id": "accent_color", "label": "Accent", "default": "#43552F" },
+    { "type": "color", "id": "glass_color", "label": "Quote glass", "default": "#E8EDE2" },
+    { "type": "color", "id": "glass_border", "label": "Quote border", "default": "#C9D2BE" },
+    { "type": "range", "id": "icon_size", "label": "Indicator icon size", "min": 40, "max": 120, "step": 5, "unit": "px", "default": 70 },
+    { "type": "range", "id": "quote_icon_size", "label": "Quote icon size", "min": 36, "max": 80, "step": 4, "unit": "px", "default": 52 }
+  ],
+  "presets": [{ "name": "Bamboo trust section" }],
+  "tag": null,
+  "class": "bamboo-trust-block"
+}
 {% endschema %}
