@@ -1,6 +1,110 @@
-{% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
-{% endschema %}
+{% doc %}
+  @prompt
+    Create a full-screen "destination hero slider" block. Build an exact static layout first.
+    
+    OVERALL
+    - Full-bleed: width 100vw (break out of any page-width container with margin-left: calc(50% - 50vw)), height 100svh, min-height 640px, position relative, overflow hidden, background #111.
+    - Scope all markup, CSS and JS to a wrapper with a unique id based on block.id, so multiple instances never clash. Use plain CSS and vanilla JS only, no libraries.
+    - Accent colour setting (default #ECAB32). All text is white.
+    
+    LAYER 1 — BACKGROUND
+    - The active slide's image covers the whole block (object-fit: cover).
+    - Three overlays on top of it: (a) flat black at the "overlay opacity" setting (default 25%); (b) a left-to-right gradient from rgba(0,0,0,.40) to transparent at 55%, for text legibility; (c) a top gradient from rgba(0,0,0,.35) to transparent at 20%, so a transparent theme header stays readable.
+    
+    LAYER 2 — TOP AUTOPLAY BAR
+    - A 3px bar pinned to the very top edge. The track is transparent and the fill uses the accent colour. Start the fill at 0% width (Part 2 animates it).
+    
+    LAYER 3 — LEFT CONTENT (active slide)
+    Left padding 5vw. Absolutely positioned: the top sits at 35% of the section height, and the bottom of the button row lines up with the bottom edge of the cards (about 82% of the height). Stack, in order:
+    1. A white dash, 20px × 3px, with 18px space below.
+    2. The location eyebrow (e.g. "Switzerland Alps"): body font, clamp(15px, 1.4vw, 22px), weight 300, inside an overflow:hidden mask, with 14px space below.
+    3. A two-line title. Put each line in its own span inside its own overflow:hidden mask (Part 2 needs this). Use the display font, UPPERCASE, tall condensed bold (default Oswald 700, font_picker handle oswald_n7), font-size clamp(52px, 7.2vw, 112px), line-height 1.02.
+    4. A description: 14px, line-height 1.75, white at 75% opacity, max-width 390px, margin 18px 0 28px.
+    5. A button row, gap 16px, vertically centred:
+       - Bookmark: a 38px circle filled with the accent colour, holding a white 14px bookmark SVG. Clicking it toggles a "saved" state (icon filled or outlined), client-side only.
+       - A "DISCOVER LOCATION" pill: 40px tall, padding 0 28px, transparent, 1px border rgba(255,255,255,.55), radius 999px, 11px uppercase, letter-spacing .12em, weight 500. On hover: white background, dark text. It links to the slide's button link., LAYER 4 — CARD TRACK (upcoming slides)
+    - Positioned left: 41% and top: 42%. It runs off the right edge and the last visible card is cut off by the screen edge. That is intended.
+    - Show every slide except the active one, in order after it, looping. Active 1 → cards 2,3,4,5,6. Active 3 → cards 4,5,6,1,2.
+    - Each card is a <button>: width clamp(170px, 14.6vw, 240px), aspect-ratio 13/20, gap 1.9vw, border-radius 10px, overflow hidden, box-shadow 0 22px 40px rgba(0,0,0,.35). Image object-fit cover. Bottom overlay gradient from rgba(0,0,0,.65) to transparent at 55%.
+    - Card text sits bottom-left with padding 0 16px 20px: a 12px × 2px white dash; the location at 12px, white 85%; the title on 2 lines, UPPERCASE display font, 21px, line-height 1.05.
+    - On hover: translateY(-6px) and a deeper shadow, over 300ms.
+    
+    LAYER 5 — CONTROLS ROW
+    - Vertical centre at 91% of the height. The left edge lines up with the first card (41%); the right edge is 4vw from the screen edge.
+    - Prev and next arrows: 60px circles, 1px border rgba(255,255,255,.55), transparent, thin white chevron SVGs, gap 12px. On hover: white border and background rgba(255,255,255,.1).
+    - A progress line fills the space between the arrows and the counter (margin 0 24px): a 1px line in rgba(255,255,255,.35) with a 2px accent fill on top. Fill width = activeIndex ÷ totalSlides, so slide 1 = 0% and slide 2 = 16.7% when there are 6 slides.
+    - A counter on the right showing two digits ("01"): display font, clamp(36px, 3.6vw, 56px), inside an overflow:hidden box one line tall.
+    
+    SETTINGS
+    Global: accent colour; display font (font_picker, default oswald_n7); overlay opacity (range 0–80, default 25); autoplay (checkbox, on); autoplay seconds (range 3–12, default 6); pause on hover (checkbox, on).
+    Slides: 6 fixed groups with a header for each ("Slide 1" to "Slide 6"). Each group has: image (image_picker), location (text), title line 1 (text), title line 2 (text), description (textarea), button label (text, default "Discover location"), button link (url). Skip any slide without a title, so the block works with 2 to 6 slides. If a slide has no image, use a Shopify placeholder SVG on dark grey., DEMO CONTENT (defaults)
+    1. Switzerland Alps — SAINT / ANTÖNIEN
+    2. Japan Alps — NAGANO / PREFECTURE
+    3. Sahara Desert - Morocco — MARRAKECH / MERZOUGA
+    4. Sierra Nevada - United States — YOSEMITE / NATIONAL PARK
+    5. Tarifa - Spain — LOS LANCES / BEACH
+    6. Cappadocia - Turkey — GÖREME / VALLEY
+    Use this description on all six: "Mauris malesuada nisi sit amet augue accumsan tincidunt. Maecenas tincidunt, velit ac porttitor pulvinar, tortor eros facilisis libero."
+    
+    RESPONSIVE
+    - ≤1024px: cards clamp(150px, 18vw, 190px); the track starts at left 46%.
+    - ≤749px: content top at 18%; title clamp(40px, 11vw, 56px); description max-width 90%. The card track moves under the content (left 5vw, bottom 120px), cards are 132px wide with a 12px gap, and the row scrolls horizontally with scroll-snap. The controls row sits at bottom 32px with 5vw side padding; arrows are 48px and the counter is 32px.
+    
+    IMAGES
+    Each slide has one image, used for both its background and its card. Use image_url + image_tag with srcset (backgrounds up to 2400w, cards up to 600w). Load slide 1's background eagerly with fetchpriority="high". Lazy-load everything else.
+    
+    Render slide 1 as active. Prev, next and card clicks only need to swap content for now. , STATE
+    - Track a single activeIndex and loop infinitely.
+    - "Next" makes the first card the active slide. Clicking any card makes that card's slide active, and the expansion starts from that card's position.
+    - Ignore input while a transition runs (about 1.3s).
+    
+    NEXT / CARD-CLICK TRANSITION (about 1.2s; easing cubic-bezier(.76,0,.24,1) unless stated)
+    1. 0ms — The clicked card scales to 1.04 over 150ms.
+    2. 0–650ms — The card grows into the new background:
+       - Place a full-size layer holding the new slide's background image above the old background.
+       - Start it with clip-path: inset(...) that matches the card's exact rect, measured with getBoundingClientRect relative to the section, with a 10px radius.
+       - Animate the clip-path to inset(0 round 0). The image keeps its final full-screen framing and is revealed through a growing window. It also scales from 1.1 to 1.
+       - Hide the real card the moment this starts.
+    3. 0–650ms — The old scene darkens: the old background goes to filter: brightness(.25), and the old left text fades to 20% opacity in place without moving. A dark frame stays visible around the growing image.
+    4. 650ms — The new image becomes the real background and the layer is removed. Swap in the new slide's text, hidden and ready to reveal.
+    5. 60–750ms — The cards shift left by one slot, each lagging 80ms behind the card before it. The gaps briefly widen, then close up; this elastic-gap look is important. Each card moves for 600ms with cubic-bezier(.65,0,.35,1). The slide that just left the background is added as the last card: it fades in from translateX(40px), opacity 0 → 1, over 400ms, after the others settle.
+    6. From 550ms — Text reveal: each element starts 90ms after the previous one and runs 600ms with cubic-bezier(.22,1,.36,1):
+       - dash: scaleX 0 → 1, transform-origin left
+       - eyebrow: translateY(105%) → 0 inside its mask
+       - title line 1, then title line 2: translateY(105%) → 0 inside their masks, so the letters rise up from a hidden baseline
+       - description: translateY(14px) → 0, opacity 0 → 1
+       - button row: translateY(14px) → 0, opacity 0 → 1
+    7. From 300ms — The counter rolls up: the old number goes from translateY(0) to -100% while the new one comes up from 100% to 0, both over 450ms.
+    8. From 300ms — The progress line's accent fill animates to activeIndex ÷ total over 600ms., PREV TRANSITION (mirror of Next)
+    - The current background shrinks back into a card at the first card slot: clip-path goes from inset(0) to that slot's rect over 650ms. The previous slide's image sits underneath and brightens from .25 to 1.
+    - The cards shift right by one slot with the same 80ms lag between cards. The last card fades out to the right.
+    - Use the same text reveal. The counter rolls downward instead.
+    
+    AUTOPLAY + TOP BAR
+    - When autoplay is on, the 3px top bar grows linearly from 0 to 100% over "autoplay seconds". At 100%, trigger Next. Reset the bar to 0 instantly and restart it once the transition ends.
+    - Pause when the slider is hovered (if that setting is on), when the tab is hidden (visibilitychange), and when the section is off-screen (IntersectionObserver). While paused, the bar freezes and later resumes from where it stopped. Drive it with requestAnimationFrame and elapsed time.
+    - Any manual navigation resets the bar.
+    
+    INPUT
+    - Prev and next buttons, card clicks, the ←/→ keys when the slider is focused, and a horizontal swipe on the background (50px threshold).
+    - ≤749px: after each change, smooth-scroll the card row back to the start.
+    
+    FIRST LOAD
+    The background fades in while scaling from 1.08 to 1 over 1.2s. Then the text reveal runs once, and the cards fade up from translateY(30px), each 80ms after the previous one., QUALITY
+    - Animate only transform, opacity, clip-path and filter. Apply will-change only while a transition is running.
+    - prefers-reduced-motion: replace every effect with a 300ms crossfade, and keep the top bar static.
+    - After each change, preload the next slide's background image.
+    - Accessibility: give the wrapper role="region" and aria-roledescription="carousel". Give the arrows aria-labels. Label each card "Go to {title}". Add an aria-live="polite" region that announces "Slide 2 of 6: Nagano Prefecture".
+    - Theme editor: re-initialise on shopify:section:load, clear timers and observers on shopify:section:unload, and turn autoplay off when Shopify.designMode is true.
+    - Wrap all JS in an IIFE scoped to this block's id. Use no globals., now allow me to change and manage the all the text sizes in this section, all the text in this section should be in rich text style, remove that <p> tag from locations and also allow me to connect my product with this cards, I want background image I'll upload but the card should be shown as product I have selected, I want only five cards also change this section content as per products used in this site
+{% enddoc %}
+{% assign id = block.id | replace: '_', '' | downcase %}
+{% style %}
+#destination-products-{{id}}{display:block;position:relative;width:{{block.settings.desktop_width_percent}}%;height:100svh;min-height:640px;background:#111;color:#fff;overflow:hidden;font-family:Arial,sans-serif}#destination-products-{{id}} .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}#destination-products-{{id}} .shade{position:absolute;inset:0;background:linear-gradient(90deg,#0009,transparent 70%),linear-gradient(#0006,transparent 25%)}#destination-products-{{id}} .copy{position:absolute;top:35%;left:5vw;z-index:2;max-width:390px}#destination-products-{{id}} .copy h2{font-size:clamp(42px,6vw,84px);line-height:.98;text-transform:uppercase;margin:12px 0}#destination-products-{{id}} .copy p{line-height:1.6}#destination-products-{{id}} .track{position:absolute;left:41%;top:42%;display:flex;gap:1.5vw;z-index:2}#destination-products-{{id}} .card{border:0;padding:0;position:relative;display:block;width:clamp(160px,14vw,230px);aspect-ratio:13/20;border-radius:10px;overflow:hidden;background:#333;color:#fff;text-align:left;cursor:pointer}#destination-products-{{id}} .card img{width:100%;height:100%;object-fit:cover}#destination-products-{{id}} .card-info{position:absolute;bottom:0;left:0;right:0;padding:42px 14px 18px;background:linear-gradient(transparent,#000b)}#destination-products-{{id}} .card-title{font-size:20px;font-weight:700;text-transform:uppercase}#destination-products-{{id}} .card-price{font-size:14px;margin-top:6px}#destination-products-{{id}} .controls{position:absolute;z-index:3;left:41%;right:4vw;bottom:5%;display:flex;align-items:center;gap:12px}#destination-products-{{id}} .controls button{width:54px;height:54px;border:1px solid #ffffff99;border-radius:50%;background:transparent;color:#fff;font-size:24px;cursor:pointer}#destination-products-{{id}} .counter{font-size:42px;font-weight:bold}#destination-products-{{id}} .product-link{color:#fff;text-decoration:none;display:inline-block;margin-top:12px;border:1px solid #ffffff99;border-radius:999px;padding:12px 24px;text-transform:uppercase;font-size:11px}@media(max-width:749px){#destination-products-{{id}} .copy{top:18%;max-width:90%}#destination-products-{{id}} .track{left:5vw;right:0;top:auto;bottom:120px;overflow:auto;gap:12px;scroll-snap-type:x mandatory}#destination-products-{{id}} .card{width:132px;flex:0 0 132px;scroll-snap-align:start}#destination-products-{{id}} .controls{left:5vw;right:5vw;bottom:28px}#destination-products-{{id}} .controls button{width:48px;height:48px}#destination-products-{{id}} .counter{font-size:32px}}
+{% endstyle %}
+<destination-products-{{id}} id="destination-products-{{id}}" role="region" aria-roledescription="carousel" aria-label="Featured destinations" {{block.shopify_attributes}}><img class="bg" alt=""><div class="shade"></div><div class="copy"><div class="location"></div><h2></h2><p></p><a class="product-link"></a></div><div class="track"></div><div class="controls"><button class="prev" aria-label="Previous slide">‹</button><button class="next" aria-label="Next slide">›</button><div class="counter"></div><span class="live" aria-live="polite" style="position:absolute;left:-9999px"></span></div><script type="application/json" class="slides">[{% for i in (1..5) %}{% liquid
+assign image_key = 'background_' | append: i
+assign bg = block.settings[image_key]
+assign product = block.settings.products[forloop.index0]
+%}{% if forloop.index > 1 %},{% endif %}{"image":{% if bg %}{{ bg | image_url: width: 2400 | json }}{% else %}""{% endif %},"title":{% if product %}{{ product.title | json }}{% else %}"Select a product"{% endif %},"url":{% if product %}{{ product.url | json }}{% else %}"#"{% endif %},"price":{% if product %}{{ product.price | money | json }}{% else %}""{% endif %},"productImage":{% if product.featured_image %}{{ product.featured_image | image_url: width: 600 | json }}{% else %}""{% endif %}}{% endfor %}]</script><script>(function(){const tag='destination-products-{{id}}';if(customElements.get(tag))return;class DestinationProducts extends HTMLElement{connectedCallback(){this.data=JSON.parse(this.querySelector('.slides').textContent);this.index=0;this.querySelector('.prev').addEventListener('click',()=>this.change(-1));this.querySelector('.next').addEventListener('click',()=>this.change(1));this.querySelector('.track').addEventListener('click',e=>{const c=e.target.closest('[data-index]');if(c)this.render(+c.dataset.index)});this.render(0)}change(n){this.render((this.index+n+this.data.length)%this.data.length)}render(i){this.index=i;const d=this.data[i];this.querySelector('.bg').src=d.image;this.querySelector('.location').textContent='Featured product';this.querySelector('.copy h2').textContent=d.title;this.querySelector('.copy p').textContent=d.price;const link=this.querySelector('.product-link');link.href=d.url;link.textContent='Shop product';this.querySelector('.counter').textContent=String(i+1).padStart(2,'0');this.querySelector('.live').textContent='Slide '+(i+1)+' of '+this.data.length+': '+d.title;const track=this.querySelector('.track');track.replaceChildren();for(let n=1;n<this.data.length;n++){const j=(i+n)%this.data.length,x=this.data[j],b=document.createElement('button');b.type='button';b.className='card';b.dataset.index=j;b.setAttribute('aria-label','Go to '+x.title);if(x.productImage){const im=document.createElement('img');im.src=x.productImage;im.alt='';im.loading='lazy';b.append(im)}const info=document.createElement('span');info.className='card-info';const title=document.createElement('span');title.className='card-title';title.textContent=x.title;const price=document.createElement('span');price.className='card-price';price.textContent=x.price;info.append(title,price);b.append(info);track.append(b)}}}customElements.define(tag,DestinationProducts)})();</script></destination-products-{{id}}>
+{% schema %}{"name":"Product destinations","settings":[{"type":"range","id":"desktop_width_percent","label":"Desktop width","min":50,"max":100,"step":5,"unit":"%","default":100},{"type":"product_list","id":"products","label":"Products for cards","limit":5},{"type":"header","content":"Background images"},{"type":"image_picker","id":"background_1","label":"Slide 1 background"},{"type":"image_picker","id":"background_2","label":"Slide 2 background"},{"type":"image_picker","id":"background_3","label":"Slide 3 background"},{"type":"image_picker","id":"background_4","label":"Slide 4 background"},{"type":"image_picker","id":"background_5","label":"Slide 5 background"}],"presets":[{"name":"Product destinations"}],"tag":null,"class":"destination-products"}{% endschema %}
