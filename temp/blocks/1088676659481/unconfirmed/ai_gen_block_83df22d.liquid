@@ -1,6 +1,422 @@
+{% doc %}
+  @prompt
+    Create a full-screen "destination hero slider" block. Build an exact static layout first.
+    
+    OVERALL
+    - Full-bleed: width 100vw (break out of any page-width container with margin-left: calc(50% - 50vw)), height 100svh, min-height 640px, position relative, overflow hidden, background #111.
+    - Scope all markup, CSS and JS to a wrapper with a unique id based on block.id, so multiple instances never clash. Use plain CSS and vanilla JS only, no libraries.
+    - Accent colour setting (default #ECAB32). All text is white.
+    
+    LAYER 1 — BACKGROUND
+    - The active slide's image covers the whole block (object-fit: cover).
+    - Three overlays on top of it: (a) flat black at the "overlay opacity" setting (default 25%); (b) a left-to-right gradient from rgba(0,0,0,.40) to transparent at 55%, for text legibility; (c) a top gradient from rgba(0,0,0,.35) to transparent at 20%, so a transparent theme header stays readable.
+    
+    LAYER 2 — TOP AUTOPLAY BAR
+    - A 3px bar pinned to the very top edge. The track is transparent and the fill uses the accent colour. Start the fill at 0% width (Part 2 animates it).
+    
+    LAYER 3 — LEFT CONTENT (active slide)
+    Left padding 5vw. Absolutely positioned: the top sits at 35% of the section height, and the bottom of the button row lines up with the bottom edge of the cards (about 82% of the height). Stack, in order:
+    1. A white dash, 20px × 3px, with 18px space below.
+    2. The location eyebrow (e.g. "Switzerland Alps"): body font, clamp(15px, 1.4vw, 22px), weight 300, inside an overflow:hidden mask, with 14px space below.
+    3. A two-line title. Put each line in its own span inside its own overflow:hidden mask (Part 2 needs this). Use the display font, UPPERCASE, tall condensed bold (default Oswald 700, font_picker handle oswald_n7), font-size clamp(52px, 7.2vw, 112px), line-height 1.02.
+    4. A description: 14px, line-height 1.75, white at 75% opacity, max-width 390px, margin 18px 0 28px.
+    5. A button row, gap 16px, vertically centred:
+       - Bookmark: a 38px circle filled with the accent colour, holding a white 14px bookmark SVG. Clicking it toggles a "saved" state (icon filled or outlined), client-side only.
+       - A "DISCOVER LOCATION" pill: 40px tall, padding 0 28px, transparent, 1px border rgba(255,255,255,.55), radius 999px, 11px uppercase, letter-spacing .12em, weight 500. On hover: white background, dark text. It links to the slide's button link.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  #destination-hero-{{ ai_gen_id }} {
+    display: block;
+    position: relative;
+    width: 100vw;
+    max-width: none;
+    height: 100svh;
+    min-height: 640px;
+    margin-left: calc(50% - 50vw);
+    overflow: hidden;
+    background: #111;
+    color: #fff;
+    isolation: isolate;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__media,
+  #destination-hero-{{ ai_gen_id }} .destination-hero__placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__media {
+    object-fit: cover;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #252525;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__placeholder svg {
+    width: 100%;
+    height: 100%;
+    opacity: .55;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__empty {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font: 14px/1.5 sans-serif;
+    text-align: center;
+    text-shadow: 0 1px 5px #000;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__shade {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: rgba(0, 0, 0, {{ block.settings.overlay_opacity | divided_by: 100.0 }});
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__shade--left {
+    background: linear-gradient(90deg, rgba(0, 0, 0, .40) 0%, rgba(0, 0, 0, 0) 55%);
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__shade--top {
+    background: linear-gradient(180deg, rgba(0, 0, 0, .35) 0%, rgba(0, 0, 0, 0) 20%);
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__progress-track {
+    position: absolute;
+    z-index: 2;
+    inset: 0 0 auto;
+    height: 3px;
+    background: transparent;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__progress-fill {
+    display: block;
+    width: 0;
+    height: 100%;
+    background: {{ block.settings.accent_color }};
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__content {
+    position: absolute;
+    z-index: 1;
+    top: 35%;
+    left: 5vw;
+    width: min(62vw, 760px);
+    color: #fff;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__dash {
+    width: 20px;
+    height: 3px;
+    margin-bottom: 18px;
+    background: #fff;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__eyebrow-mask,
+  #destination-hero-{{ ai_gen_id }} .destination-hero__title-mask {
+    overflow: hidden;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__eyebrow {
+    display: block;
+    margin-bottom: 14px;
+    color: #fff;
+    font-family: {{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }};
+    font-size: clamp(15px, 1.4vw, 22px);
+    font-weight: 300;
+    line-height: 1.35;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__title {
+    margin: 0;
+    color: #fff;
+    font-family: {{ block.settings.display_font.family }}, {{ block.settings.display_font.fallback_families }};
+    font-size: clamp(52px, 7.2vw, 112px);
+    font-weight: 700;
+    line-height: 1.02;
+    text-transform: uppercase;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__title-line {
+    display: block;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__description {
+    max-width: 390px;
+    margin: 18px 0 28px;
+    color: rgba(255, 255, 255, .75);
+    font-family: {{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }};
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__save {
+    display: inline-flex;
+    flex: 0 0 38px;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: {{ block.settings.accent_color }};
+    color: #fff;
+    cursor: pointer;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__save:focus-visible,
+  #destination-hero-{{ ai_gen_id }} .destination-hero__discover:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 4px;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__save svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__save .is-saved {
+    display: none;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__save[aria-pressed="true"] .is-unsaved {
+    display: none;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__save[aria-pressed="true"] .is-saved {
+    display: block;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__discover {
+    display: inline-flex;
+    min-height: 40px;
+    align-items: center;
+    justify-content: center;
+    padding: 0 28px;
+    border: 1px solid rgba(255, 255, 255, .55);
+    border-radius: 999px;
+    color: #fff;
+    font-family: {{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }};
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    line-height: 1;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background-color .2s ease, color .2s ease;
+  }
+
+  #destination-hero-{{ ai_gen_id }} .destination-hero__discover:hover {
+    background: #fff;
+    color: #111;
+  }
+
+  @media screen and (max-width: 749px) {
+    #destination-hero-{{ ai_gen_id }} .destination-hero__content {
+      top: 30%;
+      right: 6vw;
+      left: 6vw;
+      width: auto;
+    }
+
+    #destination-hero-{{ ai_gen_id }} .destination-hero__title {
+      font-size: clamp(48px, 14vw, 82px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #destination-hero-{{ ai_gen_id }} .destination-hero__discover {
+      transition: none;
+    }
+  }
+{% endstyle %}
+
+<destination-hero-{{ ai_gen_id }}
+  id="destination-hero-{{ ai_gen_id }}"
+  style="--destination-hero-width: {{ block.settings.desktop_width_percent }}%;"
+  {{ block.shopify_attributes }}
+>
+  {% if block.settings.image != blank %}
+    <img
+      class="destination-hero__media"
+      src="{{ block.settings.image | image_url: width: 2400 }}"
+      alt="{{ block.settings.image.alt | escape }}"
+      width="{{ block.settings.image.width }}"
+      height="{{ block.settings.image.height }}"
+      fetchpriority="high"
+    >
+  {% else %}
+    <div class="destination-hero__placeholder">
+      {{ 'image' | placeholder_svg_tag }}
+      <span class="destination-hero__empty">Choose a destination image to complete this hero.</span>
+    </div>
+  {% endif %}
+
+  <div class="destination-hero__shade" aria-hidden="true"></div>
+  <div class="destination-hero__shade destination-hero__shade--left" aria-hidden="true"></div>
+  <div class="destination-hero__shade destination-hero__shade--top" aria-hidden="true"></div>
+
+  <div class="destination-hero__progress-track" aria-hidden="true">
+    <span class="destination-hero__progress-fill"></span>
+  </div>
+
+  <div class="destination-hero__content">
+    <div class="destination-hero__dash" aria-hidden="true"></div>
+    {% if block.settings.location != blank %}
+      <div class="destination-hero__eyebrow-mask">
+        <span class="destination-hero__eyebrow">{{ block.settings.location | escape }}</span>
+      </div>
+    {% endif %}
+    <h1 class="destination-hero__title">
+      <span class="destination-hero__title-mask"><span class="destination-hero__title-line">{{ block.settings.title_line_one | escape }}</span></span>
+      <span class="destination-hero__title-mask"><span class="destination-hero__title-line">{{ block.settings.title_line_two | escape }}</span></span>
+    </h1>
+    {% if block.settings.description != blank %}
+      <p class="destination-hero__description">{{ block.settings.description | escape }}</p>
+    {% endif %}
+    <div class="destination-hero__actions">
+      <button class="destination-hero__save" type="button" aria-label="Save destination" aria-pressed="false">
+        <svg class="is-unsaved" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4.75A1.75 1.75 0 0 1 7.75 3h8.5A1.75 1.75 0 0 1 18 4.75V21l-6-4-6 4V4.75Z"/></svg>
+        <svg class="is-saved" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.75 3h8.5A1.75 1.75 0 0 1 18 4.75V21l-6-4-6 4V4.75A1.75 1.75 0 0 1 7.75 3Z"/></svg>
+      </button>
+      {% if block.settings.button_link != blank %}
+        <a class="destination-hero__discover" href="{{ block.settings.button_link }}">Discover location</a>
+      {% else %}
+        <a class="destination-hero__discover" href="#">Discover location</a>
+      {% endif %}
+    </div>
+  </div>
+</destination-hero-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    var tagName = 'destination-hero-{{ ai_gen_id }}';
+    if (customElements.get(tagName)) return;
+    class DestinationHero extends HTMLElement {
+      connectedCallback() {
+        var button = this.querySelector('.destination-hero__save');
+        if (!button || button.dataset.bound === 'true') return;
+        button.dataset.bound = 'true';
+        button.addEventListener('click', function() {
+          var saved = button.getAttribute('aria-pressed') === 'true';
+          button.setAttribute('aria-pressed', String(!saved));
+          button.setAttribute('aria-label', saved ? 'Save destination' : 'Remove saved destination');
+        });
+      }
+    }
+    customElements.define(tagName, DestinationHero);
+  })();
+</script>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Destination hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Destination"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "location",
+      "label": "Location",
+      "default": "Switzerland Alps"
+    },
+    {
+      "type": "text",
+      "id": "title_line_one",
+      "label": "Title line one",
+      "default": "Beyond the"
+    },
+    {
+      "type": "text",
+      "id": "title_line_two",
+      "label": "Title line two",
+      "default": "Ordinary"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Discover a place where dramatic peaks meet quiet alpine valleys."
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#ECAB32"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "%",
+      "default": 25
+    },
+    {
+      "type": "font_picker",
+      "id": "display_font",
+      "label": "Display font",
+      "default": "oswald_n7"
+    },
+    {
+      "type": "font_picker",
+      "id": "body_font",
+      "label": "Body font",
+      "default": "work_sans_n4"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Destination hero"
+    }
+  ],
+  "tag": null,
+  "class": "destination-hero-block"
+}
 {% endschema %}
