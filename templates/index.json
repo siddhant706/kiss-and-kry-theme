@@ -137,8 +137,8 @@
           "settings": {
             "show_section": true,
             "desktop_width_percent": 100,
-            "background_color": "#F6F3E5",
-            "circle_color": "#F7F5EC",
+            "background_color": "#f6f3e5",
+            "circle_color": "#f7f5ec",
             "text_color": "#344536",
             "icon_color": "#344536",
             "font_size": 12,
@@ -208,11 +208,11 @@
             "quote_icon": "shopify://shop_images/Untitled_design_94.png",
             "quote_text": "<p>“From the forest to your baby, with love.”</p>",
             "tagline": "<p>SUSTAINABLE BY NATURE. SAFE BY CHOICE. MADE FOR YOUR LITTLE ONE.</p>",
-            "background_color": "#FAE7CE",
-            "text_color": "#26311F",
-            "accent_color": "#43552F",
-            "glass_color": "#00000000",
-            "glass_border": "#F6F3E5",
+            "background_color": "#fae7ce",
+            "text_color": "#26311f",
+            "accent_color": "#43552f",
+            "glass_color": "rgba(0,0,0,0)",
+            "glass_border": "#f6f3e5",
             "icon_size": 70,
             "quote_icon_size": 52
           },
@@ -259,9 +259,9 @@
           "settings": {
             "show_section": true,
             "desktop_width_percent": 100,
-            "section_background": "#F3EEE2",
-            "text_color": "#41452B",
-            "heading_color": "#41452B",
+            "section_background": "#f3eee2",
+            "text_color": "#41452b",
+            "heading_color": "#41452b",
             "text_alignment": "center",
             "heading_size": 40,
             "support_size": 15,
@@ -270,10 +270,10 @@
             "side_spacing": 24,
             "mobile_vertical_spacing": 24,
             "mobile_side_spacing": 12,
-            "card_color": "#FFFDF7",
+            "card_color": "#fffdf7",
             "card_opacity": 75,
-            "card_border_color": "#FFFFFF",
-            "icon_color": "#5E6539",
+            "card_border_color": "#ffffff",
+            "icon_color": "#5e6539",
             "icon_size": 70,
             "heading": "<h2><strong>Shop by age</strong></h2>",
             "support_text": "<p>Not sure? <a href=\"#size-helper\">Try the size helper.</a></p>",
@@ -715,8 +715,8 @@
             "price_size": 16,
             "side_spacing": 20,
             "desktop_width_percent": 100,
-            "section_background": "#F2ECDF",
-            "card_border_color": "#D7CBB8"
+            "section_background": "#f2ecdf",
+            "card_border_color": "#d7cbb8"
           },
           "blocks": {}
         }
@@ -784,60 +784,78 @@
         "padding-block-end": 0
       }
     },
-    "1793097232a2887dd1": {
+    "17932706845d413504": {
+      "type": "_blocks",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "17932707920aa5e178": {
       "type": "_blocks",
       "blocks": {
-        "ai_gen_block_7883c29_jTpLH4": {
-          "type": "ai_gen_block_7883c29",
+        "ai_gen_block_2ec4293_AEUxNB": {
+          "type": "ai_gen_block_2ec4293",
           "settings": {
-            "accent_color": "#ECAB32",
-            "display_font": "oswald_n7",
-            "overlay_opacity": 25,
-            "autoplay": true,
-            "autoplay_seconds": 6,
-            "pause_on_hover": true,
-            "slide_1_location": "Switzerland Alps",
-            "slide_1_line_1": "SAINT",
-            "slide_1_line_2": "ANTÖNIEN",
-            "slide_1_description": "Mauris malesuada nisi sit amet augue accumsan tincidunt. Maecenas tincidunt, velit ac porttitor pulvinar, tortor eros facilisis libero.",
-            "slide_1_label": "Discover location",
-            "slide_1_link": "",
-            "slide_2_location": "Japan Alps",
-            "slide_2_line_1": "NAGANO",
-            "slide_2_line_2": "PREFECTURE",
-            "slide_2_description": "Mauris malesuada nisi sit amet augue accumsan tincidunt. Maecenas tincidunt, velit ac porttitor pulvinar, tortor eros facilisis libero.",
-            "slide_2_label": "Discover location",
-            "slide_2_link": "",
-            "slide_3_location": "Sahara Desert - Morocco",
-            "slide_3_line_1": "MARRAKECH",
-            "slide_3_line_2": "MERZOUGA",
-            "slide_3_description": "Mauris malesuada nisi sit amet augue accumsan tincidunt. Maecenas tincidunt, velit ac porttitor pulvinar, tortor eros facilisis libero.",
-            "slide_3_label": "Discover location",
-            "slide_3_link": "",
-            "slide_4_location": "Sierra Nevada - United States",
-            "slide_4_line_1": "YOSEMITE",
-            "slide_4_line_2": "NATIONAL PARK",
-            "slide_4_description": "Mauris malesuada nisi sit amet augue accumsan tincidunt. Maecenas tincidunt, velit ac porttitor pulvinar, tortor eros facilisis libero.",
-            "slide_4_label": "Discover location",
-            "slide_4_link": "",
-            "slide_5_location": "Tarifa - Spain",
-            "slide_5_line_1": "LOS LANCES",
-            "slide_5_line_2": "BEACH",
-            "slide_5_description": "Mauris malesuada nisi sit amet augue accumsan tincidunt. Maecenas tincidunt, velit ac porttitor pulvinar, tortor eros facilisis libero.",
-            "slide_5_label": "Discover location",
-            "slide_5_link": "",
-            "slide_6_location": "Cappadocia - Turkey",
-            "slide_6_line_1": "GÖREME",
-            "slide_6_line_2": "VALLEY",
-            "slide_6_description": "Mauris malesuada nisi sit amet augue accumsan tincidunt. Maecenas tincidunt, velit ac porttitor pulvinar, tortor eros facilisis libero.",
-            "slide_6_label": "Discover location",
-            "slide_6_link": ""
+            "desktop_width_percent": 100,
+            "products": [
+              "tranquil-crib-sheets",
+              "sumptuous-bodysuits-half-sleeves",
+              "snuggly-footies",
+              "luxurious-bodysuits-full-sleeves",
+              "cozy-rompers"
+            ],
+            "display_font": "montserrat_n4",
+            "body_font": "montserrat_n4",
+            "location_text": "<p>Featured product</p>",
+            "heading_richtext": "<p>Snuggly<br/>Footies</p>",
+            "description_richtext": "",
+            "button_richtext": "<p>Shop product</p>",
+            "card_richtext": "",
+            "copy_width": 400,
+            "heading_size": 54,
+            "heading_weight": 700,
+            "location_size": 18,
+            "location_weight": 300,
+            "description_size": 14,
+            "description_weight": 400,
+            "card_title_size": 14,
+            "card_weight": 700,
+            "price_size": 14,
+            "price_weight": 400,
+            "button_size": 11,
+            "button_weight": 500,
+            "counter_size": 42
           },
           "blocks": {}
         }
       },
       "block_order": [
-        "ai_gen_block_7883c29_jTpLH4"
+        "ai_gen_block_2ec4293_AEUxNB"
       ],
       "settings": {
         "content_direction": "column",
@@ -882,6 +900,7 @@
     "178557725789f5537d",
     "1793093256b61726ef",
     "1793096834f17255ea",
-    "1793097232a2887dd1"
+    "17932706845d413504",
+    "17932707920aa5e178"
   ]
 }
