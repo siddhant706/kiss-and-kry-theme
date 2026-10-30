@@ -22,7 +22,9 @@
     4. A description: 14px, line-height 1.75, white at 75% opacity, max-width 390px, margin 18px 0 28px.
     5. A button row, gap 16px, vertically centred:
        - Bookmark: a 38px circle filled with the accent colour, holding a white 14px bookmark SVG. Clicking it toggles a "saved" state (icon filled or outlined), client-side only.
-       - A "DISCOVER LOCATION" pill: 40px tall, padding 0 28px, transparent, 1px border rgba(255,255,255,.55), radius 999px, 11px uppercase, letter-spacing .12em, weight 500. On hover: white background, dark text. It links to the slide's button link., LAYER 4 — CARD TRACK (upcoming slides)
+       - A "DISCOVER LOCATION" pill: 40px tall, padding 0 28px, transparent, 1px border rgba(255,255,255,.55), radius 999px, 11px uppercase, letter-spacing .12em, weight 500. On hover: white background, dark text. It links to the slide's button link.
+    
+    LAYER 4 — CARD TRACK (upcoming slides)
     - Positioned left: 41% and top: 42%. It runs off the right edge and the last visible card is cut off by the screen edge. That is intended.
     - Show every slide except the active one, in order after it, looping. Active 1 → cards 2,3,4,5,6. Active 3 → cards 4,5,6,1,2.
     - Each card is a <button>: width clamp(170px, 14.6vw, 240px), aspect-ratio 13/20, gap 1.9vw, border-radius 10px, overflow hidden, box-shadow 0 22px 40px rgba(0,0,0,.35). Image object-fit cover. Bottom overlay gradient from rgba(0,0,0,.65) to transparent at 55%.
@@ -35,25 +37,7 @@
     - A progress line fills the space between the arrows and the counter (margin 0 24px): a 1px line in rgba(255,255,255,.35) with a 2px accent fill on top. Fill width = activeIndex ÷ totalSlides, so slide 1 = 0% and slide 2 = 16.7% when there are 6 slides.
     - A counter on the right showing two digits ("01"): display font, clamp(36px, 3.6vw, 56px), inside an overflow:hidden box one line tall.
     
-    SETTINGS
-    Global: accent colour; display font (font_picker, default oswald_n7); overlay opacity (range 0–80, default 25); autoplay (checkbox, on); autoplay seconds (range 3–12, default 6); pause on hover (checkbox, on).
-    Slides: 6 fixed groups with a header for each ("Slide 1" to "Slide 6"). Each group has: image (image_picker), location (text), title line 1 (text), title line 2 (text), description (textarea), button label (text, default "Discover location"), button link (url). Skip any slide without a title, so the block works with 2 to 6 slides. If a slide has no image, use a Shopify placeholder SVG on dark grey., DEMO CONTENT (defaults)
-    1. Switzerland Alps — SAINT / ANTÖNIEN
-    2. Japan Alps — NAGANO / PREFECTURE
-    3. Sahara Desert - Morocco — MARRAKECH / MERZOUGA
-    4. Sierra Nevada - United States — YOSEMITE / NATIONAL PARK
-    5. Tarifa - Spain — LOS LANCES / BEACH
-    6. Cappadocia - Turkey — GÖREME / VALLEY
-    Use this description on all six: "Mauris malesuada nisi sit amet augue accumsan tincidunt. Maecenas tincidunt, velit ac porttitor pulvinar, tortor eros facilisis libero."
-    
-    RESPONSIVE
-    - ≤1024px: cards clamp(150px, 18vw, 190px); the track starts at left 46%.
-    - ≤749px: content top at 18%; title clamp(40px, 11vw, 56px); description max-width 90%. The card track moves under the content (left 5vw, bottom 120px), cards are 132px wide with a 12px gap, and the row scrolls horizontally with scroll-snap. The controls row sits at bottom 32px with 5vw side padding; arrows are 48px and the counter is 32px.
-    
-    IMAGES
-    Each slide has one image, used for both its background and its card. Use image_url + image_tag with srcset (backgrounds up to 2400w, cards up to 600w). Load slide 1's background eagerly with fetchpriority="high". Lazy-load everything else.
-    
-    Render slide 1 as active. Prev, next and card clicks only need to swap content for now. , STATE
+    STATE
     - Track a single activeIndex and loop infinitely.
     - "Next" makes the first card the active slide. Clicking any card makes that card's slide active, and the expansion starts from that card's position.
     - Ignore input while a transition runs (about 1.3s).
@@ -75,7 +59,9 @@
        - description: translateY(14px) → 0, opacity 0 → 1
        - button row: translateY(14px) → 0, opacity 0 → 1
     7. From 300ms — The counter rolls up: the old number goes from translateY(0) to -100% while the new one comes up from 100% to 0, both over 450ms.
-    8. From 300ms — The progress line's accent fill animates to activeIndex ÷ total over 600ms., PREV TRANSITION (mirror of Next)
+    8. From 300ms — The progress line's accent fill animates to activeIndex ÷ total over 600ms.
+    
+    PREV TRANSITION (mirror of Next)
     - The current background shrinks back into a card at the first card slot: clip-path goes from inset(0) to that slot's rect over 650ms. The previous slide's image sits underneath and brightens from .25 to 1.
     - The cards shift right by one slot with the same 80ms lag between cards. The last card fades out to the right.
     - Use the same text reveal. The counter rolls downward instead.
@@ -90,18 +76,1843 @@
     - ≤749px: after each change, smooth-scroll the card row back to the start.
     
     FIRST LOAD
-    The background fades in while scaling from 1.08 to 1 over 1.2s. Then the text reveal runs once, and the cards fade up from translateY(30px), each 80ms after the previous one., QUALITY
+    The background fades in while scaling from 1.08 to 1 over 1.2s. Then the text reveal runs once, and the cards fade up from translateY(30px), each 80ms after the previous one.
+    
+    QUALITY
     - Animate only transform, opacity, clip-path and filter. Apply will-change only while a transition is running.
     - prefers-reduced-motion: replace every effect with a 300ms crossfade, and keep the top bar static.
     - After each change, preload the next slide's background image.
     - Accessibility: give the wrapper role="region" and aria-roledescription="carousel". Give the arrows aria-labels. Label each card "Go to {title}". Add an aria-live="polite" region that announces "Slide 2 of 6: Nagano Prefecture".
     - Theme editor: re-initialise on shopify:section:load, clear timers and observers on shopify:section:unload, and turn autoplay off when Shopify.designMode is true.
-    - Wrap all JS in an IIFE scoped to this block's id. Use no globals., now allow me to change and manage the all the text sizes in this section, all the text in this section should be in rich text style, remove that <p> tag from locations and also allow me to connect my product with this cards, I want background image I'll upload but the card should be shown as product I have selected, I want only five cards also change this section content as per products used in this site, product are not visible in cards resolve it , allow me change all the texts used in this section as font, size, rich text all the text in this section , add a bit of smooth motion in between transitions , all the context or text should be in rich text style , allow me to change all the texts and content in this section for size, font, weight, typo etc as well show the first product details at the place of main heading , don't show the product price in the main heading and show about the product in short in subheading, allow me to change typo for main heading as well, make all the text in this section as configurable and Rich text, make main heading first letter uppercase only of every word
+    - Wrap all JS in an IIFE scoped to this block's id. Use no globals.
 {% enddoc %}
+
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
-{% style %}.pr-{{ ai_gen_id }}{display:block;position:relative;width:{{ block.settings.desktop_width_percent }}%;height:100svh;min-height:640px;overflow:hidden;background:#111;color:#fff;font-family:{{ block.settings.body_font.family }},sans-serif;font-weight:{{ block.settings.body_weight }}}.pr-{{ ai_gen_id }} .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .5s ease,transform .8s ease}.pr-{{ ai_gen_id }} .shade{position:absolute;inset:0;background:linear-gradient(90deg,#0009,transparent 70%),linear-gradient(#0006,transparent 25%)}.pr-{{ ai_gen_id }} .copy{position:absolute;z-index:2;left:5vw;top:35%;max-width:{{ block.settings.copy_width }}px;transition:opacity .35s ease,transform .5s ease}.pr-{{ ai_gen_id }} .copy p{margin:0}.pr-{{ ai_gen_id }} .location{font-size:{{ block.settings.location_size }}px;font-weight:{{ block.settings.location_weight }};line-height:1.3}.pr-{{ ai_gen_id }} .headline{font-family:{{ block.settings.display_font.family }},sans-serif;font-size:{{ block.settings.heading_size }}px;font-weight:{{ block.settings.heading_weight }};line-height:1;text-transform:capitalize}.pr-{{ ai_gen_id }} .description{font-size:{{ block.settings.description_size }}px;font-weight:{{ block.settings.description_weight }};line-height:1.7;max-width:390px;opacity:.86}.pr-{{ ai_gen_id }} .track{position:absolute;z-index:2;left:41%;top:42%;display:flex;gap:1.6vw}.pr-{{ ai_gen_id }} .card{position:relative;flex:0 0 clamp(160px,14vw,230px);aspect-ratio:13/20;padding:0;border:0;border-radius:10px;overflow:hidden;background:#333;color:#fff;text-align:left;cursor:pointer;transition:transform .4s ease,opacity .4s ease}.pr-{{ ai_gen_id }} .card:hover{transform:translateY(-6px)}.pr-{{ ai_gen_id }} .card img{width:100%;height:100%;object-fit:cover}.pr-{{ ai_gen_id }} .card-copy{position:absolute;inset:auto 0 0;padding:42px 14px 18px;background:linear-gradient(transparent,#000b)}.pr-{{ ai_gen_id }} .card-copy p{margin:0}.pr-{{ ai_gen_id }} .card-title{font-family:{{ block.settings.display_font.family }},sans-serif;font-size:{{ block.settings.card_title_size }}px;font-weight:{{ block.settings.card_weight }};text-transform:uppercase}.pr-{{ ai_gen_id }} .price{font-size:{{ block.settings.price_size }}px;font-weight:{{ block.settings.price_weight }}}.pr-{{ ai_gen_id }} .controls{position:absolute;z-index:3;left:41%;right:4vw;bottom:5%;display:flex;align-items:center;gap:12px}.pr-{{ ai_gen_id }} .controls button{height:54px;width:54px;border:1px solid #ffffff99;border-radius:50%;color:#fff;background:transparent;font-size:24px;cursor:pointer;transition:transform .25s ease,background .25s ease}.pr-{{ ai_gen_id }} .controls button:hover{transform:scale(1.05);background:#ffffff1a}.pr-{{ ai_gen_id }} .counter{font:{{ block.settings.heading_weight }} {{ block.settings.counter_size }}px {{ block.settings.display_font.family }},sans-serif}.pr-{{ ai_gen_id }} .shop{display:inline-block;margin-top:14px;color:white;border:1px solid #ffffff99;border-radius:999px;padding:12px 24px;text-decoration:none;font-size:{{ block.settings.button_size }}px;font-weight:{{ block.settings.button_weight }};text-transform:uppercase}.pr-{{ ai_gen_id }} .shop:hover{background:#fff;color:#111}.pr-{{ ai_gen_id }}.moving .copy{opacity:.4;transform:translateY(8px)}.pr-{{ ai_gen_id }}.moving .bg{transform:scale(1);opacity:.8}@media(max-width:749px){.pr-{{ ai_gen_id }} .copy{top:18%;max-width:90%}.pr-{{ ai_gen_id }} .track{left:5vw;right:0;top:auto;bottom:120px;overflow:auto;gap:12px;scroll-snap-type:x mandatory}.pr-{{ ai_gen_id }} .card{flex-basis:132px;scroll-snap-align:start}.pr-{{ ai_gen_id }} .controls{left:5vw;right:5vw;bottom:28px}.pr-{{ ai_gen_id }} .controls button{width:48px;height:48px}}{% endstyle %}
-<product-hero-{{ ai_gen_id }} class="pr-{{ ai_gen_id }}" role="region" aria-roledescription="carousel" aria-label="Featured products" {{ block.shopify_attributes }}><img class="bg" alt=""><div class="shade"></div><div class="copy"><div class="location">{{ block.settings.location_text }}</div><div class="headline"></div><div class="description"></div><a class="shop" href="#"></a></div><div class="track"></div><div class="controls"><button class="prev" aria-label="Previous slide" type="button">‹</button><button class="next" aria-label="Next slide" type="button">›</button><span class="counter"></span><span class="live" aria-live="polite" style="position:absolute;left:-9999px"></span></div><script type="application/json" class="data">[{% for product in block.settings.products limit: 5 %}{% liquid
-assign bg_key = 'background_' | append: forloop.index
-assign bg = block.settings[bg_key]
-%}{% if forloop.index > 1 %},{% endif %}{"name":{{ product.title | json }},"url":{{ product.url | json }},"price":{{ product.price | money | json }},"description":{{ product.description | strip_html | truncate: 150 | json }},"image":{% if product.featured_image %}{{ product.featured_image | image_url: width: 600 | json }}{% else %}""{% endif %},"bg":{% if bg %}{{ bg | image_url: width: 2400 | json }}{% else %}""{% endif %}}{% endfor %}]</script><script type="application/json" class="custom-copy">{"heading":{{ block.settings.heading_richtext | json }},"description":{{ block.settings.description_richtext | json }},"button":{{ block.settings.button_richtext | json }},"card":{{ block.settings.card_richtext | json }}}</script><script>(function(){const tag='product-hero-{{ ai_gen_id }}';if(customElements.get(tag))return;class ProductHero extends HTMLElement{connectedCallback(){this.data=JSON.parse(this.querySelector('.data').textContent);this.custom=JSON.parse(this.querySelector('.custom-copy').textContent);if(!this.data.length)return;this.i=0;this.track=this.querySelector('.track');this.querySelector('.next').addEventListener('click',()=>this.show((this.i+1)%this.data.length));this.querySelector('.prev').addEventListener('click',()=>this.show((this.i-1+this.data.length)%this.data.length));this.track.addEventListener('click',e=>{const b=e.target.closest('[data-index]');if(b)this.show(+b.dataset.index)});this.show(0)}show(i){this.i=i;const p=this.data[i];this.classList.add('moving');clearTimeout(this.timer);this.timer=setTimeout(()=>this.classList.remove('moving'),550);this.querySelector('.bg').src=p.bg;this.querySelector('.headline').innerHTML=this.custom.heading||'<p>'+this.escape(p.name)+'</p>';this.querySelector('.description').innerHTML=this.custom.description||'<p>'+this.escape(p.description)+'</p>';const link=this.querySelector('.shop');link.href=p.url;link.innerHTML=this.custom.button||'<p>Shop product</p>';this.querySelector('.counter').textContent=String(i+1).padStart(2,'0');this.querySelector('.live').textContent='Slide '+(i+1)+' of '+this.data.length+': '+p.name;this.track.replaceChildren();for(let n=1;n<this.data.length;n++){const j=(i+n)%this.data.length,s=this.data[j],b=document.createElement('button');b.type='button';b.className='card';b.dataset.index=j;b.setAttribute('aria-label','Go to '+s.name);if(s.image){const im=document.createElement('img');im.src=s.image;im.alt=s.name;im.loading='lazy';b.append(im)}const c=document.createElement('span');c.className='card-copy';const t=document.createElement('span');t.className='card-title';t.innerHTML=this.custom.card||'<p>'+this.escape(s.name)+'</p>';const price=document.createElement('span');price.className='price';price.textContent=s.price;c.append(t,price);b.append(c);this.track.append(b)}if(matchMedia('(max-width:749px)').matches)this.track.scrollTo({left:0,behavior:'smooth'})}escape(s){const e=document.createElement('span');e.textContent=s;return e.innerHTML}disconnectedCallback(){clearTimeout(this.timer)}}customElements.define(tag,ProductHero)})();</script></product-hero-{{ ai_gen_id }}>
-{% schema %}{"name":"Product destination hero","settings":[{"type":"range","id":"desktop_width_percent","label":"Desktop width","min":50,"max":100,"step":5,"unit":"%","default":100},{"type":"product_list","id":"products","label":"Products","limit":5},{"type":"font_picker","id":"display_font","label":"Display font","default":"oswald_n7"},{"type":"font_picker","id":"body_font","label":"Body font","default":"montserrat_n4"},{"type":"header","content":"Rich text content"},{"type":"richtext","id":"location_text","label":"Location text","default":"<p>Featured product</p>"},{"type":"richtext","id":"heading_richtext","label":"Main heading override"},{"type":"richtext","id":"description_richtext","label":"Subheading override"},{"type":"richtext","id":"button_richtext","label":"Button label","default":"<p>Shop product</p>"},{"type":"richtext","id":"card_richtext","label":"Card title override"},{"type":"header","content":"Typography"},{"type":"range","id":"copy_width","label":"Text width","min":250,"max":600,"step":25,"unit":"px","default":400},{"type":"range","id":"heading_size","label":"Main heading size","min":32,"max":100,"step":2,"unit":"px","default":72},{"type":"range","id":"heading_weight","label":"Main heading weight","min":400,"max":900,"step":100,"default":700},{"type":"range","id":"location_size","label":"Location size","min":12,"max":30,"step":1,"unit":"px","default":18},{"type":"range","id":"location_weight","label":"Location weight","min":300,"max":700,"step":100,"default":300},{"type":"range","id":"description_size","label":"Subheading size","min":12,"max":24,"step":1,"unit":"px","default":14},{"type":"range","id":"description_weight","label":"Subheading weight","min":300,"max":700,"step":100,"default":400},{"type":"range","id":"card_title_size","label":"Card title size","min":12,"max":32,"step":1,"unit":"px","default":20},{"type":"range","id":"card_weight","label":"Card title weight","min":400,"max":900,"step":100,"default":700},{"type":"range","id":"price_size","label":"Price size","min":10,"max":22,"step":1,"unit":"px","default":14},{"type":"range","id":"price_weight","label":"Price weight","min":300,"max":700,"step":100,"default":400},{"type":"range","id":"button_size","label":"Button size","min":10,"max":18,"step":1,"unit":"px","default":11},{"type":"range","id":"button_weight","label":"Button weight","min":300,"max":700,"step":100,"default":500},{"type":"range","id":"counter_size","label":"Counter size","min":24,"max":60,"step":2,"unit":"px","default":42},{"type":"header","content":"Background images"},{"type":"image_picker","id":"background_1","label":"Slide 1"},{"type":"image_picker","id":"background_2","label":"Slide 2"},{"type":"image_picker","id":"background_3","label":"Slide 3"},{"type":"image_picker","id":"background_4","label":"Slide 4"},{"type":"image_picker","id":"background_5","label":"Slide 5"}],"presets":[{"name":"Product destination hero"}],"tag":null,"class":"product-destination-hero"}{% endschema %}
+{% assign display_font = block.settings.display_font %}
+{% assign body_font = block.settings.body_font %}
+
+{% style %}
+  {{ display_font | font_face }}
+  {{ body_font | font_face }}
+
+  .pr-{{ ai_gen_id }} {
+    display: block;
+    position: relative;
+    width: 100vw;
+    height: 100svh;
+    min-height: 640px;
+    margin-left: calc(50% - 50vw);
+    overflow: hidden;
+    background: #111;
+    color: #fff;
+    isolation: isolate;
+    font-family: {{ body_font.family | default: settings.type_body_font.family }}, sans-serif;
+    font-weight: {{ block.settings.body_weight | default: 400 }};
+  }
+
+  .pr-{{ ai_gen_id }} *,
+  .pr-{{ ai_gen_id }} *:before,
+  .pr-{{ ai_gen_id }} *:after {
+    box-sizing: border-box;
+  }
+
+  /* Autoplay Topbar */
+  .pr-{{ ai_gen_id }} .dh-topbar {
+    position: absolute;
+    z-index: 20;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: transparent;
+    pointer-events: none;
+  }
+  .pr-{{ ai_gen_id }} .dh-topbar-fill {
+    display: block;
+    width: 0%;
+    height: 100%;
+    background: {{ block.settings.accent_color | default: '#ECAB32' }};
+  }
+
+  /* Background */
+  .pr-{{ ai_gen_id }} .dh-bg-wrapper {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .pr-{{ ai_gen_id }} .dh-bg-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .pr-{{ ai_gen_id }} .dh-placeholder {
+    position: absolute;
+    inset: 0;
+    background: #252525;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pr-{{ ai_gen_id }} .dh-placeholder svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    color: #555;
+  }
+
+  /* Overlays */
+  .pr-{{ ai_gen_id }} .dh-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background:
+      linear-gradient(rgba(0, 0, 0, 0.35), transparent 20%),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.4) 30%, transparent 60%),
+      rgba(0, 0, 0, {{ block.settings.overlay_opacity | default: 25 | divided_by: 100.0 }});
+  }
+
+  /* Left Content */
+  .pr-{{ ai_gen_id }} .dh-content {
+    position: absolute;
+    z-index: 4;
+    left: 5vw;
+    top: 35%;
+    max-width: {{ block.settings.copy_width | default: 420 }}px;
+  }
+  .pr-{{ ai_gen_id }} .dh-dash {
+    display: block;
+    width: 20px;
+    height: 3px;
+    margin: 0 0 18px;
+    background: #fff;
+    transform-origin: left;
+    will-change: transform;
+  }
+  .pr-{{ ai_gen_id }} .dh-loc-mask {
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .pr-{{ ai_gen_id }} .dh-location {
+    font-size: {{ block.settings.location_size | default: 18 }}px;
+    font-weight: {{ block.settings.location_weight | default: 300 }};
+    line-height: 1.2;
+    letter-spacing: 0.05em;
+    will-change: transform;
+  }
+  .pr-{{ ai_gen_id }} .dh-title {
+    margin: 0;
+    font-family: {{ display_font.family | default: settings.type_header_font.family }}, sans-serif;
+    font-size: {{ block.settings.heading_size | default: 64 }}px;
+    font-weight: {{ block.settings.heading_weight | default: 700 }};
+    line-height: 1.02;
+    text-transform: uppercase;
+  }
+  .pr-{{ ai_gen_id }} .dh-title-mask {
+    display: block;
+    overflow: hidden;
+  }
+  .pr-{{ ai_gen_id }} .dh-title-line {
+    display: block;
+    will-change: transform;
+  }
+  .pr-{{ ai_gen_id }} .dh-description {
+    max-width: 390px;
+    margin: 18px 0 28px;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: {{ block.settings.description_size | default: 14 }}px;
+    font-weight: {{ block.settings.description_weight | default: 400 }};
+    line-height: 1.75;
+    will-change: transform, opacity;
+  }
+  .pr-{{ ai_gen_id }} .dh-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    will-change: transform, opacity;
+  }
+  .pr-{{ ai_gen_id }} .dh-save {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: {{ block.settings.accent_color | default: '#ECAB32' }};
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  .pr-{{ ai_gen_id }} .dh-save:hover {
+    transform: scale(1.08);
+  }
+  .pr-{{ ai_gen_id }} .dh-save svg {
+    width: 14px;
+    height: 14px;
+  }
+  .pr-{{ ai_gen_id }} .dh-link {
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 28px;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 999px;
+    color: #fff;
+    text-decoration: none;
+    font-size: {{ block.settings.button_size | default: 11 }}px;
+    font-weight: {{ block.settings.button_weight | default: 500 }};
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .pr-{{ ai_gen_id }} .dh-link:hover {
+    background: #fff;
+    color: #111;
+  }
+
+  /* Cards Track */
+  .pr-{{ ai_gen_id }} .dh-track {
+    position: absolute;
+    z-index: 4;
+    left: 41%;
+    top: 42%;
+    display: flex;
+    gap: 1.9vw;
+  }
+  .pr-{{ ai_gen_id }} .dh-card {
+    position: relative;
+    flex: 0 0 clamp(170px, 14.6vw, 240px);
+    aspect-ratio: 13/20;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    border-radius: 10px;
+    background: #222;
+    color: #fff;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: 0 22px 40px rgba(0, 0, 0, 0.35);
+    transition: box-shadow 300ms ease;
+  }
+  .pr-{{ ai_gen_id }} .dh-card:hover {
+    box-shadow: 0 28px 48px rgba(0, 0, 0, 0.5);
+  }
+  .pr-{{ ai_gen_id }} .dh-card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+  .pr-{{ ai_gen_id }} .dh-card-overlay {
+    position: absolute;
+    inset: 30% 0 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8) 65%);
+    pointer-events: none;
+  }
+  .pr-{{ ai_gen_id }} .dh-card-copy {
+    position: absolute;
+    z-index: 1;
+    left: 16px;
+    right: 12px;
+    bottom: 20px;
+    pointer-events: none;
+  }
+  .pr-{{ ai_gen_id }} .dh-card-dash {
+    display: block;
+    width: 12px;
+    height: 2px;
+    margin-bottom: 8px;
+    background: #fff;
+  }
+  .pr-{{ ai_gen_id }} .dh-card-loc {
+    display: block;
+    margin-bottom: 5px;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .pr-{{ ai_gen_id }} .dh-card-title {
+    display: block;
+    font-family: {{ display_font.family | default: settings.type_header_font.family }}, sans-serif;
+    font-size: {{ block.settings.card_title_size | default: 18 }}px;
+    font-weight: {{ block.settings.card_weight | default: 700 }};
+    line-height: 1.1;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .pr-{{ ai_gen_id }} .dh-card-price {
+    display: block;
+    font-size: {{ block.settings.price_size | default: 13 }}px;
+    font-weight: {{ block.settings.price_weight | default: 400 }};
+    color: {{ block.settings.accent_color | default: '#ECAB32' }};
+  }
+
+  /* Controls Row */
+  .pr-{{ ai_gen_id }} .dh-controls {
+    position: absolute;
+    z-index: 4;
+    left: 41%;
+    right: 4vw;
+    top: 91%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .pr-{{ ai_gen_id }} .dh-arrow {
+    width: 60px;
+    height: 60px;
+    flex: 0 0 60px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 50%;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+  }
+  .pr-{{ ai_gen_id }} .dh-arrow:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #fff;
+    transform: scale(1.05);
+  }
+  .pr-{{ ai_gen_id }} .dh-arrow svg {
+    width: 19px;
+    height: 19px;
+  }
+  .pr-{{ ai_gen_id }} .dh-progress {
+    flex: 1;
+    height: 1px;
+    margin: 0 24px;
+    background: rgba(255, 255, 255, 0.35);
+    position: relative;
+  }
+  .pr-{{ ai_gen_id }} .dh-progress-fill {
+    position: absolute;
+    top: -0.5px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: {{ block.settings.accent_color | default: '#ECAB32' }};
+  }
+  .pr-{{ ai_gen_id }} .dh-counter-box {
+    width: 78px;
+    flex: 0 0 78px;
+    overflow: hidden;
+    height: 1.15em;
+    position: relative;
+  }
+  .pr-{{ ai_gen_id }} .dh-counter {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    font-family: {{ display_font.family | default: settings.type_header_font.family }}, sans-serif;
+    font-size: {{ block.settings.counter_size | default: 42 }}px;
+    font-weight: 700;
+    line-height: 1.1;
+    text-align: right;
+  }
+  .pr-{{ ai_gen_id }} .dh-counter-digit {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100%;
+    line-height: 1.1;
+  }
+
+  .pr-{{ ai_gen_id }} button:focus-visible,
+  .pr-{{ ai_gen_id }} a:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 4px;
+  }
+
+  /* Responsive Rules */
+  @media (max-width: 1024px) {
+    .pr-{{ ai_gen_id }} .dh-track {
+      left: 46%;
+    }
+    .pr-{{ ai_gen_id }} .dh-card {
+      flex-basis: clamp(150px, 18vw, 190px);
+    }
+    .pr-{{ ai_gen_id }} .dh-controls {
+      left: 46%;
+    }
+  }
+
+  @media (max-width: 749px) {
+    .pr-{{ ai_gen_id }} {
+      height: 100svh;
+      min-height: 560px;
+    }
+    .pr-{{ ai_gen_id }} .dh-content {
+      left: 5vw;
+      top: 10%;
+      max-width: 90vw;
+    }
+    .pr-{{ ai_gen_id }} .dh-dash {
+      margin: 0 0 10px;
+    }
+    .pr-{{ ai_gen_id }} .dh-loc-mask {
+      margin-bottom: 8px;
+    }
+    .pr-{{ ai_gen_id }} .dh-title {
+      font-size: clamp(28px, 7.5vw, 40px);
+      line-height: 1.05;
+    }
+    .pr-{{ ai_gen_id }} .dh-description {
+      max-width: 88vw;
+      margin: 8px 0 14px;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .pr-{{ ai_gen_id }} .dh-actions {
+      gap: 12px;
+    }
+    .pr-{{ ai_gen_id }} .dh-save {
+      width: 36px;
+      height: 36px;
+      flex: 0 0 36px;
+    }
+    .pr-{{ ai_gen_id }} .dh-link {
+      height: 36px;
+      padding: 0 20px;
+      font-size: 10px;
+    }
+    .pr-{{ ai_gen_id }} .dh-track {
+      left: 5vw;
+      right: 0;
+      top: auto;
+      bottom: 80px;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding-right: 5vw;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .pr-{{ ai_gen_id }} .dh-track::-webkit-scrollbar {
+      display: none;
+    }
+    .pr-{{ ai_gen_id }} .dh-card {
+      flex: 0 0 clamp(118px, 32vw, 136px);
+      scroll-snap-align: start;
+    }
+    .pr-{{ ai_gen_id }} .dh-card-copy {
+      left: 10px;
+      right: 10px;
+      bottom: 12px;
+    }
+    .pr-{{ ai_gen_id }} .dh-card-title {
+      font-size: 12px;
+      line-height: 1.1;
+    }
+    .pr-{{ ai_gen_id }} .dh-card-loc {
+      font-size: 10px;
+    }
+    .pr-{{ ai_gen_id }} .dh-card-price {
+      font-size: 11px;
+    }
+    .pr-{{ ai_gen_id }} .dh-controls {
+      left: 5vw;
+      right: 5vw;
+      top: auto;
+      bottom: 18px;
+      transform: none;
+      gap: 8px;
+    }
+    .pr-{{ ai_gen_id }} .dh-arrow {
+      width: 44px;
+      height: 44px;
+      flex-basis: 44px;
+    }
+    .pr-{{ ai_gen_id }} .dh-arrow svg {
+      width: 15px;
+      height: 15px;
+    }
+    .pr-{{ ai_gen_id }} .dh-progress {
+      margin: 0 10px;
+    }
+    .pr-{{ ai_gen_id }} .dh-counter-box {
+      width: 44px;
+      flex-basis: 44px;
+    }
+    .pr-{{ ai_gen_id }} .dh-counter {
+      font-size: 26px;
+    }
+  }
+{% endstyle %}
+
+<product-hero-{{ ai_gen_id }}
+  id="product-hero-{{ ai_gen_id }}"
+  class="pr-{{ ai_gen_id }}"
+  role="region"
+  aria-roledescription="carousel"
+  aria-label="Product destination hero"
+  data-autoplay="{{ block.settings.autoplay | default: true }}"
+  data-seconds="{{ block.settings.autoplay_seconds | default: 6 }}"
+  data-pause="{{ block.settings.pause_on_hover | default: true }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="dh-topbar">
+    <span class="dh-topbar-fill"></span>
+  </div>
+
+  <div class="dh-bg-wrapper">
+    {% assign first_bg = '' %}
+    {% assign first_product = block.settings.products.first %}
+    {% if block.settings.background_1 %}
+      {% assign first_bg = block.settings.background_1 | image_url: width: 2400 %}
+    {% elsif first_product.featured_image %}
+      {% assign first_bg = first_product.featured_image | image_url: width: 2400 %}
+    {% endif %}
+
+    {% if first_bg != blank %}
+      <img
+        class="dh-bg-image"
+        src="{{ first_bg }}"
+        alt="{{ first_product.title | default: 'Hero background' | escape }}"
+        fetchpriority="high"
+        loading="eager"
+        width="2400"
+        height="1350"
+      >
+    {% else %}
+      <div class="dh-placeholder">
+        {{ 'hero-apparel-1' | placeholder_svg_tag }}
+      </div>
+      <img class="dh-bg-image" src="" alt="" style="display:none;" width="2400" height="1350">
+    {% endif %}
+  </div>
+
+  <div class="dh-overlay"></div>
+
+  <div class="dh-content">
+    <span class="dh-dash"></span>
+    <div class="dh-loc-mask">
+      <div class="dh-location">
+        {% if block.settings.location_text != blank %}
+          {{ block.settings.location_text | strip_html }}
+        {% else %}
+          Featured product
+        {% endif %}
+      </div>
+    </div>
+    <h1 class="dh-title">
+      <span class="dh-title-mask"><span class="dh-title-line dh-title-line-1"></span></span>
+      <span class="dh-title-mask"><span class="dh-title-line dh-title-line-2"></span></span>
+    </h1>
+    <p class="dh-description"></p>
+    <div class="dh-actions">
+      <button class="dh-save" type="button" aria-label="Save product" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 3.75h12v17l-6-4-6 4v-17Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="dh-link" href="#">
+        {% if block.settings.button_richtext != blank %}
+          {{ block.settings.button_richtext | strip_html }}
+        {% else %}
+          Shop product
+        {% endif %}
+      </a>
+    </div>
+  </div>
+
+  <div class="dh-track" role="list"></div>
+
+  <div class="dh-controls">
+    <button class="dh-arrow dh-prev" type="button" aria-label="Previous slide">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="m15 5-7 7 7 7" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+    </button>
+    <button class="dh-arrow dh-next" type="button" aria-label="Next slide">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+    </button>
+    <div class="dh-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <span class="dh-progress-fill"></span>
+    </div>
+    <div class="dh-counter-box">
+      <div class="dh-counter" aria-hidden="true">
+        <span class="dh-counter-digit current">01</span>
+      </div>
+    </div>
+    <span class="dh-live" aria-live="polite" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;"></span>
+  </div>
+
+  <script type="application/json" class="dh-data">
+    {% if block.settings.products.count > 0 %}
+      [
+        {% for product in block.settings.products limit: 5 %}
+          {% liquid
+            assign bg_key = 'background_' | append: forloop.index
+            assign bg = block.settings[bg_key]
+            assign bg_url = ''
+            if bg
+              assign bg_url = bg | image_url: width: 2400
+            elsif product.featured_image
+              assign bg_url = product.featured_image | image_url: width: 2400
+            endif
+            assign card_img = ''
+            if product.featured_image
+              assign card_img = product.featured_image | image_url: width: 600
+            elsif bg
+              assign card_img = bg | image_url: width: 600
+            endif
+          %}
+          {% if forloop.index > 1 %},{% endif %}
+          {
+            "index": {{ forloop.index0 }},
+            "id": {{ product.id | json }},
+            "name": {{ product.title | json }},
+            "url": {{ product.url | json }},
+            "price": {{ product.price | money | json }},
+            "description": {{ product.description | strip_html | truncate: 160 | json }},
+            "image": {{ card_img | json }},
+            "bg": {{ bg_url | json }}
+          }
+        {% endfor %}
+      ]
+    {% else %}
+      [
+        { "index": 0, "name": "Cozy Rompers", "url": "/collections/all", "price": "$1,499.00", "description": "Ultra-soft bamboo rompers crafted for delicate baby skin.", "image": "", "bg": "" },
+        { "index": 1, "name": "Snuggly Footies", "url": "/collections/all", "price": "$1,549.00", "description": "Naturally breathable footies designed for pure baby comfort.", "image": "", "bg": "" },
+        { "index": 2, "name": "Luxurious Bodysuits", "url": "/collections/all", "price": "$1,349.00", "description": "Hypoallergenic bamboo bodysuits with gentle stretch.", "image": "", "bg": "" },
+        { "index": 3, "name": "Tranquil Crib Sheets", "url": "/collections/all", "price": "$1,299.00", "description": "Silky-smooth crib sheets for serene night sleeps.", "image": "", "bg": "" },
+        { "index": 4, "name": "Sumptuous Bodysuits", "url": "/collections/all", "price": "$1,319.00", "description": "Everyday bamboo essentials thoughtfully crafted with love.", "image": "", "bg": "" }
+      ]
+    {% endif %}
+  </script>
+
+  <script type="application/json" class="dh-custom-copy">
+    {
+      "location": {{ block.settings.location_text | strip_html | json }},
+      "heading": {{ block.settings.heading_richtext | json }},
+      "description": {{ block.settings.description_richtext | strip_html | json }},
+      "button": {{ block.settings.button_richtext | strip_html | json }},
+      "card": {{ block.settings.card_richtext | strip_html | json }}
+    }
+  </script>
+
+  <script>
+    (function() {
+      const tag = 'product-hero-{{ ai_gen_id }}';
+      if (customElements.get(tag)) return;
+
+      class ProductHero extends HTMLElement {
+        connectedCallback() {
+          const dataEl = this.querySelector('.dh-data');
+          if (!dataEl) return;
+          try {
+            this.data = JSON.parse(dataEl.textContent);
+          } catch (e) {
+            this.data = [];
+          }
+
+          const customEl = this.querySelector('.dh-custom-copy');
+          try {
+            this.custom = customEl ? JSON.parse(customEl.textContent) : {};
+          } catch (e) {
+            this.custom = {};
+          }
+
+          if (!this.data || !this.data.length) return;
+
+          this.total = this.data.length;
+          this.activeIndex = 0;
+          this.isAnimating = false;
+
+          // Autoplay settings
+          this.autoplayEnabled = this.dataset.autoplay === 'true';
+          this.autoplaySeconds = Number(this.dataset.seconds) || 6;
+          this.pauseOnHover = this.dataset.pause === 'true';
+          this.isPaused = false;
+          this.autoplayElapsed = 0;
+          this.autoplayRaf = null;
+
+          // DOM Refs
+          this.topbarFill = this.querySelector('.dh-topbar-fill');
+          this.bgWrapper = this.querySelector('.dh-bg-wrapper');
+          this.bgImage = this.querySelector('.dh-bg-image');
+          this.content = this.querySelector('.dh-content');
+          this.dash = this.querySelector('.dh-dash');
+          this.locationEl = this.querySelector('.dh-location');
+          this.titleLine1 = this.querySelector('.dh-title-line-1');
+          this.titleLine2 = this.querySelector('.dh-title-line-2');
+          this.descEl = this.querySelector('.dh-description');
+          this.actionsEl = this.querySelector('.dh-actions');
+          this.saveBtn = this.querySelector('.dh-save');
+          this.linkBtn = this.querySelector('.dh-link');
+          this.track = this.querySelector('.dh-track');
+          this.prevBtn = this.querySelector('.dh-prev');
+          this.nextBtn = this.querySelector('.dh-next');
+          this.progressFill = this.querySelector('.dh-progress-fill');
+          this.counterBox = this.querySelector('.dh-counter');
+          this.liveRegion = this.querySelector('.dh-live');
+
+          // Initialize events
+          this.initEvents();
+
+          // Render initial UI
+          this.renderTrackCards(0);
+          this.updateProgress(0, false);
+          this.updateCounter(0, 'none');
+          this.updateLiveRegion(0);
+
+          // Accessibility setup
+          this.tabIndex = 0;
+
+          // Check reduced motion
+          this.prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+          if (this.prefersReduced) {
+            this.setupTextForReveal(this.data[0]);
+            this.triggerTextInstant();
+            if (this.autoplayEnabled && !(window.Shopify && window.Shopify.designMode)) {
+              this.startAutoplay();
+            }
+          } else {
+            this.runFirstLoad();
+          }
+
+          // Theme editor listeners
+          this.onSectionUnload = (e) => {
+            if (e.target.contains(this)) {
+              this.cleanup();
+            }
+          };
+          document.addEventListener('shopify:section:unload', this.onSectionUnload);
+        }
+
+        disconnectedCallback() {
+          this.cleanup();
+        }
+
+        cleanup() {
+          this.stopAutoplay();
+          if (this.observer) this.observer.disconnect();
+          document.removeEventListener('shopify:section:unload', this.onSectionUnload);
+        }
+
+        initEvents() {
+          if (this.nextBtn) {
+            this.nextBtn.addEventListener('click', (e) => {
+              e.preventDefault();
+              this.next();
+            });
+          }
+
+          if (this.prevBtn) {
+            this.prevBtn.addEventListener('click', (e) => {
+              e.preventDefault();
+              this.prev();
+            });
+          }
+
+          if (this.track) {
+            this.track.addEventListener('click', (e) => {
+              const card = e.target.closest('.dh-card');
+              if (!card || this.isAnimating) return;
+              e.preventDefault();
+              const slideIdx = parseInt(card.dataset.slideIndex, 10);
+              this.goTo(slideIdx, 'next', card);
+            });
+          }
+
+          if (this.saveBtn) {
+            this.saveBtn.addEventListener('click', () => {
+              const on = this.saveBtn.getAttribute('aria-pressed') === 'true';
+              this.saveBtn.setAttribute('aria-pressed', String(!on));
+              const path = this.saveBtn.querySelector('path');
+              if (path) path.setAttribute('fill', on ? 'none' : 'currentColor');
+            });
+          }
+
+          // Keyboard navigation
+          this.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+              e.preventDefault();
+              this.next();
+            } else if (e.key === 'ArrowLeft') {
+              e.preventDefault();
+              this.prev();
+            }
+          });
+
+          // Touch swipe
+          let touchStartX = 0;
+          let touchStartY = 0;
+          this.addEventListener('touchstart', (e) => {
+            if (!e.touches.length) return;
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+          }, { passive: true });
+
+          this.addEventListener('touchend', (e) => {
+            if (!e.changedTouches.length) return;
+            const diffX = e.changedTouches[0].clientX - touchStartX;
+            const diffY = e.changedTouches[0].clientY - touchStartY;
+            if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY)) {
+              if (diffX < 0) this.next();
+              else this.prev();
+            }
+          }, { passive: true });
+
+          // Hover pause
+          if (this.pauseOnHover) {
+            this.addEventListener('mouseenter', () => {
+              this.isPaused = true;
+            });
+            this.addEventListener('mouseleave', () => {
+              this.isPaused = false;
+            });
+          }
+
+          // Visibility pause
+          document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+              this.isPaused = true;
+            } else {
+              this.isPaused = false;
+            }
+          });
+
+          // Intersection observer pause
+          if ('IntersectionObserver' in window) {
+            this.observer = new IntersectionObserver((entries) => {
+              entries.forEach((entry) => {
+                this.isPaused = !entry.isIntersecting;
+              });
+            }, { threshold: 0.1 });
+            this.observer.observe(this);
+          }
+        }
+
+        getLocationText() {
+          if (this.custom && this.custom.location && this.custom.location.trim()) {
+            return this.custom.location.trim();
+          }
+          return 'Featured product';
+        }
+
+        splitTitle(title, customHeading) {
+          if (customHeading && customHeading.trim()) {
+            const clean = customHeading.replace(/<\/?p>/gi, '').trim();
+            if (clean.includes('<br')) {
+              const parts = clean.split(/<br\s*\/?>/i);
+              return [parts[0].trim(), parts.slice(1).join(' ').trim()];
+            }
+          }
+          const cleanTitle = (title || '').trim();
+          const words = cleanTitle.split(/\s+/);
+          if (words.length <= 1) return [cleanTitle, ''];
+          if (words.length === 2) return [words[0], words[1]];
+          if (words.length === 3) return [words[0] + ' ' + words[1], words[2]];
+          const mid = Math.ceil(words.length / 2);
+          return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
+        }
+
+        escapeHtml(str) {
+          const div = document.createElement('div');
+          div.textContent = str || '';
+          return div.innerHTML;
+        }
+
+        createCardElement(slide, isLastEntering = false) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'dh-card';
+          btn.dataset.slideIndex = slide.index;
+          btn.setAttribute('aria-label', `Go to ${slide.name}`);
+
+          const [t1, t2] = this.splitTitle(slide.name, '');
+
+          btn.innerHTML = `
+            <img src="${slide.image || slide.bg}" alt="${this.escapeHtml(slide.name)}" loading="lazy" />
+            <span class="dh-card-overlay"></span>
+            <span class="dh-card-copy">
+              <span class="dh-card-dash"></span>
+              <span class="dh-card-loc">${this.escapeHtml(this.getLocationText())}</span>
+              <span class="dh-card-title">${this.escapeHtml(t1)}<br>${this.escapeHtml(t2)}</span>
+              ${slide.price ? `<span class="dh-card-price">${this.escapeHtml(slide.price)}</span>` : ''}
+            </span>
+          `;
+
+          if (isLastEntering) {
+            btn.style.opacity = '0';
+            btn.style.transform = 'translateX(40px)';
+          }
+
+          return btn;
+        }
+
+        renderTrackCards(activeIdx) {
+          this.track.innerHTML = '';
+          for (let n = 1; n < this.total; n++) {
+            const nextIdx = (activeIdx + n) % this.total;
+            const card = this.createCardElement(this.data[nextIdx]);
+            this.track.appendChild(card);
+          }
+        }
+
+        setupTextForReveal(slide) {
+          const customHeading = slide.index === 0 ? (this.custom && this.custom.heading) : '';
+          const [t1, t2] = this.splitTitle(slide.name, customHeading);
+          if (this.titleLine1) this.titleLine1.textContent = t1;
+          if (this.titleLine2) this.titleLine2.textContent = t2;
+
+          if (this.descEl) {
+            const customDesc = (this.custom && this.custom.description && this.custom.description.trim());
+            const desc = (slide.index === 0 && customDesc)
+              ? customDesc
+              : (slide.description || 'Ultra-soft bamboo fabric that\'s gentle on delicate skin.');
+            this.descEl.textContent = desc;
+          }
+
+          if (this.linkBtn) {
+            this.linkBtn.href = slide.url || '#';
+            if (this.custom && this.custom.button && this.custom.button.trim()) {
+              this.linkBtn.textContent = this.custom.button.trim();
+            } else {
+              this.linkBtn.textContent = 'Shop product';
+            }
+          }
+
+          if (this.locationEl) {
+            this.locationEl.textContent = this.getLocationText();
+          }
+
+          // Initial reveal states
+          this.dash.style.transition = 'none';
+          this.dash.style.transform = 'scaleX(0)';
+
+          this.locationEl.style.transition = 'none';
+          this.locationEl.style.transform = 'translateY(105%)';
+
+          this.titleLine1.style.transition = 'none';
+          this.titleLine1.style.transform = 'translateY(105%)';
+
+          if (this.titleLine2) {
+            this.titleLine2.style.transition = 'none';
+            this.titleLine2.style.transform = 'translateY(105%)';
+          }
+
+          this.descEl.style.transition = 'none';
+          this.descEl.style.transform = 'translateY(14px)';
+          this.descEl.style.opacity = '0';
+
+          this.actionsEl.style.transition = 'none';
+          this.actionsEl.style.transform = 'translateY(14px)';
+          this.actionsEl.style.opacity = '0';
+        }
+
+        triggerTextInstant() {
+          this.dash.style.transition = 'none';
+          this.dash.style.transform = 'scaleX(1)';
+
+          this.locationEl.style.transition = 'none';
+          this.locationEl.style.transform = 'translateY(0)';
+
+          this.titleLine1.style.transition = 'none';
+          this.titleLine1.style.transform = 'translateY(0)';
+
+          if (this.titleLine2) {
+            this.titleLine2.style.transition = 'none';
+            this.titleLine2.style.transform = 'translateY(0)';
+          }
+
+          this.descEl.style.transition = 'none';
+          this.descEl.style.transform = 'translateY(0)';
+          this.descEl.style.opacity = '1';
+
+          this.actionsEl.style.transition = 'none';
+          this.actionsEl.style.transform = 'translateY(0)';
+          this.actionsEl.style.opacity = '1';
+        }
+
+        triggerTextReveal() {
+          const ease = 'cubic-bezier(.22, 1, .36, 1)';
+          const dur = '600ms';
+
+          // Force reflow
+          this.dash.offsetHeight;
+
+          // 1. dash
+          this.dash.style.transition = `transform ${dur} ${ease}`;
+          this.dash.style.transform = 'scaleX(1)';
+
+          // 2. eyebrow (+90ms)
+          setTimeout(() => {
+            this.locationEl.style.transition = `transform ${dur} ${ease}`;
+            this.locationEl.style.transform = 'translateY(0)';
+          }, 90);
+
+          // 3. title line 1 (+180ms)
+          setTimeout(() => {
+            this.titleLine1.style.transition = `transform ${dur} ${ease}`;
+            this.titleLine1.style.transform = 'translateY(0)';
+          }, 180);
+
+          // 4. title line 2 (+270ms)
+          setTimeout(() => {
+            if (this.titleLine2) {
+              this.titleLine2.style.transition = `transform ${dur} ${ease}`;
+              this.titleLine2.style.transform = 'translateY(0)';
+            }
+          }, 270);
+
+          // 5. description (+360ms)
+          setTimeout(() => {
+            this.descEl.style.transition = `transform ${dur} ${ease}, opacity ${dur} ${ease}`;
+            this.descEl.style.transform = 'translateY(0)';
+            this.descEl.style.opacity = '1';
+          }, 360);
+
+          // 6. actions button row (+450ms)
+          setTimeout(() => {
+            this.actionsEl.style.transition = `transform ${dur} ${ease}, opacity ${dur} ${ease}`;
+            this.actionsEl.style.transform = 'translateY(0)';
+            this.actionsEl.style.opacity = '1';
+          }, 450);
+        }
+
+        updateCounter(idx, dir = 'none') {
+          if (!this.counterBox) return;
+          const numStr = String(idx + 1).padStart(2, '0');
+
+          if (dir === 'none' || this.prefersReduced) {
+            this.counterBox.innerHTML = `<span class="dh-counter-digit current">${numStr}</span>`;
+            return;
+          }
+
+          const currentDigit = this.counterBox.querySelector('.dh-counter-digit.current');
+          const nextDigit = document.createElement('span');
+          nextDigit.className = 'dh-counter-digit next';
+          nextDigit.textContent = numStr;
+
+          const fromY = dir === 'up' ? '100%' : '-100%';
+          const toY = dir === 'up' ? '-100%' : '100%';
+
+          nextDigit.style.transform = `translateY(${fromY})`;
+          this.counterBox.appendChild(nextDigit);
+
+          // Force reflow
+          nextDigit.offsetHeight;
+
+          const ease = 'cubic-bezier(.76, 0, .24, 1)';
+          const dur = '450ms';
+
+          if (currentDigit) {
+            currentDigit.style.transition = `transform ${dur} ${ease}`;
+            currentDigit.style.transform = `translateY(${toY})`;
+          }
+
+          nextDigit.style.transition = `transform ${dur} ${ease}`;
+          nextDigit.style.transform = 'translateY(0)';
+
+          setTimeout(() => {
+            if (currentDigit) currentDigit.remove();
+            nextDigit.className = 'dh-counter-digit current';
+          }, 450);
+        }
+
+        updateProgress(idx, animated = true) {
+          if (!this.progressFill) return;
+          const pct = (idx / this.total) * 100;
+          if (animated && !this.prefersReduced) {
+            this.progressFill.style.transition = 'width 600ms cubic-bezier(.76, 0, .24, 1)';
+          } else {
+            this.progressFill.style.transition = 'none';
+          }
+          this.progressFill.style.width = pct + '%';
+
+          const prog = this.querySelector('.dh-progress');
+          if (prog) prog.setAttribute('aria-valuenow', Math.round(pct));
+        }
+
+        updateLiveRegion(idx) {
+          if (!this.liveRegion || !this.data[idx]) return;
+          this.liveRegion.textContent = `Slide ${idx + 1} of ${this.total}: ${this.data[idx].name}`;
+        }
+
+        preloadNext(idx) {
+          const nextIdx = (idx + 1) % this.total;
+          const bg = this.data[nextIdx].bg || this.data[nextIdx].image;
+          if (bg) {
+            const im = new Image();
+            im.src = bg;
+          }
+        }
+
+        runFirstLoad() {
+          if (this.bgImage) {
+            this.bgImage.style.opacity = '0';
+            this.bgImage.style.transform = 'scale(1.08)';
+            this.bgImage.style.transition = 'opacity 1.2s cubic-bezier(.76, 0, .24, 1), transform 1.2s cubic-bezier(.76, 0, .24, 1)';
+          }
+
+          const cards = Array.from(this.track.children);
+          cards.forEach((card) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+          });
+
+          this.setupTextForReveal(this.data[0]);
+
+          requestAnimationFrame(() => {
+            if (this.bgImage) {
+              this.bgImage.style.opacity = '1';
+              this.bgImage.style.transform = 'scale(1)';
+            }
+
+            setTimeout(() => {
+              this.triggerTextReveal();
+            }, 350);
+
+            cards.forEach((card, idx) => {
+              setTimeout(() => {
+                card.style.transition = 'opacity 500ms ease, transform 500ms cubic-bezier(.22, 1, .36, 1)';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+              }, 450 + idx * 80);
+            });
+
+            setTimeout(() => {
+              if (this.autoplayEnabled && !(window.Shopify && window.Shopify.designMode)) {
+                this.startAutoplay();
+              }
+            }, 1250);
+          });
+        }
+
+        startAutoplay() {
+          if (!this.autoplayEnabled || this.total <= 1 || (window.Shopify && window.Shopify.designMode)) return;
+          this.stopAutoplay();
+
+          const duration = this.autoplaySeconds * 1000;
+          let lastTime = performance.now();
+
+          const tick = (now) => {
+            if (this.isPaused || this.isAnimating) {
+              lastTime = now;
+              this.autoplayRaf = requestAnimationFrame(tick);
+              return;
+            }
+
+            const delta = now - lastTime;
+            lastTime = now;
+            this.autoplayElapsed += delta;
+
+            const pct = Math.min(1, this.autoplayElapsed / duration);
+            if (this.topbarFill) {
+              this.topbarFill.style.width = (pct * 100) + '%';
+            }
+
+            if (pct >= 1) {
+              this.resetAutoplayBar();
+              this.next();
+              return;
+            }
+
+            this.autoplayRaf = requestAnimationFrame(tick);
+          };
+
+          this.autoplayRaf = requestAnimationFrame(tick);
+        }
+
+        stopAutoplay() {
+          if (this.autoplayRaf) {
+            cancelAnimationFrame(this.autoplayRaf);
+            this.autoplayRaf = null;
+          }
+        }
+
+        resetAutoplayBar() {
+          this.autoplayElapsed = 0;
+          if (this.topbarFill) {
+            this.topbarFill.style.transition = 'none';
+            this.topbarFill.style.width = '0%';
+          }
+        }
+
+        next() {
+          if (this.isAnimating) return;
+          this.resetAutoplayBar();
+          const targetIndex = (this.activeIndex + 1) % this.total;
+          const firstCard = this.track.children[0];
+          this.goTo(targetIndex, 'next', firstCard);
+        }
+
+        prev() {
+          if (this.isAnimating) return;
+          this.resetAutoplayBar();
+          const targetIndex = (this.activeIndex - 1 + this.total) % this.total;
+          this.goTo(targetIndex, 'prev');
+        }
+
+        goTo(targetIndex, direction = 'next', fromCardEl = null) {
+          if (this.isAnimating || targetIndex === this.activeIndex) return;
+          this.isAnimating = true;
+          this.stopAutoplay();
+
+          const oldIndex = this.activeIndex;
+          const nextIndex = targetIndex;
+          const nextSlide = this.data[nextIndex];
+          const oldSlide = this.data[oldIndex];
+
+          if (this.prefersReduced) {
+            this.performReducedTransition(nextIndex, oldIndex);
+            return;
+          }
+
+          if (direction === 'prev') {
+            this.performPrevTransition(nextIndex, oldIndex);
+          } else {
+            this.performNextTransition(nextIndex, oldIndex, fromCardEl);
+          }
+        }
+
+        performReducedTransition(nextIndex, oldIndex) {
+          this.content.style.transition = 'opacity 150ms ease';
+          this.content.style.opacity = '0';
+          if (this.bgImage) {
+            this.bgImage.style.transition = 'opacity 150ms ease';
+            this.bgImage.style.opacity = '0';
+          }
+
+          setTimeout(() => {
+            const nextSlide = this.data[nextIndex];
+            if (this.bgImage) {
+              this.bgImage.src = nextSlide.bg || nextSlide.image;
+              this.bgImage.style.opacity = '1';
+            }
+            this.setupTextForReveal(nextSlide);
+            this.triggerTextInstant();
+            this.renderTrackCards(nextIndex);
+            this.updateCounter(nextIndex, 'none');
+            this.updateProgress(nextIndex, false);
+            this.updateLiveRegion(nextIndex);
+            this.activeIndex = nextIndex;
+            this.isAnimating = false;
+            this.preloadNext(nextIndex);
+            if (this.autoplayEnabled && !(window.Shopify && window.Shopify.designMode)) {
+              this.startAutoplay();
+            }
+          }, 150);
+        }
+
+        performNextTransition(nextIndex, oldIndex, fromCardEl) {
+          const nextSlide = this.data[nextIndex];
+          const fromCard = fromCardEl || this.track.children[0];
+
+          // 1. 0ms: Scale clicked card to 1.04 over 150ms
+          fromCard.style.willChange = 'transform';
+          fromCard.style.transition = 'transform 150ms cubic-bezier(.76, 0, .24, 1)';
+          fromCard.style.transform = 'scale(1.04)';
+
+          const sectionRect = this.getBoundingClientRect();
+          const cardRect = fromCard.getBoundingClientRect();
+          const top = Math.round(cardRect.top - sectionRect.top);
+          const left = Math.round(cardRect.left - sectionRect.left);
+          const right = Math.round(sectionRect.width - (left + cardRect.width));
+          const bottom = Math.round(sectionRect.height - (top + cardRect.height));
+
+          // Clean up any lingering layer from before
+          const existingLayers = this.querySelectorAll('.dh-expand-layer');
+          existingLayers.forEach((el) => el.remove());
+
+          // 2. 0-650ms: Full-size layer holding new slide's background grows from card's rect
+          const layer = document.createElement('div');
+          layer.className = 'dh-expand-layer';
+          layer.style.cssText = `
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            pointer-events: none;
+            overflow: hidden;
+            clip-path: inset(${top}px ${right}px ${bottom}px ${left}px round 10px);
+            will-change: clip-path, opacity;
+          `;
+
+          const layerImg = document.createElement('img');
+          layerImg.src = nextSlide.bg || nextSlide.image;
+          layerImg.alt = nextSlide.name;
+          layerImg.style.cssText = `
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.1);
+            transform-origin: center center;
+            will-change: transform;
+          `;
+          layer.appendChild(layerImg);
+          this.appendChild(layer);
+
+          // Hide real card immediately
+          fromCard.style.opacity = '0';
+
+          // 3. 0-650ms: Old scene darkens: old bg brightness(.25), left text fades to 20%
+          if (this.bgWrapper) {
+            this.bgWrapper.style.willChange = 'filter';
+            this.bgWrapper.style.transition = 'filter 650ms cubic-bezier(.76, 0, .24, 1)';
+            this.bgWrapper.style.filter = 'brightness(0.25)';
+          }
+
+          this.content.style.willChange = 'opacity';
+          this.content.style.transition = 'opacity 650ms cubic-bezier(.76, 0, .24, 1)';
+          this.content.style.opacity = '0.2';
+
+          // Animate clip-path to inset(0 round 0) and image scale from 1.1 to 1
+          layer.offsetHeight; // Force reflow
+          layer.style.transition = 'clip-path 650ms cubic-bezier(.76, 0, .24, 1)';
+          layerImg.style.transition = 'transform 650ms cubic-bezier(.76, 0, .24, 1)';
+          layer.style.clipPath = 'inset(0px 0px 0px 0px round 0px)';
+          layerImg.style.transform = 'scale(1)';
+
+          // 5. 60-750ms: The cards shift left by one slot with 80ms lag (elastic-gap look)
+          const cards = Array.from(this.track.children);
+          const firstCard = cards[0];
+          const secondCard = cards[1];
+          const slotDist = secondCard
+            ? Math.round(secondCard.getBoundingClientRect().left - firstCard.getBoundingClientRect().left)
+            : Math.round(firstCard.offsetWidth + 20);
+
+          cards.forEach((c, idx) => {
+            setTimeout(() => {
+              c.style.willChange = 'transform';
+              c.style.transition = 'transform 600ms cubic-bezier(.65, 0, .35, 1)';
+              c.style.transform = `translateX(-${slotDist}px)`;
+            }, 60 + idx * 80);
+          });
+
+          // 7 & 8: From 300ms — Counter rolls up and progress fill animates
+          setTimeout(() => {
+            this.updateCounter(nextIndex, 'up');
+            this.updateProgress(nextIndex, true);
+          }, 300);
+
+          // 6. From 550ms — Text reveal: swap in new slide text and trigger staggered reveal
+          setTimeout(() => {
+            this.content.style.opacity = '1';
+            this.content.style.transition = '';
+            this.setupTextForReveal(nextSlide);
+            this.triggerTextReveal();
+          }, 550);
+
+          // 4. 650ms: The new image becomes real background; expansion layer gently fades out
+          setTimeout(() => {
+            if (this.bgImage) {
+              this.bgImage.src = nextSlide.bg || nextSlide.image;
+              this.bgImage.style.display = 'block';
+            }
+            if (this.bgWrapper) {
+              this.bgWrapper.style.willChange = 'filter';
+              this.bgWrapper.style.transition = 'filter 500ms ease';
+              this.bgWrapper.style.filter = 'brightness(1)';
+            }
+
+            // Gently fade out the expansion layer so it smoothly turns into the background
+            layer.style.willChange = 'opacity';
+            layer.style.transition = 'opacity 500ms cubic-bezier(.25, 1, .5, 1)';
+            layer.style.opacity = '0';
+
+            setTimeout(() => {
+              layer.remove();
+              if (this.bgWrapper) {
+                this.bgWrapper.style.filter = 'brightness(1)';
+                this.bgWrapper.style.transition = '';
+                this.bgWrapper.style.willChange = '';
+              }
+            }, 520);
+
+            // Rebuild track cards for the new activeIndex
+            this.renderTrackCards(nextIndex);
+
+            // Add the slide that just left as the last card, fade in from translateX(40px)
+            const lastCard = this.track.lastElementChild;
+            if (lastCard) {
+              lastCard.style.opacity = '0';
+              lastCard.style.transform = 'translateX(40px)';
+              setTimeout(() => {
+                lastCard.style.willChange = 'transform, opacity';
+                lastCard.style.transition = 'transform 400ms cubic-bezier(.65, 0, .35, 1), opacity 400ms ease';
+                lastCard.style.transform = 'translateX(0)';
+                lastCard.style.opacity = '1';
+              }, 50);
+            }
+          }, 650);
+
+          // Settle at 1300ms
+          setTimeout(() => {
+            this.isAnimating = false;
+            this.activeIndex = nextIndex;
+            this.updateLiveRegion(nextIndex);
+            this.preloadNext(nextIndex);
+
+            // Reset will-change
+            this.content.style.willChange = '';
+            Array.from(this.track.children).forEach((c) => {
+              c.style.willChange = '';
+            });
+
+            // Smooth scroll track back to start on mobile
+            if (window.innerWidth <= 749) {
+              this.track.scrollTo({ left: 0, behavior: 'smooth' });
+            }
+
+            // Restart autoplay
+            if (this.autoplayEnabled && !(window.Shopify && window.Shopify.designMode)) {
+              this.startAutoplay();
+            }
+          }, 1300);
+        }
+
+        performPrevTransition(nextIndex, oldIndex) {
+          const nextSlide = this.data[nextIndex];
+          const oldSlide = this.data[oldIndex];
+
+          const firstCard = this.track.children[0];
+          const sectionRect = this.getBoundingClientRect();
+          const cardRect = firstCard ? firstCard.getBoundingClientRect() : { top: 0, left: 0, width: 200, height: 300 };
+          const top = Math.round(cardRect.top - sectionRect.top);
+          const left = Math.round(cardRect.left - sectionRect.left);
+          const right = Math.round(sectionRect.width - (left + cardRect.width));
+          const bottom = Math.round(sectionRect.height - (top + cardRect.height));
+
+          // Clean up any lingering layer from before
+          const existingLayers = this.querySelectorAll('.dh-expand-layer');
+          existingLayers.forEach((el) => el.remove());
+
+          // Background shrinks back into card at first card slot
+          const layer = document.createElement('div');
+          layer.className = 'dh-expand-layer';
+          layer.style.cssText = `
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            pointer-events: none;
+            overflow: hidden;
+            clip-path: inset(0px 0px 0px 0px round 0px);
+            will-change: clip-path, opacity;
+          `;
+
+          const layerImg = document.createElement('img');
+          layerImg.src = oldSlide.bg || oldSlide.image;
+          layerImg.alt = oldSlide.name;
+          layerImg.style.cssText = `
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1);
+            transform-origin: center center;
+          `;
+          layer.appendChild(layerImg);
+          this.appendChild(layer);
+
+          // Underlying background set to previous slide and brightens from .25 to 1
+          if (this.bgImage) {
+            this.bgImage.src = nextSlide.bg || nextSlide.image;
+            this.bgImage.style.display = 'block';
+          }
+          if (this.bgWrapper) {
+            this.bgWrapper.style.filter = 'brightness(0.25)';
+            this.bgWrapper.style.transition = 'filter 650ms cubic-bezier(.76, 0, .24, 1)';
+          }
+
+          // Text fades out
+          this.content.style.transition = 'opacity 650ms cubic-bezier(.76, 0, .24, 1)';
+          this.content.style.opacity = '0.2';
+
+          layer.offsetHeight; // Force reflow
+          layer.style.transition = 'clip-path 650ms cubic-bezier(.76, 0, .24, 1)';
+          layer.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px round 10px)`;
+          if (this.bgWrapper) {
+            this.bgWrapper.style.filter = 'brightness(1)';
+          }
+
+          // Cards shift right by one slot
+          const cards = Array.from(this.track.children);
+          const secondCard = cards[1];
+          const slotDist = secondCard
+            ? Math.round(secondCard.getBoundingClientRect().left - firstCard.getBoundingClientRect().left)
+            : Math.round(firstCard.offsetWidth + 20);
+
+          // Last card fades out to right
+          const lastCard = cards[cards.length - 1];
+          if (lastCard) {
+            lastCard.style.transition = 'transform 400ms cubic-bezier(.65, 0, .35, 1), opacity 400ms ease';
+            lastCard.style.transform = 'translateX(40px)';
+            lastCard.style.opacity = '0';
+          }
+
+          cards.forEach((c, idx) => {
+            setTimeout(() => {
+              c.style.willChange = 'transform';
+              c.style.transition = 'transform 600ms cubic-bezier(.65, 0, .35, 1)';
+              c.style.transform = `translateX(${slotDist}px)`;
+            }, 60 + idx * 80);
+          });
+
+          // From 300ms: Counter rolls down, progress fill animates
+          setTimeout(() => {
+            this.updateCounter(nextIndex, 'down');
+            this.updateProgress(nextIndex, true);
+          }, 300);
+
+          // From 550ms: text reveal: swap in new slide text and trigger staggered reveal
+          setTimeout(() => {
+            this.content.style.opacity = '1';
+            this.content.style.transition = '';
+            this.setupTextForReveal(nextSlide);
+            this.triggerTextReveal();
+          }, 550);
+
+          // At 650ms: update track, gently fade out shrunk layer
+          setTimeout(() => {
+            if (this.bgWrapper) {
+              this.bgWrapper.style.filter = 'brightness(1)';
+              this.bgWrapper.style.transition = '';
+            }
+            this.renderTrackCards(nextIndex);
+
+            // Gently fade out shrunk layer over 300ms
+            layer.style.willChange = 'opacity';
+            layer.style.transition = 'opacity 300ms ease';
+            layer.style.opacity = '0';
+
+            setTimeout(() => {
+              layer.remove();
+            }, 320);
+          }, 650);
+
+          // Settle at 1300ms
+          setTimeout(() => {
+            this.isAnimating = false;
+            this.activeIndex = nextIndex;
+            this.updateLiveRegion(nextIndex);
+            this.preloadNext(nextIndex);
+
+            this.content.style.willChange = '';
+            Array.from(this.track.children).forEach((c) => {
+              c.style.willChange = '';
+            });
+
+            if (window.innerWidth <= 749) {
+              this.track.scrollTo({ left: 0, behavior: 'smooth' });
+            }
+
+            if (this.autoplayEnabled && !(window.Shopify && window.Shopify.designMode)) {
+              this.startAutoplay();
+            }
+          }, 1300);
+        }
+      }
+
+      customElements.define(tag, ProductHero);
+    })();
+  </script>
+</product-hero-{{ ai_gen_id }}>
+
+{% schema %}
+{
+  "name": "Product destination hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Global settings"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#ECAB32"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 25
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_seconds",
+      "label": "Autoplay seconds",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "unit": "s",
+      "default": 6
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause on hover",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "product_list",
+      "id": "products",
+      "label": "Products",
+      "limit": 5
+    },
+    {
+      "type": "font_picker",
+      "id": "display_font",
+      "label": "Display font",
+      "default": "oswald_n7"
+    },
+    {
+      "type": "font_picker",
+      "id": "body_font",
+      "label": "Body font",
+      "default": "montserrat_n4"
+    },
+    {
+      "type": "header",
+      "content": "Rich text content"
+    },
+    {
+      "type": "richtext",
+      "id": "location_text",
+      "label": "Location text",
+      "default": "<p>Featured product</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "heading_richtext",
+      "label": "Main heading override"
+    },
+    {
+      "type": "richtext",
+      "id": "description_richtext",
+      "label": "Subheading override"
+    },
+    {
+      "type": "richtext",
+      "id": "button_richtext",
+      "label": "Button label",
+      "default": "<p>Shop product</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "card_richtext",
+      "label": "Card title override"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "copy_width",
+      "label": "Text width",
+      "min": 250,
+      "max": 600,
+      "step": 25,
+      "unit": "px",
+      "default": 400
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Main heading size",
+      "min": 32,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "heading_weight",
+      "label": "Main heading weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "location_size",
+      "label": "Location size",
+      "min": 12,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "location_weight",
+      "label": "Location weight",
+      "min": 300,
+      "max": 700,
+      "step": 100,
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "label": "Subheading size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "description_weight",
+      "label": "Subheading weight",
+      "min": 300,
+      "max": 700,
+      "step": 100,
+      "default": 400
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "label": "Card title size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "card_weight",
+      "label": "Card title weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "price_size",
+      "label": "Price size",
+      "min": 10,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "price_weight",
+      "label": "Price weight",
+      "min": 300,
+      "max": 700,
+      "step": 100,
+      "default": 400
+    },
+    {
+      "type": "range",
+      "id": "button_size",
+      "label": "Button size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 11
+    },
+    {
+      "type": "range",
+      "id": "button_weight",
+      "label": "Button weight",
+      "min": 300,
+      "max": 700,
+      "step": 100,
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "counter_size",
+      "label": "Counter size",
+      "min": 24,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 42
+    },
+    {
+      "type": "header",
+      "content": "Background images"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_1",
+      "label": "Slide 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_2",
+      "label": "Slide 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_3",
+      "label": "Slide 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_4",
+      "label": "Slide 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_5",
+      "label": "Slide 5"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product destination hero"
+    }
+  ],
+  "tag": null,
+  "class": "product-destination-hero"
+}
+{% endschema %}
