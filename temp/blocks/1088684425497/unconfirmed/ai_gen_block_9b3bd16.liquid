@@ -1,6 +1,124 @@
+{% doc %}
+  @prompt
+    Build ONE Shopify Online Store 2.0 section (single .liquid file) named "Bamboo Hero Banner" that recreates the attached reference banner. We'll build it in 6 steps; this is STEP 1. Return only the full code.
+    
+    RULES (apply to all steps):
+    - Font: Montserrat ONLY (Google Fonts link, weights 300-800). No font_picker, no theme fonts.
+    - Nothing hardcoded: all text, colors, sizes, weights, spacing, links, show/hide toggles are settings with defaults.
+    - All text fields are richtext (CTA label is plain text). Single-line richtext: strip <p> with replace '</p><p>' with '<br>', remove '<p>' and '</p>'.
+    - <strong> inside richtext uses that element's own bold weight and accent color settings.
+    - CSS scoped to section id, prefix "mbh-", settings mapped to CSS variables. No JS, no external CSS.
+    - Mobile below 750px, desktop 990px+, fluid clamp() in between.
+    - Group settings with headers. Valid schema JSON, unique ids, add a preset.
+    - Empty text or image: render nothing.
+    
+    STEP 1:
+    Full-bleed section, aspect ~16:9, min-height setting (default 760px). Background image fills it (object-fit cover, focal point, srcset, eager-load checkbox) with an optional color overlay (default 0%). Separate optional mobile image. Fallback bg color #F3E9DD. Keep the center ~38% of the width empty (the baby is in the photo).
+    Settings: bg_image, bg_image_mobile, bg_color, overlay color + opacity, eager_load, desktop height, horizontal padding (desktop 88 / mobile 20), content top offset (80), content max-width (560), mobile text align, margin top/bottom.
+{% enddoc %}
+{% assign mbh_id = section.id | replace: '_', '' | downcase %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+{% style %}
+  #mbh-{{ mbh_id }} {
+    --mbh-bg: {{ section.settings.bg_color }};
+    --mbh-overlay: {{ section.settings.overlay_color }};
+    --mbh-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+    --mbh-desktop-height: {{ section.settings.desktop_height }}px;
+    --mbh-pad-x: {{ section.settings.horizontal_padding_desktop }}px;
+    --mbh-pad-mobile: {{ section.settings.horizontal_padding_mobile }}px;
+    --mbh-content-top: {{ section.settings.content_top_offset }}px;
+    --mbh-content-width: {{ section.settings.content_max_width }}px;
+    --mbh-margin-top: {{ section.settings.margin_top }}px;
+    --mbh-margin-bottom: {{ section.settings.margin_bottom }}px;
+    position: relative;
+    display: block;
+    width: 100%;
+    min-height: max(var(--mbh-desktop-height), 56.25vw);
+    margin-block: var(--mbh-margin-top) var(--mbh-margin-bottom);
+    overflow: hidden;
+    background: var(--mbh-bg);
+    font-family: 'Montserrat', sans-serif;
+  }
+  #mbh-{{ mbh_id }} .mbh-background,
+  #mbh-{{ mbh_id }} .mbh-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  #mbh-{{ mbh_id }} .mbh-background { object-fit: cover; }
+  #mbh-{{ mbh_id }} .mbh-overlay {
+    background: var(--mbh-overlay);
+    opacity: var(--mbh-overlay-opacity);
+    pointer-events: none;
+  }
+  #mbh-{{ mbh_id }} .mbh-content {
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: var(--mbh-content-width);
+    padding: var(--mbh-content-top) var(--mbh-pad-x) 48px;
+  }
+  @media (min-width: 750px) and (max-width: 989px) {
+    #mbh-{{ mbh_id }} { min-height: max(56.25vw, calc(var(--mbh-desktop-height) * 0.82)); }
+    #mbh-{{ mbh_id }} .mbh-content { padding-top: clamp(48px, 6vw, var(--mbh-content-top)); padding-inline: clamp(30px, 6vw, var(--mbh-pad-x)); }
+  }
+  @media (max-width: 749px) {
+    #mbh-{{ mbh_id }} { min-height: max(56.25vw, 420px); }
+    #mbh-{{ mbh_id }} .mbh-background--desktop { display: none; }
+    #mbh-{{ mbh_id }} .mbh-content {
+      padding: clamp(36px, 10vw, var(--mbh-content-top)) var(--mbh-pad-mobile) 36px;
+      text-align: {{ section.settings.mobile_text_align }};
+    }
+  }
+{% endstyle %}
+<section id="mbh-{{ mbh_id }}" aria-label="{{ section.settings.accessibility_label | strip_html | escape }}" {{ section.shopify_attributes }}>
+  {% if section.settings.bg_image_mobile != blank %}
+    <img class="mbh-background mbh-background--mobile" src="{{ section.settings.bg_image_mobile | image_url: width: 1600 }}" srcset="{{ section.settings.bg_image_mobile | image_url: width: 375 }} 375w, {{ section.settings.bg_image_mobile | image_url: width: 750 }} 750w, {{ section.settings.bg_image_mobile | image_url: width: 1100 }} 1100w, {{ section.settings.bg_image_mobile | image_url: width: 1600 }} 1600w" sizes="100vw" width="{{ section.settings.bg_image_mobile.width }}" height="{{ section.settings.bg_image_mobile.height }}" alt="{{ section.settings.bg_image_mobile.alt | escape }}" {% if section.settings.eager_load %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+  {% endif %}
+  {% if section.settings.bg_image != blank %}
+    <img class="mbh-background mbh-background--desktop{% if section.settings.bg_image_mobile != blank %} mbh-background--desktop-only{% endif %}" src="{{ section.settings.bg_image | image_url: width: 2400 }}" srcset="{{ section.settings.bg_image | image_url: width: 750 }} 750w, {{ section.settings.bg_image | image_url: width: 1100 }} 1100w, {{ section.settings.bg_image | image_url: width: 1600 }} 1600w, {{ section.settings.bg_image | image_url: width: 2400 }} 2400w" sizes="100vw" width="{{ section.settings.bg_image.width }}" height="{{ section.settings.bg_image.height }}" alt="{{ section.settings.bg_image.alt | escape }}" {% if section.settings.eager_load %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+  {% endif %}
+  <div class="mbh-overlay" aria-hidden="true"></div>
+  <div class="mbh-content"></div>
+</section>
+{% style %}
+  @media (max-width: 749px) {
+    #mbh-{{ mbh_id }} .mbh-background--desktop-only { display: none; }
+    #mbh-{{ mbh_id }} .mbh-background--mobile { display: block; }
+  }
+  @media (min-width: 750px) {
+    #mbh-{{ mbh_id }} .mbh-background--mobile { display: none; }
+  }
+{% endstyle %}
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Bamboo Hero Banner",
+  "tag": "section",
+  "class": "mbh-section",
+  "settings": [
+    { "type": "header", "content": "Background" },
+    { "type": "image_picker", "id": "bg_image", "label": "Desktop image" },
+    { "type": "image_picker", "id": "bg_image_mobile", "label": "Mobile image" },
+    { "type": "color", "id": "bg_color", "label": "Fallback background", "default": "#F3E9DD" },
+    { "type": "color", "id": "overlay_color", "label": "Overlay color", "default": "#000000" },
+    { "type": "range", "id": "overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 0 },
+    { "type": "checkbox", "id": "eager_load", "label": "Load images eagerly", "default": false },
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "desktop_height", "label": "Desktop minimum height", "min": 400, "max": 1200, "step": 20, "unit": "px", "default": 760 },
+    { "type": "range", "id": "horizontal_padding_desktop", "label": "Desktop horizontal padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 88 },
+    { "type": "range", "id": "horizontal_padding_mobile", "label": "Mobile horizontal padding", "min": 0, "max": 60, "step": 2, "unit": "px", "default": 20 },
+    { "type": "range", "id": "content_top_offset", "label": "Content top offset", "min": 0, "max": 240, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "content_max_width", "label": "Content maximum width", "min": 320, "max": 900, "step": 20, "unit": "px", "default": 560 },
+    { "type": "select", "id": "mobile_text_align", "label": "Mobile text alignment", "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }, { "value": "right", "label": "Right" }], "default": "left" },
+    { "type": "range", "id": "margin_top", "label": "Top margin", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 0 },
+    { "type": "range", "id": "margin_bottom", "label": "Bottom margin", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 0 },
+    { "type": "header", "content": "Accessibility" },
+    { "type": "richtext", "id": "accessibility_label", "label": "Section label", "default": "<p>Hero banner</p>" }
+  ],
+  "presets": [{ "name": "Bamboo Hero Banner" }]
+}
 {% endschema %}
