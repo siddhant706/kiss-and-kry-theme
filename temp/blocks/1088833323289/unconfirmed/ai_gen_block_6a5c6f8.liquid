@@ -1,6 +1,24 @@
+{% doc %}
+  @prompt
+    generate a full page with section to show about the kiss and kry with and eyebrow, heading , subheading on top left and on right button a complete context about kiss and kry, without any photo, bro i want eyebrow, heading on top left and on right bottom subheading and context only this rest will remain blank, all the text as rich text 
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% style %}
+.ai-about-{{ ai_gen_id }}{display:block;width:{{ block.settings.desktop_width_percent }}%;max-width:100%;min-height:{{ block.settings.section_height }}px;padding:{{ block.settings.vertical_padding }}px clamp(20px,6vw,88px);box-sizing:border-box;background:{{ block.settings.background_color }};color:{{ block.settings.text_color }}}
+.ai-about-{{ ai_gen_id }}__inner-{{ ai_gen_id }}{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.72fr);align-items:stretch;gap:clamp(32px,8vw,120px);width:100%;max-width:1240px;min-height:inherit;margin:0 auto}
+.ai-about-{{ ai_gen_id }}__left-{{ ai_gen_id }}{align-self:start}
+.ai-about-{{ ai_gen_id }}__eyebrow-{{ ai_gen_id }}{margin:0 0 18px;color:{{ block.settings.accent_color }};font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.ai-about-{{ ai_gen_id }}__eyebrow-{{ ai_gen_id }} p{margin:0}
+.ai-about-{{ ai_gen_id }}__heading-{{ ai_gen_id }}{margin:0;color:inherit;font-size:clamp(38px,6vw,76px);font-weight:600;line-height:1.04;letter-spacing:-.045em}
+.ai-about-{{ ai_gen_id }}__heading-{{ ai_gen_id }} p{margin:0}
+.ai-about-{{ ai_gen_id }}__right-{{ ai_gen_id }}{display:flex;flex-direction:column;justify-content:flex-end;align-self:stretch;padding-bottom:4px}
+.ai-about-{{ ai_gen_id }}__subheading-{{ ai_gen_id }}{margin:0 0 22px;color:{{ block.settings.muted_color }};font-size:clamp(18px,2vw,24px);line-height:1.5}
+.ai-about-{{ ai_gen_id }}__subheading-{{ ai_gen_id }} p{margin:0}
+.ai-about-{{ ai_gen_id }}__context-{{ ai_gen_id }} p{margin:0 0 16px;font-size:15px;line-height:1.8}
+.ai-about-{{ ai_gen_id }}__context-{{ ai_gen_id }} p:last-child{margin-bottom:0}
+@media screen and (max-width:749px){.ai-about-{{ ai_gen_id }}{min-height:0;padding:{{ block.settings.vertical_padding | divided_by: 2 }}px 20px}.ai-about-{{ ai_gen_id }}__inner-{{ ai_gen_id }}{grid-template-columns:1fr;gap:56px;min-height:0}.ai-about-{{ ai_gen_id }}__right-{{ ai_gen_id }}{max-width:560px}}
+{% endstyle %}
+<section class="ai-about-{{ ai_gen_id }}" {{ block.shopify_attributes }}><div class="ai-about-{{ ai_gen_id }}__inner-{{ ai_gen_id }}"><div class="ai-about-{{ ai_gen_id }}__left-{{ ai_gen_id }}">{% if block.settings.eyebrow != blank %}<div class="ai-about-{{ ai_gen_id }}__eyebrow-{{ ai_gen_id }}">{{ block.settings.eyebrow }}</div>{% endif %}{% if block.settings.heading != blank %}<div class="ai-about-{{ ai_gen_id }}__heading-{{ ai_gen_id }}">{{ block.settings.heading }}</div>{% endif %}</div><div class="ai-about-{{ ai_gen_id }}__right-{{ ai_gen_id }}">{% if block.settings.subheading != blank %}<div class="ai-about-{{ ai_gen_id }}__subheading-{{ ai_gen_id }}">{{ block.settings.subheading }}</div>{% endif %}{% if block.settings.context != blank %}<div class="ai-about-{{ ai_gen_id }}__context-{{ ai_gen_id }}">{{ block.settings.context }}</div>{% endif %}</div></div></section>
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{"name":"About Kiss and Kry","settings":[{"type":"header","content":"Content"},{"type":"range","id":"desktop_width_percent","label":"Desktop width","min":50,"max":100,"step":5,"unit":"%","default":100},{"type":"richtext","id":"eyebrow","label":"Eyebrow","default":"<p>A little about us</p>"},{"type":"richtext","id":"heading","label":"Heading","default":"<p>Meet Kiss and Kry</p>"},{"type":"richtext","id":"subheading","label":"Subheading","default":"<p>Thoughtful finds, chosen with care and made for the moments that matter.</p>"},{"type":"richtext","id":"context","label":"About text","default":"<p>Kiss and Kry is a thoughtfully curated shop built around personal style, meaningful details, and pieces you’ll love to keep close.</p><p>We believe the things we choose can bring more joy to everyday life. Each collection is selected with care, with an eye for distinctive design, lasting appeal, and the details that make something feel like yours.</p><p>Thank you for being here and letting Kiss and Kry be part of your story.</p>"},{"type":"header","content":"Layout and colors"},{"type":"range","id":"section_height","label":"Desktop section height","min":300,"max":900,"step":30,"unit":"px","default":600},{"type":"range","id":"vertical_padding","label":"Vertical spacing","min":30,"max":120,"step":5,"unit":"px","default":80},{"type":"color","id":"background_color","label":"Background","default":"#FFFFFF"},{"type":"color","id":"text_color","label":"Heading","default":"#20221C"},{"type":"color","id":"muted_color","label":"Supporting text","default":"#53584A"},{"type":"color","id":"accent_color","label":"Eyebrow","default":"#5E6539"}],"presets":[{"name":"About Kiss and Kry"}],"tag":null,"class":"about-kiss-and-kry"}
 {% endschema %}
