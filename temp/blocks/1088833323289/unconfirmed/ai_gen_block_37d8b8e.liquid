@@ -1,6 +1,227 @@
+{% doc %}
+  @prompt
+    generate a full page with section to show about the kiss and kry with and eyebrow, heading , subheading on top left and on right button a complete context about kiss and kry
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-about-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: {{ block.settings.vertical_padding }}px clamp(20px, 6vw, 88px);
+    background: {{ block.settings.background_color }};
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-about-{{ ai_gen_id }} *,
+  .ai-about-{{ ai_gen_id }} *::before,
+  .ai-about-{{ ai_gen_id }} *::after { box-sizing: border-box; }
+
+  .ai-about-{{ ai_gen_id }}__inner-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  .ai-about-{{ ai_gen_id }}__top-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 0.72fr);
+    align-items: end;
+    gap: clamp(28px, 6vw, 96px);
+    padding-bottom: clamp(40px, 7vw, 88px);
+  }
+
+  .ai-about-{{ ai_gen_id }}__eyebrow-{{ ai_gen_id }} {
+    margin: 0 0 18px;
+    color: {{ block.settings.accent_color }};
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .ai-about-{{ ai_gen_id }}__heading-{{ ai_gen_id }} {
+    margin: 0;
+    color: inherit;
+    font-size: clamp(38px, 6vw, 76px);
+    font-weight: 600;
+    line-height: 1.04;
+    letter-spacing: -0.045em;
+  }
+
+  .ai-about-{{ ai_gen_id }}__subheading-{{ ai_gen_id }} {
+    margin: 22px 0 0;
+    max-width: 540px;
+    color: {{ block.settings.muted_color }};
+    font-size: clamp(16px, 1.8vw, 20px);
+    line-height: 1.55;
+  }
+
+  .ai-about-{{ ai_gen_id }}__intro-{{ ai_gen_id }} {
+    align-self: end;
+  }
+
+  .ai-about-{{ ai_gen_id }}__intro-{{ ai_gen_id }} p,
+  .ai-about-{{ ai_gen_id }}__story-{{ ai_gen_id }} p {
+    margin: 0 0 18px;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .ai-about-{{ ai_gen_id }}__button-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    margin-top: 8px;
+    padding: 12px 22px;
+    border: 1px solid {{ block.settings.button_background }};
+    border-radius: 14px;
+    background: {{ block.settings.button_background }};
+    color: {{ block.settings.button_text }};
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 160ms ease, color 160ms ease;
+  }
+
+  .ai-about-{{ ai_gen_id }}__button-{{ ai_gen_id }}:hover {
+    background: transparent;
+    color: {{ block.settings.button_background }};
+  }
+
+  .ai-about-{{ ai_gen_id }}__button-{{ ai_gen_id }}:focus-visible {
+    outline: 3px solid {{ block.settings.accent_color }};
+    outline-offset: 4px;
+  }
+
+  .ai-about-{{ ai_gen_id }}__story-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(28px, 6vw, 88px);
+    align-items: center;
+    padding-top: clamp(32px, 5vw, 64px);
+    border-top: 1px solid {{ block.settings.divider_color }};
+  }
+
+  .ai-about-{{ ai_gen_id }}__image-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+  .ai-about-{{ ai_gen_id }}__placeholder-{{ ai_gen_id }} {
+    position: relative;
+    display: flex;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 10px;
+    background: {{ block.settings.placeholder_color }};
+  }
+
+  .ai-about-{{ ai_gen_id }}__placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    color: {{ block.settings.muted_color }};
+  }
+
+  .ai-about-{{ ai_gen_id }}__empty-{{ ai_gen_id }} {
+    position: absolute;
+    right: 16px;
+    bottom: 14px;
+    left: 16px;
+    margin: 0;
+    color: {{ block.settings.text_color }};
+    font-size: 13px;
+    text-align: center;
+  }
+
+  .ai-about-{{ ai_gen_id }}__story-{{ ai_gen_id }} h2 {
+    margin: 0 0 20px;
+    font-size: clamp(28px, 3.4vw, 42px);
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-about-{{ ai_gen_id }} { padding-right: 20px; padding-left: 20px; }
+    .ai-about-{{ ai_gen_id }}__top-{{ ai_gen_id }},
+    .ai-about-{{ ai_gen_id }}__story-{{ ai_gen_id }} { grid-template-columns: 1fr; }
+    .ai-about-{{ ai_gen_id }}__top-{{ ai_gen_id }} { gap: 28px; }
+    .ai-about-{{ ai_gen_id }}__story-{{ ai_gen_id }} { gap: 28px; }
+  }
+{% endstyle %}
+
+<section class="ai-about-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-about-{{ ai_gen_id }}__inner-{{ ai_gen_id }}">
+    <div class="ai-about-{{ ai_gen_id }}__top-{{ ai_gen_id }}">
+      <div>
+        {% if block.settings.eyebrow != blank %}<p class="ai-about-{{ ai_gen_id }}__eyebrow-{{ ai_gen_id }}">{{ block.settings.eyebrow | escape }}</p>{% endif %}
+        {% if block.settings.heading != blank %}<h1 class="ai-about-{{ ai_gen_id }}__heading-{{ ai_gen_id }}">{{ block.settings.heading | escape }}</h1>{% endif %}
+        {% if block.settings.subheading != blank %}<p class="ai-about-{{ ai_gen_id }}__subheading-{{ ai_gen_id }}">{{ block.settings.subheading | escape }}</p>{% endif %}
+      </div>
+      <div class="ai-about-{{ ai_gen_id }}__intro-{{ ai_gen_id }}">
+        {{ block.settings.intro_text }}
+        {% if block.settings.button_label != blank and block.settings.button_link != blank %}
+          <a class="ai-about-{{ ai_gen_id }}__button-{{ ai_gen_id }}" href="{{ block.settings.button_link }}">{{ block.settings.button_label | escape }}</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="ai-about-{{ ai_gen_id }}__story-{{ ai_gen_id }}">
+      {% if block.settings.story_image != blank %}
+        <img class="ai-about-{{ ai_gen_id }}__image-{{ ai_gen_id }}" src="{{ block.settings.story_image | image_url: width: 1400 }}" alt="{{ block.settings.story_image.alt | escape }}" loading="lazy" width="{{ block.settings.story_image.width }}" height="{{ block.settings.story_image.height }}">
+      {% else %}
+        <div class="ai-about-{{ ai_gen_id }}__placeholder-{{ ai_gen_id }}">
+          {{ 'image' | placeholder_svg_tag }}
+          <p class="ai-about-{{ ai_gen_id }}__empty-{{ ai_gen_id }}">Add an image that reflects Kiss and Kry’s story.</p>
+        </div>
+      {% endif %}
+      <div>
+        {% if block.settings.story_heading != blank %}<h2>{{ block.settings.story_heading | escape }}</h2>{% endif %}
+        <div class="ai-about-{{ ai_gen_id }}__story-{{ ai_gen_id }}">{{ block.settings.story_text }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "About Kiss and Kry",
+  "settings": [
+    { "type": "header", "content": "Introduction" },
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "A little about us" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Meet Kiss and Kry" },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Thoughtful finds, chosen with care and made for the moments that matter." },
+    { "type": "richtext", "id": "intro_text", "label": "Intro text", "default": "<p>Kiss and Kry is a thoughtfully curated shop built around personal style, meaningful details, and pieces you’ll love to keep close.</p>" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Get in touch" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "header", "content": "Our story" },
+    { "type": "image_picker", "id": "story_image", "label": "Story image" },
+    { "type": "text", "id": "story_heading", "label": "Story heading", "default": "Made for your everyday story" },
+    { "type": "richtext", "id": "story_text", "label": "Story text", "default": "<p>At Kiss and Kry, we believe the things we choose can bring a little more joy to everyday life. Our collection is selected with care, with an eye for distinctive design, lasting appeal, and the details that make something feel like yours.</p><p>We’re here to make discovering your next favorite feel easy and personal. Thank you for being here and letting us be part of your story.</p>" },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#FFFFFF" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#20221C" },
+    { "type": "color", "id": "muted_color", "label": "Supporting text", "default": "#53584A" },
+    { "type": "color", "id": "accent_color", "label": "Accent", "default": "#5E6539" },
+    { "type": "color", "id": "divider_color", "label": "Divider", "default": "#DFDFDF" },
+    { "type": "color", "id": "placeholder_color", "label": "Image placeholder", "default": "#F1F2ED" },
+    { "type": "color", "id": "button_background", "label": "Button background", "default": "#20221C" },
+    { "type": "color", "id": "button_text", "label": "Button text", "default": "#FFFFFF" },
+    { "type": "range", "id": "vertical_padding", "label": "Vertical spacing", "min": 30, "max": 120, "step": 5, "unit": "px", "default": 80 }
+  ],
+  "presets": [{ "name": "About Kiss and Kry" }],
+  "tag": null,
+  "class": "about-kiss-and-kry"
+}
 {% endschema %}
