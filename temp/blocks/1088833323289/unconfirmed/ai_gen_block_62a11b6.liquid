@@ -1,6 +1,207 @@
+{% doc %}
+  @prompt
+    Generate a NEW trust strip. Colour scheme: Sage mist.
+    Four tiles. 2 by 2 on mobile, 4 across on desktop. Each tile: a 64px Milk circle, a 32px icon, a label of 4 words at most.
+    Generate four matching line icons: a delivery box, a returns arrow, a rupee note, a bamboo leaf.
+    Labels: "Free delivery", "[7]-day returns", "Cash on delivery", "Bamboo viscose".
+    Link Free delivery and Returns to the shipping and returns policy pages.
+    Add a "Show this section" checkbox, on by default., convert in auto moving marquee, make it slim by 60%, allow me to change the background color, font size, weight, color, icons as well and icons as png make it fully responsive in mobile as well
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-trust-strip-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    overflow: hidden;
+    padding: 8px 0;
+    background: {{ block.settings.background_color }};
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-trust-strip-{{ ai_gen_id }} .ai-trust-strip__track {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+  }
+
+  .ai-trust-strip-{{ ai_gen_id }} .ai-trust-strip__item {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .ai-trust-strip-{{ ai_gen_id }} .ai-trust-strip__badge {
+    display: flex;
+    width: 64px;
+    height: 64px;
+    flex: 0 0 64px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: {{ block.settings.circle_color }};
+  }
+
+  .ai-trust-strip-{{ ai_gen_id }} .ai-trust-strip__icon {
+    display: block;
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    object-fit: contain;
+  }
+
+  .ai-trust-strip-{{ ai_gen_id }} .ai-trust-strip__icon svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: {{ block.settings.icon_color }};
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .ai-trust-strip-{{ ai_gen_id }} .ai-trust-strip__label {
+    margin: 0;
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.font_size }}px;
+    font-weight: {{ block.settings.font_weight }};
+    line-height: 1.25;
+  }
+
+  @media (min-width: 750px) {
+    .ai-trust-strip-{{ ai_gen_id }}[data-marquee="true"] .ai-trust-strip__track {
+      display: flex;
+      width: max-content;
+      animation: ai-trust-marquee-{{ ai_gen_id }} {{ block.settings.marquee_speed }}s linear infinite;
+    }
+
+    .ai-trust-strip-{{ ai_gen_id }}[data-marquee="true"] .ai-trust-strip__item {
+      min-width: max-content;
+      padding: 0 24px;
+    }
+
+    .ai-trust-strip-{{ ai_gen_id }}:hover .ai-trust-strip__track,
+    .ai-trust-strip-{{ ai_gen_id }}:focus-within .ai-trust-strip__track {
+      animation-play-state: paused;
+    }
+  }
+
+  @keyframes ai-trust-marquee-{{ ai_gen_id }} {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @media (max-width: 749px) {
+    .ai-trust-strip-{{ ai_gen_id }} {
+      padding: 6px 0;
+    }
+
+    .ai-trust-strip-{{ ai_gen_id }} .ai-trust-strip__track {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 6px;
+    }
+
+    .ai-trust-strip-{{ ai_gen_id }} .ai-trust-strip__item {
+      justify-content: flex-start;
+      gap: 8px;
+    }
+
+    .ai-trust-strip-{{ ai_gen_id }} .ai-trust-strip__badge {
+      width: 48px;
+      height: 48px;
+      flex-basis: 48px;
+    }
+
+    .ai-trust-strip-{{ ai_gen_id }} .ai-trust-strip__icon {
+      width: min({{ block.settings.icon_size }}px, 28px);
+      height: min({{ block.settings.icon_size }}px, 28px);
+    }
+
+    .ai-trust-strip-{{ ai_gen_id }} .ai-trust-strip__label {
+      font-size: {{ block.settings.mobile_font_size }}px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ai-trust-strip-{{ ai_gen_id }} .ai-trust-strip__track { animation: none !important; }
+  }
+{% endstyle %}
+
+{% if block.settings.show_section %}
+  <div class="ai-trust-strip-{{ ai_gen_id }}" data-marquee="{{ block.settings.enable_marquee }}" {{ block.shopify_attributes }}>
+    <div class="ai-trust-strip__track">
+      {% for copy in (1..2) %}
+        {% for i in (1..4) %}
+          {% liquid
+            assign label_key = 'tile_' | append: i | append: '_label'
+            assign icon_key = 'tile_' | append: i | append: '_icon'
+            assign label = block.settings[label_key]
+            assign icon_image = block.settings[icon_key]
+            assign item_link = ''
+            if i == 1
+              assign item_link = policies.shipping_policy.url | default: '/policies/shipping-policy'
+            elsif i == 2
+              assign item_link = policies.refund_policy.url | default: '/policies/refund-policy'
+            endif
+          %}
+          {% if item_link != blank %}<a class="ai-trust-strip__item" href="{{ item_link }}"{% if copy == 2 %} tabindex="-1" aria-hidden="true"{% endif %}>{% else %}<div class="ai-trust-strip__item"{% if copy == 2 %} aria-hidden="true"{% endif %}>{% endif %}
+            <span class="ai-trust-strip__badge" aria-hidden="true">
+              {% if icon_image != blank %}
+                <img class="ai-trust-strip__icon" src="{{ icon_image | image_url: width: 128 }}" alt="" width="64" height="64" loading="lazy">
+              {% else %}
+                <span class="ai-trust-strip__icon">
+                  {% case i %}
+                    {% when 1 %}<svg viewBox="0 0 32 32"><path d="M4 10.5 16 4l12 6.5v13L16 30 4 23.5z"/><path d="m4 10.5 12 7 12-7M16 17.5V30M10 7.3l12 7"/></svg>
+                    {% when 2 %}<svg viewBox="0 0 32 32"><path d="M7 13a10 10 0 1 1 1 10"/><path d="M7 5v8h8M6 22l2 2"/></svg>
+                    {% when 3 %}<svg viewBox="0 0 32 32"><rect x="4" y="7" width="24" height="18" rx="2"/><path d="M4 12h24M10 18h5"/><path d="M21 15v7m-2-2 2 2 2-2"/></svg>
+                    {% when 4 %}<svg viewBox="0 0 32 32"><path d="M26 5C14 5 7 9 6 17c-.7 5 3 8 7 7 8-1 12-8 13-19Z"/><path d="M7 27c4-7 8-11 15-16M14 21l-1-6m6 1 5 1"/></svg>
+                  {% endcase %}
+                </span>
+              {% endif %}
+            </span>
+            <span class="ai-trust-strip__label">{{ label | escape }}</span>
+          {% if item_link != blank %}</a>{% else %}</div>{% endif %}
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Sage mist trust strip",
+  "settings": [
+    { "type": "checkbox", "id": "show_section", "label": "Show this section", "default": true },
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "checkbox", "id": "enable_marquee", "label": "Auto-moving marquee on desktop", "default": true },
+    { "type": "range", "id": "marquee_speed", "label": "Marquee duration", "min": 12, "max": 60, "step": 4, "unit": "s", "default": 28 },
+    { "type": "header", "content": "Tiles and icons" },
+    { "type": "text", "id": "tile_1_label", "label": "Delivery label", "default": "Free delivery" },
+    { "type": "image_picker", "id": "tile_1_icon", "label": "Delivery icon PNG" },
+    { "type": "text", "id": "tile_2_label", "label": "Returns label", "default": "7-day returns" },
+    { "type": "image_picker", "id": "tile_2_icon", "label": "Returns icon PNG" },
+    { "type": "text", "id": "tile_3_label", "label": "Payment label", "default": "Cash on delivery" },
+    { "type": "image_picker", "id": "tile_3_icon", "label": "Payment icon PNG" },
+    { "type": "text", "id": "tile_4_label", "label": "Material label", "default": "Bamboo viscose" },
+    { "type": "image_picker", "id": "tile_4_icon", "label": "Bamboo icon PNG" },
+    { "type": "header", "content": "Colors and type" },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#E8EEE6" },
+    { "type": "color", "id": "circle_color", "label": "Milk circle", "default": "#F7F5EE" },
+    { "type": "color", "id": "text_color", "label": "Label color", "default": "#3C4938" },
+    { "type": "color", "id": "icon_color", "label": "Icon color", "default": "#3C4938" },
+    { "type": "range", "id": "icon_size", "label": "Icon size", "min": 16, "max": 32, "step": 2, "unit": "px", "default": 32 },
+    { "type": "range", "id": "font_size", "label": "Desktop font size", "min": 12, "max": 24, "step": 2, "unit": "px", "default": 16 },
+    { "type": "range", "id": "mobile_font_size", "label": "Mobile font size", "min": 10, "max": 18, "step": 2, "unit": "px", "default": 12 },
+    { "type": "select", "id": "font_weight", "label": "Font weight", "options": [{ "value": "400", "label": "Regular" }, { "value": "500", "label": "Medium" }, { "value": "600", "label": "Semibold" }, { "value": "700", "label": "Bold" }], "default": "500" }
+  ],
+  "presets": [{ "name": "Sage mist trust strip" }],
+  "tag": null,
+  "class": "sage-mist-trust-strip"
+}
 {% endschema %}
