@@ -918,9 +918,9 @@
     "semantic_hash": "8e13fee61e52776e61deadd4f7c215a1"
   },
   "templates/index.json": {
-    "mtime": 1793604711.0917342,
-    "seen": 1793606207.952525,
-    "ast_hash": "354e6e6d4377c824559b346c1a707cd6",
+    "mtime": 1793608691.7415142,
+    "seen": 1793608800.0015697,
+    "ast_hash": "1c31263f339923fa7fb91b753d56987c",
     "semantic_hash": ""
   },
   "templates/list-collections.json": {
