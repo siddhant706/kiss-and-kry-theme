@@ -843,6 +843,70 @@
         "padding-block-start": 0,
         "padding-block-end": 0
       }
+    },
+    "1793638704ea5290b8": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_70fc265_eLMawW": {
+          "type": "ai_gen_block_70fc265",
+          "settings": {
+            "desktop_width_percent": 100,
+            "eyebrow": "<h5>CARE GUIDE</h5>",
+            "title": "<p><strong>Keep It Soft, Wash After Wash.</strong></p>",
+            "description": "<p>Bamboo viscose loves a little gentleness. Follow these four simple steps and every piece stays soft for longer.</p>",
+            "step_1_heading": "<p>Wash gently</p>",
+            "step_1_description": "<p>Use a cool, gentle cycle to care for the fibres.</p>",
+            "step_2_heading": "<p>Skip the bleach</p>",
+            "step_2_description": "<p>Choose a mild detergent and avoid harsh whitening agents.</p>",
+            "step_3_heading": "<p>Air dry</p>",
+            "step_3_description": "<p>Lay flat or hang to dry, away from direct heat.</p>",
+            "step_4_heading": "<p>Low heat only</p>",
+            "step_4_description": "<p>If needed, press on a low setting while slightly damp.</p>",
+            "glass_effect": false,
+            "glass_blur": 8,
+            "background_color": "#F2F3EE",
+            "card_color": "#F9F6F1",
+            "heading_color": "#626B4C",
+            "eyebrow_color": "#777D5D",
+            "description_color": "#555545",
+            "number_color": "#777D5D",
+            "icon_background": "#EFE3D6",
+            "icon_color": "#626B4C"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_70fc265_eLMawW"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "center",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "full-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
     }
   },
   "order": [
@@ -859,6 +923,7 @@
     "179362741998f798f0",
     "179363590433a4f149",
     "17936373274cfbb107",
-    "1793638112b374a0ec"
+    "1793638112b374a0ec",
+    "1793638704ea5290b8"
   ]
 }
