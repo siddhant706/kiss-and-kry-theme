@@ -918,10 +918,10 @@
     "semantic_hash": "8e13fee61e52776e61deadd4f7c215a1"
   },
   "templates/index.json": {
-    "mtime": 1792581265.9479797,
-    "seen": 1792584625.724737,
-    "ast_hash": "0cdc0852dc985161b13e1577101e11f6",
-    "semantic_hash": "0cdc0852dc985161b13e1577101e11f6"
+    "mtime": 1793604711.0917342,
+    "seen": 1793606207.952525,
+    "ast_hash": "354e6e6d4377c824559b346c1a707cd6",
+    "semantic_hash": ""
   },
   "templates/list-collections.json": {
     "mtime": 1792579335.4419918,
@@ -960,10 +960,10 @@
     "semantic_hash": "56ee2c7c23e72165f1b6526ce568a43a"
   },
   "CLAUDE.md": {
-    "mtime": 1792584573.714224,
-    "seen": 1792584625.7247696,
-    "ast_hash": "aeb9024d3fb0b9f42658d7cfb6ad6b29",
-    "semantic_hash": "aeb9024d3fb0b9f42658d7cfb6ad6b29"
+    "mtime": 1792584663.066046,
+    "seen": 1793606207.952574,
+    "ast_hash": "a7e621f8a6c8da450ef20ec7b9fdd690",
+    "semantic_hash": ""
   },
   "assets/icon-account.svg": {
     "mtime": 1792579323.0644524,
@@ -1174,5 +1174,11 @@
     "seen": 1792584625.7249262,
     "ast_hash": "ef29d51730e2cdf32c1e3e0d02437084",
     "semantic_hash": "ef29d51730e2cdf32c1e3e0d02437084"
+  },
+  ".claude/settings.json": {
+    "mtime": 1792584663.1037045,
+    "seen": 1793606207.95146,
+    "ast_hash": "7f26a1d39ee948f9a981bd43dd9b4dbd",
+    "semantic_hash": ""
   }
 }

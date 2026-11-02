@@ -1,30 +1,785 @@
 {% doc %}
-  @prompt
-    generate a full page width cover sized hero section with full size background image and all the text as eyebrow, heading, context on left top , align all the text in equal side spacing from left perfectly aligned to each other in verticle order, make all the font as montserrate and allow me to change as rich text , now on bottom left add three trust indicators in circle frame with a circular stroke and , the trust indicators should be in PNG only and also allow me change all the texts size as well, image for indicators are not appearing, circular strokee should be thick allow me change thickness as well, heading size should be increase if I increase, increase heading size by 40% more, add a indicator name tag just below each indicator in small size bold, indicator circular strokes should be in glassmorphic style, I want heading as 
-    Softer Days (Bold)
-    for a Brighter (Not bold)
-    Tomorrow (Not bold), for a brighter tomorrow should be less thick by 30% more, Born From Bamboo.
-    Made For Baby.
-    
-    I want heading this bamboo and baby should be extra bold only rest will be medium , bro i want as it aligned as all in two lines only as 
-    Born From Bamboo.
-    Made For Baby., just below the heading add a subheading as Ultra soft. Naturally breathable., subheaing should be same thick as context but a bit of big size to look different from context, now on right bottom add a subheading of different weights as line one normal and line two bold then a context below of 3 lines then a CTA button, allow me to change all the text colors in this section , now manager the background image opacity or layer on it so that every text is visible clearly , adjust the background image visibility so that one can all the text on this section clearly, make the button colored glassmorphic style
+  Cover hero: full-width cover image with eyebrow, heading, subheading and context at the top left,
+  trust indicators at the bottom left, and a subheading, supporting text and CTA at the bottom right.
+  Every component has a visibility toggle; every image has opacity and brightness controls.
+  Separate mobile image support with responsive focal point and opacity/brightness.
+  Customizable entrance animations with reduced-motion support. Fully responsive layout.
 {% enddoc %}
-{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{%- liquid
+  assign ai_gen_id = block.id | replace: '_', '' | downcase
+  assign s = block.settings
+  assign bg = s.background_image
+  assign bg_mobile = s.background_image_mobile
+
+  # Visibility defaults (true if nil so existing configurations stay visible)
+  assign show_bg = s.show_background
+  if show_bg == nil
+    assign show_bg = true
+  endif
+
+  assign show_overlay = s.show_overlay
+  if show_overlay == nil
+    assign show_overlay = true
+  endif
+
+  assign show_eyebrow = s.show_eyebrow
+  if show_eyebrow == nil
+    assign show_eyebrow = true
+  endif
+
+  assign show_heading = s.show_heading
+  if show_heading == nil
+    assign show_heading = true
+  endif
+
+  assign show_subheading = s.show_subheading
+  if show_subheading == nil
+    assign show_subheading = true
+  endif
+
+  assign show_context = s.show_context
+  if show_context == nil
+    assign show_context = true
+  endif
+
+  assign show_context_mobile = s.show_context_mobile
+  if show_context_mobile == nil
+    assign show_context_mobile = true
+  endif
+
+  assign show_trust = s.show_trust
+  if show_trust == nil
+    assign show_trust = true
+  endif
+
+  assign show_trust_mobile = s.show_trust_mobile
+  if show_trust_mobile == nil
+    assign show_trust_mobile = true
+  endif
+
+  assign show_trust_labels = s.show_trust_labels
+  if show_trust_labels == nil
+    assign show_trust_labels = true
+  endif
+
+  assign show_trust_one = s.show_trust_item_one
+  if show_trust_one == nil
+    assign show_trust_one = true
+  endif
+
+  assign show_trust_two = s.show_trust_item_two
+  if show_trust_two == nil
+    assign show_trust_two = true
+  endif
+
+  assign show_trust_three = s.show_trust_item_three
+  if show_trust_three == nil
+    assign show_trust_three = true
+  endif
+
+  assign show_right = s.show_right
+  if show_right == nil
+    assign show_right = true
+  endif
+
+  assign show_right_mobile = s.show_right_mobile
+  if show_right_mobile == nil
+    assign show_right_mobile = true
+  endif
+
+  assign show_right_heading = s.show_right_heading
+  if show_right_heading == nil
+    assign show_right_heading = true
+  endif
+
+  assign show_right_context = s.show_right_context
+  if show_right_context == nil
+    assign show_right_context = true
+  endif
+
+  assign show_cta = s.show_cta
+  if show_cta == nil
+    assign show_cta = true
+  endif
+
+  assign enable_anim = s.enable_animations
+  if enable_anim == nil
+    assign enable_anim = true
+  endif
+
+  assign has_trust = false
+  if show_trust
+    if show_trust_one and s.trust_image_one != blank
+      assign has_trust = true
+    elsif show_trust_two and s.trust_image_two != blank
+      assign has_trust = true
+    elsif show_trust_three and s.trust_image_three != blank
+      assign has_trust = true
+    endif
+  endif
+
+  assign has_right = false
+  if show_right
+    if show_right_heading and s.right_heading != blank
+      assign has_right = true
+    elsif show_right_context and s.right_context != blank
+      assign has_right = true
+    elsif show_cta and s.cta_label != blank
+      assign has_right = true
+    endif
+  endif
+
+  assign hide_trust_class = ''
+  unless show_trust_mobile
+    assign hide_trust_class = ' ai-cover__trust--no-mobile'
+  endunless
+
+  assign hide_right_class = ''
+  unless show_right_mobile
+    assign hide_right_class = ' ai-cover__right--no-mobile'
+  endunless
+
+  assign hide_context_class = ''
+  unless show_context_mobile
+    assign hide_context_class = ' ai-cover__context--no-mobile'
+  endunless
+
+  # Numeric token fallbacks
+  assign img_opacity = s.image_opacity | default: 100
+  assign img_brightness = s.image_brightness | default: 100
+  assign img_opacity_mobile = s.image_opacity_mobile | default: img_opacity
+  assign img_brightness_mobile = s.image_brightness_mobile | default: img_brightness
+  assign trust_opacity = s.trust_image_opacity | default: 100
+  assign trust_brightness = s.trust_image_brightness | default: 100
+  assign overlay_val = s.overlay_opacity | default: 65
+-%}
+
 {% style %}
-.ai-cover-{{ ai_gen_id }}{position:relative;display:block;width:{{ block.settings.desktop_width_percent }}%;max-width:100%;min-height:{{ block.settings.hero_height }}px;overflow:hidden;background:{{ block.settings.fallback_color }};font-family:Montserrat,var(--font-body-family,sans-serif)}
-.ai-cover-{{ ai_gen_id }}__image,.ai-cover-{{ ai_gen_id }}__placeholder,.ai-cover-{{ ai_gen_id }}__shade{position:absolute;inset:0;width:100%;height:100%}.ai-cover-{{ ai_gen_id }}__image{object-fit:cover;object-position:{{ block.settings.image_position }}}.ai-cover-{{ ai_gen_id }}__placeholder{background:#e9e9e5}.ai-cover-{{ ai_gen_id }}__placeholder svg{width:100%;height:100%;object-fit:cover}.ai-cover-{{ ai_gen_id }}__shade{z-index:1;background:{{ block.settings.overlay_color | color_modify: 'alpha', block.settings.overlay_opacity | divided_by: 100.0 }}}
-.ai-cover-{{ ai_gen_id }}__left{position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box;width:min(100%,{{ block.settings.content_width }}px);padding:{{ block.settings.content_padding }}px}.ai-cover-{{ ai_gen_id }}__eyebrow,.ai-cover-{{ ai_gen_id }}__heading,.ai-cover-{{ ai_gen_id }}__subheading,.ai-cover-{{ ai_gen_id }}__context,.ai-cover-{{ ai_gen_id }}__right-title,.ai-cover-{{ ai_gen_id }}__right-copy{margin:0;font-family:Montserrat,var(--font-body-family,sans-serif);text-align:left}.ai-cover-{{ ai_gen_id }}__eyebrow{margin-bottom:14px;color:{{ block.settings.eyebrow_color }};font-size:{{ block.settings.eyebrow_size }}px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}.ai-cover-{{ ai_gen_id }}__heading{width:max-content;max-width:none;color:{{ block.settings.heading_color }};font-size:{{ block.settings.heading_size | times:1.4 }}px;line-height:1.05;font-weight:500}.ai-cover-{{ ai_gen_id }}__heading strong{font-weight:800}.ai-cover-{{ ai_gen_id }}__subheading{margin-top:14px;color:{{ block.settings.subheading_color }};font-size:{{ block.settings.context_size | plus:4 }}px;line-height:1.5;font-weight:400}.ai-cover-{{ ai_gen_id }}__context{max-width:48ch;margin-top:18px;color:{{ block.settings.context_color }};font-size:{{ block.settings.context_size }}px;line-height:1.6;font-weight:400}.ai-cover-{{ ai_gen_id }}__left p,.ai-cover-{{ ai_gen_id }}__left h2{margin:0}
-.ai-cover-{{ ai_gen_id }}__trust{position:absolute;z-index:3;left:{{ block.settings.content_padding }}px;bottom:{{ block.settings.content_padding }}px;display:flex;gap:14px;align-items:flex-start;max-width:50%}.ai-cover-{{ ai_gen_id }}__trust-card{display:flex;flex-direction:column;align-items:center;gap:7px}.ai-cover-{{ ai_gen_id }}__circle{box-sizing:border-box;display:grid;place-items:center;width:{{ block.settings.trust_circle_size }}px;height:{{ block.settings.trust_circle_size }}px;padding:6px;border:{{ block.settings.trust_stroke_width }}px solid {{ block.settings.trust_stroke_color }};border-radius:50%;background:rgba(255,255,255,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 1px 1px rgba(255,255,255,.35),0 4px 16px rgba(0,0,0,.12);overflow:hidden}.ai-cover-{{ ai_gen_id }}__circle img{width:100%;height:100%;object-fit:contain;border-radius:50%}.ai-cover-{{ ai_gen_id }}__label{max-width:{{ block.settings.trust_circle_size | plus:24 }}px;color:{{ block.settings.trust_label_color }};font-size:{{ block.settings.trust_label_size }}px;font-weight:700;line-height:1.25;text-align:center}
-.ai-cover-{{ ai_gen_id }}__right{position:absolute;z-index:3;right:{{ block.settings.content_padding }}px;bottom:{{ block.settings.content_padding }}px;box-sizing:border-box;width:min(42%,{{ block.settings.right_content_width }}px);display:flex;flex-direction:column;align-items:flex-start}.ai-cover-{{ ai_gen_id }}__right-title{margin-bottom:12px;color:{{ block.settings.right_heading_color }};font-size:{{ block.settings.right_heading_size }}px;line-height:1.35;font-weight:400}.ai-cover-{{ ai_gen_id }}__right-title strong{font-weight:700}.ai-cover-{{ ai_gen_id }}__right-copy{margin-bottom:22px;color:{{ block.settings.right_context_color }};font-size:{{ block.settings.right_context_size }}px;line-height:1.55}.ai-cover-{{ ai_gen_id }}__right p{margin:0}.ai-cover-{{ ai_gen_id }}__button{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 24px;border:1px solid {{ block.settings.button_border_color | color_modify: 'alpha', 0.8 }};border-radius:{{ block.settings.button_radius }}px;background:{{ block.settings.button_background | color_modify: 'alpha', 0.42 }};backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:inset 0 1px 1px rgba(255,255,255,.45),0 6px 18px rgba(0,0,0,.16);color:{{ block.settings.button_text_color }};font-size:16px;font-weight:600;text-decoration:none;transition:background-color .2s ease,transform .2s ease}.ai-cover-{{ ai_gen_id }}__button:hover{background:{{ block.settings.button_background | color_modify: 'alpha', 0.62 }};transform:translateY(-1px)}.ai-cover-{{ ai_gen_id }}__button:focus-visible{outline:3px solid currentColor;outline-offset:3px}
-@media(max-width:749px){.ai-cover-{{ ai_gen_id }}{min-height:{{ block.settings.mobile_height }}px}.ai-cover-{{ ai_gen_id }}__left{padding:28px}.ai-cover-{{ ai_gen_id }}__heading{font-size:{{ block.settings.heading_size | times:1.05 }}px}.ai-cover-{{ ai_gen_id }}__trust{left:20px;bottom:20px;gap:8px;max-width:50%}.ai-cover-{{ ai_gen_id }}__circle{width:{{ block.settings.trust_circle_size | times:0.8 }}px;height:{{ block.settings.trust_circle_size | times:0.8 }}px}.ai-cover-{{ ai_gen_id }}__right{right:18px;bottom:20px;width:44%}.ai-cover-{{ ai_gen_id }}__right-title{font-size:{{ block.settings.right_heading_size | times:0.8 }}px}.ai-cover-{{ ai_gen_id }}__right-copy{font-size:{{ block.settings.right_context_size | times:0.9 }}px}.ai-cover-{{ ai_gen_id }}__button{min-height:42px;padding:10px 16px;font-size:14px}}
+.ai-cover-{{ ai_gen_id }} {
+  --cv-pad: {{ s.content_padding | default: 64 }}px;
+  --cv-height: {{ s.hero_height | default: 700 }}px;
+  --cv-eyebrow: {{ s.eyebrow_size | default: 14 }}px;
+  --cv-heading: {{ s.heading_size | default: 64 }}px;
+  --cv-subheading: {{ s.subheading_size | default: 20 }}px;
+  --cv-context: {{ s.context_size | default: 16 }}px;
+  --cv-right-heading: {{ s.right_heading_size | default: 24 }}px;
+  --cv-right-context: {{ s.right_context_size | default: 16 }}px;
+  --cv-circle: {{ s.trust_circle_size | default: 96 }}px;
+  --cv-img-opacity: {{ img_opacity | divided_by: 100.0 }};
+  --cv-img-brightness: {{ img_brightness }}%;
+  --cv-img-position: {{ s.image_position | default: 'center center' }};
+  --cv-trust-opacity: {{ trust_opacity | divided_by: 100.0 }};
+  --cv-trust-brightness: {{ trust_brightness }}%;
+  --cv-dur: {{ s.animation_duration | default: 800 }}ms;
+  --cv-delay: {{ s.animation_delay | default: 0 }}ms;
+  --cv-stagger: {{ s.animation_stagger | default: 100 }}ms;
+}
+
+@media (max-width: 767px) {
+  .ai-cover-{{ ai_gen_id }} {
+    --cv-pad: clamp(16px, 5vw, 32px);
+    --cv-height: {{ s.mobile_height | default: 500 }}px;
+    --cv-heading: {{ s.heading_size_mobile | default: 36 }}px;
+    --cv-subheading: clamp(15px, 4vw, {{ s.subheading_size | default: 20 }}px);
+    --cv-context: clamp(14px, 3.5vw, {{ s.context_size | default: 16 }}px);
+    --cv-right-heading: clamp(18px, 4.5vw, {{ s.right_heading_size | default: 24 }}px);
+    --cv-right-context: clamp(14px, 3.5vw, {{ s.right_context_size | default: 16 }}px);
+    --cv-circle: clamp(64px, 18vw, {{ s.trust_circle_size | default: 96 }}px);
+    --cv-img-opacity: {{ img_opacity_mobile | divided_by: 100.0 }};
+    --cv-img-brightness: {{ img_brightness_mobile }}%;
+    --cv-img-position: {{ s.image_position_mobile | default: s.image_position | default: 'center center' }};
+  }
+}
+
+.ai-cover-{{ ai_gen_id }} {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 32px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-height: var(--cv-height);
+  padding: var(--cv-pad);
+  overflow: hidden;
+  isolation: isolate;
+  background: {{ s.fallback_color | default: '#5E6539' }};
+  font-family: Montserrat, var(--font-body-family, sans-serif);
+}
+
+.ai-cover-{{ ai_gen_id }} :is(p, h1, h2, h3, h4, h5, h6) {
+  margin: 0;
+}
+
+.ai-cover-{{ ai_gen_id }}__media,
+.ai-cover-{{ ai_gen_id }}__shade {
+  position: absolute;
+  inset: 0;
+}
+
+.ai-cover-{{ ai_gen_id }}__media {
+  z-index: 0;
+}
+
+.ai-cover-{{ ai_gen_id }}__media picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ai-cover-{{ ai_gen_id }}__media :is(img, svg) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--cv-img-position);
+  opacity: var(--cv-img-opacity);
+  filter: brightness(var(--cv-img-brightness));
+}
+
+.ai-cover-{{ ai_gen_id }}__shade {
+  z-index: 1;
+  pointer-events: none;
+  background: {{ s.overlay_color | default: '#000000' | color_modify: 'alpha', overlay_val | divided_by: 100.0 }};
+}
+
+.ai-cover-{{ ai_gen_id }}__left,
+.ai-cover-{{ ai_gen_id }}__bottom {
+  position: relative;
+  z-index: 2;
+}
+
+.ai-cover-{{ ai_gen_id }}__left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: min(100%, {{ s.content_width | default: 560 }}px);
+}
+
+.ai-cover-{{ ai_gen_id }}__eyebrow,
+.ai-cover-{{ ai_gen_id }}__heading,
+.ai-cover-{{ ai_gen_id }}__subheading,
+.ai-cover-{{ ai_gen_id }}__context,
+.ai-cover-{{ ai_gen_id }}__right-title,
+.ai-cover-{{ ai_gen_id }}__right-copy {
+  text-align: left;
+  overflow-wrap: break-word;
+}
+
+.ai-cover-{{ ai_gen_id }}__eyebrow {
+  margin-bottom: 12px;
+  color: {{ s.eyebrow_color | default: '#5B6344' }};
+  font-size: var(--cv-eyebrow);
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.ai-cover-{{ ai_gen_id }}__heading {
+  max-width: 100%;
+  color: {{ s.heading_color | default: '#5B6344' }};
+  font-size: var(--cv-heading);
+  line-height: 1.08;
+  font-weight: 500;
+  text-wrap: balance;
+}
+
+.ai-cover-{{ ai_gen_id }}__heading strong {
+  font-weight: 800;
+}
+
+.ai-cover-{{ ai_gen_id }}__subheading {
+  margin-top: 14px;
+  color: {{ s.subheading_color | default: '#70675B' }};
+  font-size: var(--cv-subheading);
+  line-height: 1.45;
+  font-weight: 400;
+}
+
+.ai-cover-{{ ai_gen_id }}__context {
+  max-width: 48ch;
+  margin-top: 16px;
+  color: {{ s.context_color | default: '#70675B' }};
+  font-size: var(--cv-context);
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.ai-cover-{{ ai_gen_id }}__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+}
+
+.ai-cover-{{ ai_gen_id }}__trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-start;
+  max-width: 100%;
+}
+
+.ai-cover-{{ ai_gen_id }}__trust-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.ai-cover-{{ ai_gen_id }}__circle {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  width: var(--cv-circle);
+  height: var(--cv-circle);
+  padding: 6px;
+  border: {{ s.trust_stroke_width | default: 6 }}px solid {{ s.trust_stroke_color | default: '#FAE7CE' }};
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.35), 0 4px 16px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+.ai-cover-{{ ai_gen_id }}__circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  opacity: var(--cv-trust-opacity);
+  filter: brightness(var(--cv-trust-brightness));
+}
+
+.ai-cover-{{ ai_gen_id }}__label {
+  max-width: calc(var(--cv-circle) + 24px);
+  color: {{ s.trust_label_color | default: '#FFFFFF' }};
+  font-size: {{ s.trust_label_size | default: 12 }}px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.ai-cover-{{ ai_gen_id }}__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: auto;
+  width: min(100%, {{ s.right_content_width | default: 420 }}px);
+}
+
+.ai-cover-{{ ai_gen_id }}__right-title {
+  margin-bottom: 10px;
+  color: {{ s.right_heading_color | default: '#5B6344' }};
+  font-size: var(--cv-right-heading);
+  line-height: 1.35;
+  font-weight: 400;
+}
+
+.ai-cover-{{ ai_gen_id }}__right-title strong {
+  font-weight: 700;
+}
+
+.ai-cover-{{ ai_gen_id }}__right-copy {
+  margin-bottom: 20px;
+  color: {{ s.right_context_color | default: '#70675B' }};
+  font-size: var(--cv-right-context);
+  line-height: 1.55;
+}
+
+.ai-cover-{{ ai_gen_id }}__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 28px;
+  border: 1px solid {{ s.button_border_color | default: '#5B6344' }};
+  border-radius: {{ s.button_radius | default: 30 }}px;
+  background: {{ s.button_background | default: '#5B6344' }};
+  color: {{ s.button_text_color | default: '#FFFFFF' }};
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ai-cover-{{ ai_gen_id }}__button:hover {
+  transform: translateY(-2px);
+  opacity: 0.92;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+
+.ai-cover-{{ ai_gen_id }}__button:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+}
+
+@media (max-width: 767px) {
+  .ai-cover-{{ ai_gen_id }} {
+    gap: 28px;
+  }
+  .ai-cover-{{ ai_gen_id }}__bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+  .ai-cover-{{ ai_gen_id }}__trust {
+    gap: 12px;
+  }
+  .ai-cover-{{ ai_gen_id }}__right {
+    margin-left: 0;
+    width: 100%;
+  }
+  .ai-cover-{{ ai_gen_id }}__button {
+    width: 100%;
+    min-height: 48px;
+    font-size: 15px;
+  }
+  .ai-cover__context--no-mobile,
+  .ai-cover__trust--no-mobile,
+  .ai-cover__right--no-mobile {
+    display: none !important;
+  }
+}
+
+/* Animations */
+{%- if enable_anim -%}
+.ai-cover-{{ ai_gen_id }} [data-cv-anim]:not([data-cv-anim='none']) {
+  animation-duration: var(--cv-dur);
+  animation-timing-function: cubic-bezier(.22, .61, .36, 1);
+  animation-fill-mode: backwards;
+  animation-delay: calc(var(--cv-delay) + var(--cv-i, 0) * var(--cv-stagger));
+}
+.ai-cover-{{ ai_gen_id }} [data-cv-anim='fade-in'] { animation-name: cv-fade-in; }
+.ai-cover-{{ ai_gen_id }} [data-cv-anim='fade-up'] { animation-name: cv-fade-up; }
+.ai-cover-{{ ai_gen_id }} [data-cv-anim='fade-down'] { animation-name: cv-fade-down; }
+.ai-cover-{{ ai_gen_id }} [data-cv-anim='slide-left'] { animation-name: cv-slide-left; }
+.ai-cover-{{ ai_gen_id }} [data-cv-anim='slide-right'] { animation-name: cv-slide-right; }
+.ai-cover-{{ ai_gen_id }} [data-cv-anim='zoom-in'] { animation-name: cv-zoom-in; }
+.ai-cover-{{ ai_gen_id }} [data-cv-anim='zoom-out'] { animation-name: cv-zoom-out; }
+
+@keyframes cv-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes cv-fade-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes cv-fade-down { from { opacity: 0; transform: translateY(-24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes cv-slide-left { from { opacity: 0; transform: translateX(-32px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes cv-slide-right { from { opacity: 0; transform: translateX(32px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes cv-zoom-in { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: scale(1); } }
+@keyframes cv-zoom-out { from { opacity: 0; transform: scale(1.08); } to { opacity: 1; transform: scale(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-cover-{{ ai_gen_id }} [data-cv-anim] { animation: none !important; }
+}
+{%- else -%}
+.ai-cover-{{ ai_gen_id }} [data-cv-anim] {
+  animation: none !important;
+}
+{%- endif -%}
 {% endstyle %}
-<section class="ai-cover-{{ ai_gen_id }}" style="width:{{ block.settings.desktop_width_percent }}%;" {{ block.shopify_attributes }}>
-{% if block.settings.background_image != blank %}<img class="ai-cover-{{ ai_gen_id }}__image" src="{{ block.settings.background_image | image_url: width:2400 }}" alt="{{ block.settings.background_image.alt | escape }}" width="{{ block.settings.background_image.width }}" height="{{ block.settings.background_image.height }}" loading="lazy">{% else %}<div class="ai-cover-{{ ai_gen_id }}__placeholder">{{ 'hero-apparel-1' | placeholder_svg_tag }}</div>{% endif %}<div class="ai-cover-{{ ai_gen_id }}__shade" aria-hidden="true"></div>
-<div class="ai-cover-{{ ai_gen_id }}__left">{% if block.settings.eyebrow != blank %}<div class="ai-cover-{{ ai_gen_id }}__eyebrow">{{ block.settings.eyebrow }}</div>{% endif %}{% if block.settings.heading != blank %}<div class="ai-cover-{{ ai_gen_id }}__heading">{{ block.settings.heading }}</div>{% endif %}{% if block.settings.subheading != blank %}<div class="ai-cover-{{ ai_gen_id }}__subheading">{{ block.settings.subheading }}</div>{% endif %}{% if block.settings.context != blank %}<div class="ai-cover-{{ ai_gen_id }}__context">{{ block.settings.context }}</div>{% endif %}</div>
-{% assign trust_one = block.settings.trust_image_one %}{% assign trust_two = block.settings.trust_image_two %}{% assign trust_three = block.settings.trust_image_three %}{% if trust_one != blank or trust_two != blank or trust_three != blank %}<div class="ai-cover-{{ ai_gen_id }}__trust" role="group" aria-label="Trust indicators">{% if trust_one != blank %}<div class="ai-cover-{{ ai_gen_id }}__trust-card"><div class="ai-cover-{{ ai_gen_id }}__circle"><img src="{{ trust_one | image_url: width:300 }}" alt="{{ trust_one.alt | escape }}" width="{{ trust_one.width }}" height="{{ trust_one.height }}" loading="lazy"></div><span class="ai-cover-{{ ai_gen_id }}__label">{{ block.settings.trust_label_one | escape }}</span></div>{% endif %}{% if trust_two != blank %}<div class="ai-cover-{{ ai_gen_id }}__trust-card"><div class="ai-cover-{{ ai_gen_id }}__circle"><img src="{{ trust_two | image_url: width:300 }}" alt="{{ trust_two.alt | escape }}" width="{{ trust_two.width }}" height="{{ trust_two.height }}" loading="lazy"></div><span class="ai-cover-{{ ai_gen_id }}__label">{{ block.settings.trust_label_two | escape }}</span></div>{% endif %}{% if trust_three != blank %}<div class="ai-cover-{{ ai_gen_id }}__trust-card"><div class="ai-cover-{{ ai_gen_id }}__circle"><img src="{{ trust_three | image_url: width:300 }}" alt="{{ trust_three.alt | escape }}" width="{{ trust_three.width }}" height="{{ trust_three.height }}" loading="lazy"></div><span class="ai-cover-{{ ai_gen_id }}__label">{{ block.settings.trust_label_three | escape }}</span></div>{% endif %}</div>{% endif %}
-<div class="ai-cover-{{ ai_gen_id }}__right">{% if block.settings.right_heading != blank %}<div class="ai-cover-{{ ai_gen_id }}__right-title">{{ block.settings.right_heading }}</div>{% endif %}{% if block.settings.right_context != blank %}<div class="ai-cover-{{ ai_gen_id }}__right-copy">{{ block.settings.right_context }}</div>{% endif %}{% if block.settings.cta_label != blank %}<a class="ai-cover-{{ ai_gen_id }}__button" href="{{ block.settings.cta_link | default: routes.all_products_collection_url }}">{{ block.settings.cta_label | escape }}</a>{% endif %}</div>
+
+<section class="ai-cover-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {%- if show_bg -%}
+    <div class="ai-cover-{{ ai_gen_id }}__media" data-cv-anim="{{ s.anim_background | default: 'fade-in' }}">
+      {%- if bg != blank or bg_mobile != blank -%}
+        {%- assign desktop_img = bg | default: bg_mobile -%}
+        <picture>
+          {%- if bg_mobile != blank -%}
+            <source
+              media="(max-width: 767px)"
+              srcset="{{ bg_mobile | image_url: width: 400 }} 400w, {{ bg_mobile | image_url: width: 600 }} 600w, {{ bg_mobile | image_url: width: 800 }} 800w, {{ bg_mobile | image_url: width: 1200 }} 1200w"
+              sizes="100vw"
+              width="{{ bg_mobile.width }}"
+              height="{{ bg_mobile.height }}"
+            >
+          {%- endif -%}
+          {{
+            desktop_img
+            | image_url: width: 3000
+            | image_tag:
+              widths: '750, 1100, 1500, 1780, 2000, 2560, 3000',
+              sizes: '100vw',
+              alt: desktop_img.alt | default: 'Hero background image',
+              loading: 'eager',
+              fetchpriority: 'high'
+          }}
+        </picture>
+      {%- else -%}
+        {{ 'hero-apparel-1' | placeholder_svg_tag }}
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- if show_overlay -%}
+    <div class="ai-cover-{{ ai_gen_id }}__shade" aria-hidden="true"></div>
+  {%- endif -%}
+
+  <div class="ai-cover-{{ ai_gen_id }}__left">
+    {%- if show_eyebrow and s.eyebrow != blank -%}
+      <div class="ai-cover-{{ ai_gen_id }}__eyebrow" data-cv-anim="{{ s.anim_eyebrow | default: 'fade-up' }}" style="--cv-i:0">{{ s.eyebrow }}</div>
+    {%- endif -%}
+    {%- if show_heading and s.heading != blank -%}
+      <div class="ai-cover-{{ ai_gen_id }}__heading" data-cv-anim="{{ s.anim_heading | default: 'fade-up' }}" style="--cv-i:1">{{ s.heading }}</div>
+    {%- endif -%}
+    {%- if show_subheading and s.subheading != blank -%}
+      <div class="ai-cover-{{ ai_gen_id }}__subheading" data-cv-anim="{{ s.anim_subheading | default: 'fade-up' }}" style="--cv-i:2">{{ s.subheading }}</div>
+    {%- endif -%}
+    {%- if show_context and s.context != blank -%}
+      <div class="ai-cover-{{ ai_gen_id }}__context{{ hide_context_class }}" data-cv-anim="{{ s.anim_context | default: 'fade-up' }}" style="--cv-i:3">{{ s.context }}</div>
+    {%- endif -%}
+  </div>
+
+  {%- if has_trust or has_right -%}
+    <div class="ai-cover-{{ ai_gen_id }}__bottom">
+      {%- if has_trust -%}
+        <div class="ai-cover-{{ ai_gen_id }}__trust{{ hide_trust_class }}" role="group" aria-label="Trust indicators" data-cv-anim="{{ s.anim_trust | default: 'fade-up' }}" style="--cv-i:4">
+          {%- if show_trust_one and s.trust_image_one != blank -%}
+            <div class="ai-cover-{{ ai_gen_id }}__trust-card">
+              <div class="ai-cover-{{ ai_gen_id }}__circle">
+                <img src="{{ s.trust_image_one | image_url: width: 300 }}" alt="{{ s.trust_image_one.alt | default: s.trust_label_one | escape }}" width="{{ s.trust_image_one.width }}" height="{{ s.trust_image_one.height }}" loading="lazy">
+              </div>
+              {%- if show_trust_labels and s.trust_label_one != blank -%}
+                <span class="ai-cover-{{ ai_gen_id }}__label">{{ s.trust_label_one | escape }}</span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+          {%- if show_trust_two and s.trust_image_two != blank -%}
+            <div class="ai-cover-{{ ai_gen_id }}__trust-card">
+              <div class="ai-cover-{{ ai_gen_id }}__circle">
+                <img src="{{ s.trust_image_two | image_url: width: 300 }}" alt="{{ s.trust_image_two.alt | default: s.trust_label_two | escape }}" width="{{ s.trust_image_two.width }}" height="{{ s.trust_image_two.height }}" loading="lazy">
+              </div>
+              {%- if show_trust_labels and s.trust_label_two != blank -%}
+                <span class="ai-cover-{{ ai_gen_id }}__label">{{ s.trust_label_two | escape }}</span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+          {%- if show_trust_three and s.trust_image_three != blank -%}
+            <div class="ai-cover-{{ ai_gen_id }}__trust-card">
+              <div class="ai-cover-{{ ai_gen_id }}__circle">
+                <img src="{{ s.trust_image_three | image_url: width: 300 }}" alt="{{ s.trust_image_three.alt | default: s.trust_label_three | escape }}" width="{{ s.trust_image_three.width }}" height="{{ s.trust_image_three.height }}" loading="lazy">
+              </div>
+              {%- if show_trust_labels and s.trust_label_three != blank -%}
+                <span class="ai-cover-{{ ai_gen_id }}__label">{{ s.trust_label_three | escape }}</span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if has_right -%}
+        <div class="ai-cover-{{ ai_gen_id }}__right{{ hide_right_class }}">
+          {%- if show_right_heading and s.right_heading != blank -%}
+            <div class="ai-cover-{{ ai_gen_id }}__right-title" data-cv-anim="{{ s.anim_right_heading | default: 'fade-up' }}" style="--cv-i:5">{{ s.right_heading }}</div>
+          {%- endif -%}
+          {%- if show_right_context and s.right_context != blank -%}
+            <div class="ai-cover-{{ ai_gen_id }}__right-copy" data-cv-anim="{{ s.anim_right_context | default: 'fade-up' }}" style="--cv-i:6">{{ s.right_context }}</div>
+          {%- endif -%}
+          {%- if show_cta and s.cta_label != blank -%}
+            <a class="ai-cover-{{ ai_gen_id }}__button" href="{{ s.cta_link | default: routes.all_products_collection_url }}" data-cv-anim="{{ s.anim_button | default: 'zoom-in' }}" style="--cv-i:7">{{ s.cta_label | escape }}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
 </section>
+
 {% schema %}
-{"name":"Cover hero","settings":[{"type":"image_picker","id":"background_image","label":"Background image"},{"type":"range","id":"desktop_width_percent","label":"Desktop width","min":50,"max":100,"step":5,"unit":"%","default":100},{"type":"range","id":"hero_height","label":"Desktop height","min":400,"max":900,"step":50,"unit":"px","default":700},{"type":"range","id":"mobile_height","label":"Mobile height","min":300,"max":700,"step":50,"unit":"px","default":500},{"type":"select","id":"image_position","label":"Image focal point","options":[{"value":"center center","label":"Center"},{"value":"left center","label":"Left"},{"value":"right center","label":"Right"},{"value":"center top","label":"Top"},{"value":"center bottom","label":"Bottom"}],"default":"center center"},{"type":"richtext","id":"eyebrow","label":"Eyebrow","default":"<p>A thoughtful collection</p>"},{"type":"richtext","id":"heading","label":"Heading","default":"<h2>Born From <strong>Bamboo.</strong><br>Made For <strong>Baby.</strong></h2>"},{"type":"richtext","id":"subheading","label":"Subheading","default":"<p>Ultra soft. Naturally breathable.</p>"},{"type":"richtext","id":"context","label":"Context","default":"<p>Discover considered essentials, made to bring a little more meaning to every day.</p>"},{"type":"range","id":"eyebrow_size","label":"Eyebrow text size","min":10,"max":30,"step":2,"unit":"px","default":14},{"type":"range","id":"heading_size","label":"Heading text size","min":40,"max":88,"step":4,"unit":"px","default":64},{"type":"range","id":"context_size","label":"Context text size","min":12,"max":30,"step":2,"unit":"px","default":16},{"type":"range","id":"content_width","label":"Text width","min":320,"max":800,"step":40,"unit":"px","default":560},{"type":"range","id":"content_padding","label":"Content inset","min":24,"max":120,"step":8,"unit":"px","default":64},{"type":"color","id":"overlay_color","label":"Overlay color","default":"#000000"},{"type":"range","id":"overlay_opacity","label":"Overlay opacity","min":0,"max":90,"step":5,"unit":"%","default":65},{"type":"color","id":"fallback_color","label":"Fallback background","default":"#5E6539"},{"type":"color","id":"eyebrow_color","label":"Eyebrow color","default":"#FFFFFF"},{"type":"color","id":"heading_color","label":"Heading color","default":"#FFFFFF"},{"type":"color","id":"subheading_color","label":"Subheading color","default":"#FFFFFF"},{"type":"color","id":"context_color","label":"Context color","default":"#FFFFFF"},{"type":"header","content":"Right-side content"},{"type":"richtext","id":"right_heading","label":"Two-line subheading","default":"<p>Thoughtfully made.<br><strong>For everyday comfort.</strong></p>"},{"type":"richtext","id":"right_context","label":"Supporting text","default":"<p>Soft essentials for little ones.<br>Made with care and comfort<br>for every day.</p>"},{"type":"range","id":"right_heading_size","label":"Subheading size","min":16,"max":40,"step":2,"unit":"px","default":24},{"type":"range","id":"right_context_size","label":"Supporting text size","min":12,"max":24,"step":2,"unit":"px","default":16},{"type":"range","id":"right_content_width","label":"Right content width","min":240,"max":600,"step":30,"unit":"px","default":420},{"type":"color","id":"right_heading_color","label":"Subheading color","default":"#FFFFFF"},{"type":"color","id":"right_context_color","label":"Supporting text color","default":"#FFFFFF"},{"type":"text","id":"cta_label","label":"Button label","default":"Shop the collection"},{"type":"url","id":"cta_link","label":"Button link"},{"type":"color","id":"button_background","label":"Button background","default":"#A9B883"},{"type":"color","id":"button_text_color","label":"Button text","default":"#17200F"},{"type":"color","id":"button_border_color","label":"Button border","default":"#FFFFFF"},{"type":"range","id":"button_radius","label":"Button corner radius","min":0,"max":30,"step":2,"unit":"px","default":4},{"type":"header","content":"Trust indicators"},{"type":"image_picker","id":"trust_image_one","label":"Trust image one"},{"type":"text","id":"trust_label_one","label":"Name tag one","default":"Indicator one"},{"type":"image_picker","id":"trust_image_two","label":"Trust image two"},{"type":"text","id":"trust_label_two","label":"Name tag two","default":"Indicator two"},{"type":"image_picker","id":"trust_image_three","label":"Trust image three"},{"type":"text","id":"trust_label_three","label":"Name tag three","default":"Indicator three"},{"type":"range","id":"trust_label_size","label":"Name tag size","min":10,"max":18,"step":2,"unit":"px","default":12},{"type":"color","id":"trust_label_color","label":"Name tag color","default":"#FFFFFF"},{"type":"range","id":"trust_circle_size","label":"Circle size","min":64,"max":144,"step":8,"unit":"px","default":96},{"type":"range","id":"trust_stroke_width","label":"Circle stroke thickness","min":2,"max":10,"step":2,"unit":"px","default":6},{"type":"color","id":"trust_stroke_color","label":"Circle stroke","default":"#FFFFFF"}],"presets":[{"name":"Cover hero"}],"tag":null,"class":"cover-hero-block"}
+{
+  "name": "Cover hero",
+  "tag": null,
+  "class": "cover-hero-block",
+  "settings": [
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "hero_height", "label": "Desktop height", "min": 400, "max": 1000, "step": 50, "unit": "px", "default": 700 },
+    { "type": "range", "id": "mobile_height", "label": "Mobile height", "min": 300, "max": 900, "step": 50, "unit": "px", "default": 500, "info": "Minimum height on mobile screens." },
+    { "type": "range", "id": "content_padding", "label": "Content inset", "min": 16, "max": 120, "step": 8, "unit": "px", "default": 64, "info": "Scales down automatically on mobile." },
+    { "type": "range", "id": "content_width", "label": "Left content width", "min": 320, "max": 800, "step": 40, "unit": "px", "default": 560 },
+    { "type": "color", "id": "fallback_color", "label": "Fallback background", "default": "#5E6539", "info": "Shown behind image and before image loads." },
+
+    { "type": "header", "content": "Background image & overlay" },
+    { "type": "checkbox", "id": "show_background", "label": "Show background image", "default": true },
+    { "type": "image_picker", "id": "background_image", "label": "Desktop image" },
+    { "type": "image_picker", "id": "background_image_mobile", "label": "Mobile image", "info": "Optional. Recommended for mobile aspect ratios. Falls back to desktop image." },
+    { "type": "select", "id": "image_position", "label": "Desktop focal point", "options": [
+      { "value": "center center", "label": "Center" },
+      { "value": "left center", "label": "Left" },
+      { "value": "right center", "label": "Right" },
+      { "value": "center top", "label": "Top" },
+      { "value": "center bottom", "label": "Bottom" }
+    ], "default": "center center" },
+    { "type": "select", "id": "image_position_mobile", "label": "Mobile focal point", "options": [
+      { "value": "center center", "label": "Center" },
+      { "value": "left center", "label": "Left" },
+      { "value": "right center", "label": "Right" },
+      { "value": "center top", "label": "Top" },
+      { "value": "center bottom", "label": "Bottom" }
+    ], "default": "center center" },
+    { "type": "range", "id": "image_opacity", "label": "Desktop image opacity", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "image_brightness", "label": "Desktop image brightness", "min": 20, "max": 150, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "image_opacity_mobile", "label": "Mobile image opacity", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "image_brightness_mobile", "label": "Mobile image brightness", "min": 20, "max": 150, "step": 5, "unit": "%", "default": 100 },
+    { "type": "checkbox", "id": "show_overlay", "label": "Show color overlay", "default": true },
+    { "type": "color", "id": "overlay_color", "label": "Overlay color", "default": "#000000" },
+    { "type": "range", "id": "overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 65 },
+
+    { "type": "header", "content": "Eyebrow" },
+    { "type": "checkbox", "id": "show_eyebrow", "label": "Show eyebrow", "default": true },
+    { "type": "richtext", "id": "eyebrow", "label": "Text", "default": "<p>A thoughtful collection</p>" },
+    { "type": "range", "id": "eyebrow_size", "label": "Text size", "min": 10, "max": 30, "step": 2, "unit": "px", "default": 14 },
+    { "type": "color", "id": "eyebrow_color", "label": "Text color", "default": "#5B6344" },
+
+    { "type": "header", "content": "Heading" },
+    { "type": "checkbox", "id": "show_heading", "label": "Show heading", "default": true },
+    { "type": "richtext", "id": "heading", "label": "Text", "default": "<h1>Born From <strong>Bamboo.</strong><br/>Made For <strong>Baby.</strong></h1>" },
+    { "type": "range", "id": "heading_size", "label": "Desktop text size", "min": 32, "max": 88, "step": 4, "unit": "px", "default": 64 },
+    { "type": "range", "id": "heading_size_mobile", "label": "Mobile text size", "min": 24, "max": 60, "step": 2, "unit": "px", "default": 36 },
+    { "type": "color", "id": "heading_color", "label": "Text color", "default": "#5B6344" },
+
+    { "type": "header", "content": "Subheading" },
+    { "type": "checkbox", "id": "show_subheading", "label": "Show subheading", "default": true },
+    { "type": "richtext", "id": "subheading", "label": "Text", "default": "<p>Ultra soft. Naturally breathable.</p>" },
+    { "type": "range", "id": "subheading_size", "label": "Text size", "min": 12, "max": 36, "step": 2, "unit": "px", "default": 20 },
+    { "type": "color", "id": "subheading_color", "label": "Text color", "default": "#70675B" },
+
+    { "type": "header", "content": "Context" },
+    { "type": "checkbox", "id": "show_context", "label": "Show context", "default": true },
+    { "type": "checkbox", "id": "show_context_mobile", "label": "Show context on mobile", "default": true },
+    { "type": "richtext", "id": "context", "label": "Text", "default": "<p>Discover considered essentials, made to bring a little more meaning to every day.</p>" },
+    { "type": "range", "id": "context_size", "label": "Text size", "min": 12, "max": 30, "step": 2, "unit": "px", "default": 16 },
+    { "type": "color", "id": "context_color", "label": "Text color", "default": "#70675B" },
+
+    { "type": "header", "content": "Trust indicators" },
+    { "type": "checkbox", "id": "show_trust", "label": "Show trust indicators", "default": true },
+    { "type": "checkbox", "id": "show_trust_mobile", "label": "Show trust indicators on mobile", "default": true },
+    { "type": "checkbox", "id": "show_trust_labels", "label": "Show name tags", "default": true },
+    { "type": "range", "id": "trust_image_opacity", "label": "Image opacity", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "trust_image_brightness", "label": "Image brightness", "min": 20, "max": 150, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "trust_circle_size", "label": "Circle size", "min": 48, "max": 144, "step": 8, "unit": "px", "default": 96 },
+    { "type": "range", "id": "trust_stroke_width", "label": "Circle stroke thickness", "min": 0, "max": 10, "step": 2, "unit": "px", "default": 6 },
+    { "type": "color", "id": "trust_stroke_color", "label": "Circle stroke", "default": "#FAE7CE" },
+    { "type": "range", "id": "trust_label_size", "label": "Name tag size", "min": 10, "max": 18, "step": 2, "unit": "px", "default": 12 },
+    { "type": "color", "id": "trust_label_color", "label": "Name tag color", "default": "#FFFFFF" },
+    { "type": "checkbox", "id": "show_trust_item_one", "label": "Show trust indicator 1", "default": true },
+    { "type": "image_picker", "id": "trust_image_one", "label": "Image one", "info": "PNG recommended." },
+    { "type": "text", "id": "trust_label_one", "label": "Name tag one", "default": "Indicator one" },
+    { "type": "checkbox", "id": "show_trust_item_two", "label": "Show trust indicator 2", "default": true },
+    { "type": "image_picker", "id": "trust_image_two", "label": "Image two" },
+    { "type": "text", "id": "trust_label_two", "label": "Name tag two", "default": "Indicator two" },
+    { "type": "checkbox", "id": "show_trust_item_three", "label": "Show trust indicator 3", "default": true },
+    { "type": "image_picker", "id": "trust_image_three", "label": "Image three" },
+    { "type": "text", "id": "trust_label_three", "label": "Name tag three", "default": "Indicator three" },
+
+    { "type": "header", "content": "Right-side content" },
+    { "type": "checkbox", "id": "show_right", "label": "Show right-side content", "default": true },
+    { "type": "checkbox", "id": "show_right_mobile", "label": "Show right-side content on mobile", "default": true },
+    { "type": "range", "id": "right_content_width", "label": "Content width", "min": 240, "max": 600, "step": 30, "unit": "px", "default": 420 },
+    { "type": "checkbox", "id": "show_right_heading", "label": "Show subheading", "default": true },
+    { "type": "richtext", "id": "right_heading", "label": "Subheading", "default": "<p>Thoughtfully made.<br><strong>For everyday comfort.</strong></p>" },
+    { "type": "range", "id": "right_heading_size", "label": "Subheading size", "min": 16, "max": 40, "step": 2, "unit": "px", "default": 24 },
+    { "type": "color", "id": "right_heading_color", "label": "Subheading color", "default": "#5B6344" },
+    { "type": "checkbox", "id": "show_right_context", "label": "Show supporting text", "default": true },
+    { "type": "richtext", "id": "right_context", "label": "Supporting text", "default": "<p>Soft essentials for little ones.<br>Made with care and comfort<br>for every day.</p>" },
+    { "type": "range", "id": "right_context_size", "label": "Supporting text size", "min": 12, "max": 24, "step": 2, "unit": "px", "default": 16 },
+    { "type": "color", "id": "right_context_color", "label": "Supporting text color", "default": "#70675B" },
+
+    { "type": "header", "content": "Button" },
+    { "type": "checkbox", "id": "show_cta", "label": "Show button", "default": true },
+    { "type": "text", "id": "cta_label", "label": "Label", "default": "Shop the collection" },
+    { "type": "url", "id": "cta_link", "label": "Link" },
+    { "type": "color", "id": "button_background", "label": "Background", "default": "#5B6344" },
+    { "type": "color", "id": "button_text_color", "label": "Text", "default": "#FFFFFF" },
+    { "type": "color", "id": "button_border_color", "label": "Border", "default": "#5B6344" },
+    { "type": "range", "id": "button_radius", "label": "Corner radius", "min": 0, "max": 30, "step": 2, "unit": "px", "default": 30 },
+
+    { "type": "header", "content": "Animations" },
+    { "type": "checkbox", "id": "enable_animations", "label": "Enable entrance animations", "default": true },
+    { "type": "range", "id": "animation_duration", "label": "Duration", "min": 200, "max": 2000, "step": 100, "unit": "ms", "default": 800 },
+    { "type": "range", "id": "animation_delay", "label": "Start delay", "min": 0, "max": 1500, "step": 100, "unit": "ms", "default": 0 },
+    { "type": "range", "id": "animation_stagger", "label": "Delay between components", "min": 0, "max": 500, "step": 50, "unit": "ms", "default": 100, "info": "Each component starts this much later than the one before it. Animations are skipped for visitors who prefer reduced motion." },
+    { "type": "select", "id": "anim_background", "label": "Background image", "options": [
+      { "value": "none", "label": "None" },
+      { "value": "fade-in", "label": "Fade in" },
+      { "value": "zoom-in", "label": "Zoom in" },
+      { "value": "zoom-out", "label": "Zoom out" }
+    ], "default": "fade-in" },
+    { "type": "select", "id": "anim_eyebrow", "label": "Eyebrow", "options": [
+      { "value": "none", "label": "None" },
+      { "value": "fade-in", "label": "Fade in" },
+      { "value": "fade-up", "label": "Fade up" },
+      { "value": "fade-down", "label": "Fade down" },
+      { "value": "slide-left", "label": "Slide from left" },
+      { "value": "slide-right", "label": "Slide from right" },
+      { "value": "zoom-in", "label": "Zoom in" }
+    ], "default": "fade-up" },
+    { "type": "select", "id": "anim_heading", "label": "Heading", "options": [
+      { "value": "none", "label": "None" },
+      { "value": "fade-in", "label": "Fade in" },
+      { "value": "fade-up", "label": "Fade up" },
+      { "value": "fade-down", "label": "Fade down" },
+      { "value": "slide-left", "label": "Slide from left" },
+      { "value": "slide-right", "label": "Slide from right" },
+      { "value": "zoom-in", "label": "Zoom in" }
+    ], "default": "fade-up" },
+    { "type": "select", "id": "anim_subheading", "label": "Subheading", "options": [
+      { "value": "none", "label": "None" },
+      { "value": "fade-in", "label": "Fade in" },
+      { "value": "fade-up", "label": "Fade up" },
+      { "value": "fade-down", "label": "Fade down" },
+      { "value": "slide-left", "label": "Slide from left" },
+      { "value": "slide-right", "label": "Slide from right" },
+      { "value": "zoom-in", "label": "Zoom in" }
+    ], "default": "fade-up" },
+    { "type": "select", "id": "anim_context", "label": "Context", "options": [
+      { "value": "none", "label": "None" },
+      { "value": "fade-in", "label": "Fade in" },
+      { "value": "fade-up", "label": "Fade up" },
+      { "value": "fade-down", "label": "Fade down" },
+      { "value": "slide-left", "label": "Slide from left" },
+      { "value": "slide-right", "label": "Slide from right" },
+      { "value": "zoom-in", "label": "Zoom in" }
+    ], "default": "fade-up" },
+    { "type": "select", "id": "anim_trust", "label": "Trust indicators", "options": [
+      { "value": "none", "label": "None" },
+      { "value": "fade-in", "label": "Fade in" },
+      { "value": "fade-up", "label": "Fade up" },
+      { "value": "fade-down", "label": "Fade down" },
+      { "value": "slide-left", "label": "Slide from left" },
+      { "value": "slide-right", "label": "Slide from right" },
+      { "value": "zoom-in", "label": "Zoom in" }
+    ], "default": "fade-up" },
+    { "type": "select", "id": "anim_right_heading", "label": "Right subheading", "options": [
+      { "value": "none", "label": "None" },
+      { "value": "fade-in", "label": "Fade in" },
+      { "value": "fade-up", "label": "Fade up" },
+      { "value": "fade-down", "label": "Fade down" },
+      { "value": "slide-left", "label": "Slide from left" },
+      { "value": "slide-right", "label": "Slide from right" },
+      { "value": "zoom-in", "label": "Zoom in" }
+    ], "default": "fade-up" },
+    { "type": "select", "id": "anim_right_context", "label": "Right supporting text", "options": [
+      { "value": "none", "label": "None" },
+      { "value": "fade-in", "label": "Fade in" },
+      { "value": "fade-up", "label": "Fade up" },
+      { "value": "fade-down", "label": "Fade down" },
+      { "value": "slide-left", "label": "Slide from left" },
+      { "value": "slide-right", "label": "Slide from right" },
+      { "value": "zoom-in", "label": "Zoom in" }
+    ], "default": "fade-up" },
+    { "type": "select", "id": "anim_button", "label": "Button", "options": [
+      { "value": "none", "label": "None" },
+      { "value": "fade-in", "label": "Fade in" },
+      { "value": "fade-up", "label": "Fade up" },
+      { "value": "fade-down", "label": "Fade down" },
+      { "value": "slide-left", "label": "Slide from left" },
+      { "value": "slide-right", "label": "Slide from right" },
+      { "value": "zoom-in", "label": "Zoom in" }
+    ], "default": "zoom-in" }
+  ],
+  "presets": [{ "name": "Cover hero" }]
+}
 {% endschema %}
