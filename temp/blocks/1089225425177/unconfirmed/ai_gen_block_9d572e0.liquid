@@ -1,6 +1,288 @@
+{% doc %}
+  @prompt
+    Create a premium, minimalist Instagram gallery section for the babywear brand KISS & KRY, replicating the supplied reference screenshot as closely as possible.
+    
+    STRICT INSTRUCTION: Do not redesign or reinterpret the reference. Maintain the exact layout, image proportions, spacing, typography, colours, alignment, and visual hierarchy.
+    
+    1. OVERALL SECTION DESIGN
+    
+    Full-width Shopify section.
+    
+    Background colour: pure white (#FFFFFF).
+    
+    Maximum content width: 1200px.
+    
+    Desktop horizontal padding: 55px.
+    
+    Desktop vertical padding: 65px.
+    
+    Minimal, clean, premium editorial aesthetic.
+    
+    Use Montserrat typography throughout.
+    
+    No gradients, heavy shadows, or decorative backgrounds.
+    
+    2. HEADER – LEFT ALIGNMENT
+    
+    Create a header at the top-left.
+    
+    Eyebrow text:
+    
+    "— #KISSANDKRY"
+    
+    Font: Montserrat Medium.
+    
+    Size: 9px.
+    
+    Uppercase.
+    
+    Letter spacing: 2px.
+    
+    Colour: muted olive (#777D5D).
+    
+    Position above the main heading.
+    
+    Main heading:
+    
+    "Tiny Moments, Shared."
+    
+    Font: Montserrat Bold.
+    
+    Size: 36px desktop.
+    
+    Colour: dark olive (#626B4C).
+    
+    Line height: 1.2.
+    
+    Left aligned.
+    
+    Margin-top: 8px.
+    
+    3. INSTAGRAM FOLLOW BUTTON
+    
+    Position the Instagram follow button at the top-right of the section.
+    
+    Button content:
+    Instagram outline icon + "Follow @kissandkry"
+    
+    Design:
+    
+    White background.
+    
+    Thin olive-grey border (#C9CDBD).
+    
+    Pill-shaped border radius: 30px.
+    
+    Height: 42px.
+    
+    Horizontal padding: 20px.
+    
+    Font: Montserrat SemiBold.
+    
+    Size: 11px.
+    
+    Text colour: #626B4C.
+    
+    Instagram icon: small, 13px.
+    
+    Vertically centred content.
+    
+    Subtle hover transition.
+    
+    Functionality:
+    
+    Make the entire button clickable.
+    
+    Link to the Instagram profile: https://www.instagram.com/kissandkry/
+    
+    Open in a new tab.
+    
+    4. INSTAGRAM IMAGE GALLERY
+    
+    This is the most important component.
+    
+    Create a single horizontal row containing EXACTLY SIX equally sized image tiles on desktop.
+    
+    Layout specifications:
+    
+    Six columns.
+    
+    Equal image dimensions.
+    
+    Image aspect ratio: approximately 1:1.
+    
+    Desktop image dimensions: approximately 160px × 160px.
+    
+    Horizontal gap: 10px.
+    
+    Border radius: 12px.
+    
+    Object-fit: cover.
+    
+    Object-position: center.
+    
+    No borders.
+    
+    No heavy shadows.
+    
+    All images must have identical dimensions.
+    
+    The gallery must span almost the entire available content width., IMAGE 1 – BABY CLOSE-UP
+    
+    Close-up lifestyle photograph of a smiling baby.
+    
+    Baby wearing a mustard-yellow bamboo outfit.
+    
+    Face clearly visible.
+    
+    Natural warm lighting.
+    
+    Soft premium photography.
+    
+    IMAGE 2 – BABY IN WHITE
+    
+    Baby wearing a white bamboo babywear outfit.
+    
+    Baby sitting comfortably against a soft knitted cream blanket.
+    
+    Warm natural lighting.
+    
+    Premium editorial photography.
+    
+    IMAGE 3 – INSTAGRAM FEATURE TILE
+    
+    Create a special Instagram promotional tile instead of a baby photograph.
+    
+    Background: muted olive green (#626B4C).
+    
+    Add subtle, low-opacity bamboo leaf illustrations.
+    
+    Place a white Instagram outline icon in the centre.
+    
+    Below the icon, display:
+    "View on Instagram"
+    
+    Font: Montserrat Medium.
+    
+    Size: 11px.
+    
+    Text colour: white.
+    
+    Keep the design minimal and centred.
+    
+    Make the entire tile clickable and link to the Instagram profile.
+    
+    IMAGE 4 – BABY IN SOFT WHITE
+    
+    Lifestyle photograph of a baby wearing a soft white bamboo outfit.
+    
+    Baby lying comfortably on a cream-coloured blanket.
+    
+    Natural daylight.
+    
+    Gentle, premium appearance.
+    
+    IMAGE 5 – BABY ON TEXTURED BLANKET
+    
+    Baby wearing a pale yellow bamboo outfit.
+    
+    Baby lying on a fluffy mustard-yellow / cream textured blanket.
+    
+    Top-down lifestyle photography.
+    
+    Warm and soft colour grading.
+    
+    IMAGE 6 – BABY IN WHITE OUTFIT
+    
+    Happy baby wearing a white bamboo outfit.
+    
+    Baby sitting or lying on a soft neutral blanket.
+    
+    Face clearly visible.
+    
+    Soft natural lighting.
+    
+    IMPORTANT:
+    All six tiles must have consistent image dimensions and corner radii. Do not make one image larger than another.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-instagram-gallery-{{ ai_gen_id }} { display:block; width:{{ block.settings.desktop_width_percent }}%; max-width:100%; margin:0 auto; padding:65px 55px; box-sizing:border-box; background:#fff; color:#626b4c; font-family:{{ settings.type_body_font.family }},sans-serif; }
+  .ai-instagram-gallery-{{ ai_gen_id }}__inner { max-width:1200px; margin:0 auto; }
+  .ai-instagram-gallery-{{ ai_gen_id }}__header { display:flex; justify-content:space-between; align-items:flex-start; gap:24px; margin-bottom:30px; }
+  .ai-instagram-gallery-{{ ai_gen_id }}__eyebrow { margin:0 0 8px; color:#777d5d; font-size:9px; font-weight:500; letter-spacing:2px; line-height:1.3; text-transform:uppercase; }
+  .ai-instagram-gallery-{{ ai_gen_id }}__title { margin:0; color:#626b4c; font-family:{{ settings.type_heading_font.family }},sans-serif; font-size:36px; font-weight:700; line-height:1.2; }
+  .ai-instagram-gallery-{{ ai_gen_id }}__follow { display:inline-flex; min-height:42px; align-items:center; justify-content:center; gap:9px; padding:0 20px; border:1px solid #c9cdbd; border-radius:30px; background:#fff; color:#626b4c; font-size:11px; font-weight:600; line-height:1; text-decoration:none; white-space:nowrap; transition:background-color 180ms ease,border-color 180ms ease; }
+  .ai-instagram-gallery-{{ ai_gen_id }}__follow:hover { background:#f7f8f4; border-color:#777d5d; }
+  .ai-instagram-gallery-{{ ai_gen_id }}__follow:focus-visible,.ai-instagram-gallery-{{ ai_gen_id }}__feature:focus-visible { outline:2px solid #626b4c; outline-offset:3px; }
+  .ai-instagram-gallery-{{ ai_gen_id }}__icon { width:13px; height:13px; flex:0 0 13px; }
+  .ai-instagram-gallery-{{ ai_gen_id }}__grid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:10px; }
+  .ai-instagram-gallery-{{ ai_gen_id }}__tile { display:block; position:relative; width:100%; aspect-ratio:1; overflow:hidden; border-radius:12px; }
+  .ai-instagram-gallery-{{ ai_gen_id }}__tile img { display:block; width:100%; height:100%; object-fit:cover; object-position:center; }
+  .ai-instagram-gallery-{{ ai_gen_id }}__placeholder { position:relative; width:100%; height:100%; background:#f4f4f1; }
+  .ai-instagram-gallery-{{ ai_gen_id }}__placeholder svg { display:block; width:100%; height:100%; object-fit:cover; }
+  .ai-instagram-gallery-{{ ai_gen_id }}__empty-note { position:absolute; right:8px; bottom:8px; left:8px; padding:6px; border-radius:4px; background:rgba(255,255,255,.92); color:#626b4c; font-size:10px; line-height:1.3; text-align:center; }
+  .ai-instagram-gallery-{{ ai_gen_id }}__feature { position:relative; display:flex; width:100%; height:100%; align-items:center; justify-content:center; flex-direction:column; gap:10px; overflow:hidden; background:#626b4c; color:#fff; text-align:center; text-decoration:none; }
+  .ai-instagram-gallery-{{ ai_gen_id }}__bamboo { position:absolute; width:80px; height:120px; color:#fff; opacity:.12; pointer-events:none; }
+  .ai-instagram-gallery-{{ ai_gen_id }}__bamboo--one { top:-12px; left:-10px; transform:rotate(-25deg); }
+  .ai-instagram-gallery-{{ ai_gen_id }}__bamboo--two { right:-13px; bottom:-18px; transform:rotate(155deg); }
+  .ai-instagram-gallery-{{ ai_gen_id }}__feature-icon { position:relative; z-index:1; width:28px; height:28px; }
+  .ai-instagram-gallery-{{ ai_gen_id }}__feature-label { position:relative; z-index:1; color:#fff; font-size:11px; font-weight:500; line-height:1.3; }
+  @media screen and (max-width:749px) {
+    .ai-instagram-gallery-{{ ai_gen_id }} { padding:44px 20px; }
+    .ai-instagram-gallery-{{ ai_gen_id }}__header { align-items:flex-start; flex-direction:column; gap:18px; margin-bottom:22px; }
+    .ai-instagram-gallery-{{ ai_gen_id }}__title { font-size:28px; }
+    .ai-instagram-gallery-{{ ai_gen_id }}__grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  }
+{% endstyle %}
+
+<div class="ai-instagram-gallery-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-instagram-gallery-{{ ai_gen_id }}__inner">
+    <div class="ai-instagram-gallery-{{ ai_gen_id }}__header">
+      <div><p class="ai-instagram-gallery-{{ ai_gen_id }}__eyebrow">— #KISSANDKRY</p><h2 class="ai-instagram-gallery-{{ ai_gen_id }}__title">Tiny Moments, Shared.</h2></div>
+      <a class="ai-instagram-gallery-{{ ai_gen_id }}__follow" href="https://www.instagram.com/kissandkry/" target="_blank" rel="noopener noreferrer" aria-label="Follow @kissandkry on Instagram">
+        <svg class="ai-instagram-gallery-{{ ai_gen_id }}__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="18" cy="6" r=".8" fill="currentColor" stroke="none"></circle></svg><span>Follow @kissandkry</span>
+      </a>
+    </div>
+    <div class="ai-instagram-gallery-{{ ai_gen_id }}__grid">
+      {% for i in (1..6) %}
+        {% if i == 3 %}
+          <div class="ai-instagram-gallery-{{ ai_gen_id }}__tile">
+            <a class="ai-instagram-gallery-{{ ai_gen_id }}__feature" href="https://www.instagram.com/kissandkry/" target="_blank" rel="noopener noreferrer" aria-label="View KISS & KRY on Instagram">
+              <svg class="ai-instagram-gallery-{{ ai_gen_id }}__bamboo ai-instagram-gallery-{{ ai_gen_id }}__bamboo--one" viewBox="0 0 100 150" fill="none" aria-hidden="true"><path d="M13 142C31 106 46 68 65 8M28 112C13 99 7 84 8 69c18 4 29 17 30 33M39 88C58 80 70 66 74 49c-19 1-32 11-39 28M52 57C39 44 35 29 40 13c16 9 24 23 21 39M23 124C42 117 59 104 68 87c-19-2-34 6-45 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="ai-instagram-gallery-{{ ai_gen_id }}__bamboo ai-instagram-gallery-{{ ai_gen_id }}__bamboo--two" viewBox="0 0 100 150" fill="none" aria-hidden="true"><path d="M13 142C31 106 46 68 65 8M28 112C13 99 7 84 8 69c18 4 29 17 30 33M39 88C58 80 70 66 74 49c-19 1-32 11-39 28M52 57C39 44 35 29 40 13c16 9 24 23 21 39M23 124C42 117 59 104 68 87c-19-2-34 6-45 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="ai-instagram-gallery-{{ ai_gen_id }}__feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="18" cy="6" r=".8" fill="currentColor" stroke="none"></circle></svg>
+              <span class="ai-instagram-gallery-{{ ai_gen_id }}__feature-label">View on Instagram</span>
+            </a>
+          </div>
+        {% else %}
+          {% assign image_key = 'gallery_image_' | append: i %}
+          {% assign gallery_image = block.settings[image_key] %}
+          <div class="ai-instagram-gallery-{{ ai_gen_id }}__tile">
+            {% if gallery_image != blank %}<img src="{{ gallery_image | image_url: width: 500 }}" alt="{{ gallery_image.alt | escape }}" loading="lazy" width="500" height="500">
+            {% else %}<div class="ai-instagram-gallery-{{ ai_gen_id }}__placeholder">{{ 'image' | placeholder_svg_tag }}<span class="ai-instagram-gallery-{{ ai_gen_id }}__empty-note">Add babywear photo {{ i }}</span></div>{% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Instagram gallery",
+  "settings": [
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "header", "content": "Babywear photos" },
+    { "type": "image_picker", "id": "gallery_image_1", "label": "Baby close-up" },
+    { "type": "image_picker", "id": "gallery_image_2", "label": "Baby in white" },
+    { "type": "image_picker", "id": "gallery_image_4", "label": "Baby in soft white" },
+    { "type": "image_picker", "id": "gallery_image_5", "label": "Baby on textured blanket" },
+    { "type": "image_picker", "id": "gallery_image_6", "label": "Baby in white outfit" }
+  ],
+  "presets": [{ "name": "Instagram gallery" }],
+  "tag": null,
+  "class": "instagram-gallery-block"
+}
 {% endschema %}
