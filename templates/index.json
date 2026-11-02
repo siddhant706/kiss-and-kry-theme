@@ -1059,6 +1059,78 @@
         "padding-block-start": 0,
         "padding-block-end": 0
       }
+    },
+    "1793641205063f71b4": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_3db4aa1_gFtfhy": {
+          "type": "ai_gen_block_3db4aa1",
+          "settings": {
+            "eyebrow": "<h5>&nbsp;JOIN THE FAMILY</h5>",
+            "heading": "<p>Little Updates,<br/>Delivered Softly.</p>",
+            "description": "<p>Be the first to know about new drops, restocks and little moments worth sharing. No spam, ever.</p>",
+            "email_placeholder": "<p>Enter your email address</p>",
+            "button_label": "<p>Subscribe →</p>",
+            "success_message": "<p>Thanks for subscribing. Welcome to the family!</p>",
+            "trust_one": "<p>New drops first</p>",
+            "trust_two": "<p>Restock alerts</p>",
+            "trust_three": "<p>Unsubscribe anytime</p>",
+            "privacy_text": "<p>By subscribing, you agree to our</p>",
+            "privacy_link_label": "<p>Privacy Policy</p>",
+            "privacy_url": "",
+            "banner_background": "#626B4C",
+            "eyebrow_color": "{{ settings.color_palette.background }}",
+            "icon_color": "#F6F3E5",
+            "texture_enabled": true,
+            "texture_opacity": 13,
+            "heading_color": "{{ settings.color_palette.background }}",
+            "description_color": "{{ settings.color_palette.background }}",
+            "button_background": "#5B6344",
+            "button_text_color": "{{ settings.color_palette.background }}",
+            "banner_radius": 20,
+            "banner_height": 230,
+            "section_padding": 65,
+            "heading_font": "montserrat_n7",
+            "body_font": "montserrat_n4",
+            "heading_size": 36,
+            "mobile_heading_size": 27,
+            "mobile_description_size": 11,
+            "desktop_width_percent": 100
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_3db4aa1_gFtfhy"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "center",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "full-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
     }
   },
   "order": [
@@ -1078,6 +1150,7 @@
     "1793638112b374a0ec",
     "1793638704ea5290b8",
     "17936399751f07d88a",
-    "1793640689e18de4ac"
+    "1793640689e18de4ac",
+    "1793641205063f71b4"
   ]
 }
