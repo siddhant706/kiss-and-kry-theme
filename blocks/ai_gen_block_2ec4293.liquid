@@ -569,12 +569,20 @@
   </div>
 
   <div class="dh-bg-wrapper">
+    {% assign first_product = nil %}
+    {% for product in block.settings.products limit: 1 %}
+      {% assign first_product = product %}
+    {% endfor %}
+
     {% assign first_bg = '' %}
-    {% assign first_product = block.settings.products.first %}
-    {% if block.settings.background_1 %}
+    {% if block.settings.background_1 != blank %}
       {% assign first_bg = block.settings.background_1 | image_url: width: 2400 %}
-    {% elsif first_product.featured_image %}
-      {% assign first_bg = first_product.featured_image | image_url: width: 2400 %}
+    {% elsif first_product != blank %}
+      {% if first_product.featured_image != blank %}
+        {% assign first_bg = first_product.featured_image | image_url: width: 2400 %}
+      {% elsif first_product.featured_media != blank %}
+        {% assign first_bg = first_product.featured_media | image_url: width: 2400 %}
+      {% endif %}
     {% endif %}
 
     {% if first_bg != blank %}
@@ -777,6 +785,20 @@
 
           // Check reduced motion
           this.prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+          // Ensure initial background image matches first slide dynamically
+          if (this.data && this.data.length && this.bgImage) {
+            const initialBg = this.data[0].bg || this.data[0].image;
+            if (initialBg) {
+              const currentSrc = this.bgImage.getAttribute('src');
+              if (!currentSrc || this.bgImage.style.display === 'none') {
+                this.bgImage.src = initialBg;
+                this.bgImage.style.display = 'block';
+              }
+              const ph = this.querySelector('.dh-placeholder');
+              if (ph) ph.remove();
+            }
+          }
 
           if (this.prefersReduced) {
             this.setupTextForReveal(this.data[0]);
