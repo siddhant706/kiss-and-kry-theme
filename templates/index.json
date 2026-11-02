@@ -624,6 +624,82 @@
         "padding-block-start": 0,
         "padding-block-end": 0
       }
+    },
+    "179363590433a4f149": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_6390098_LEnL9H": {
+          "type": "ai_gen_block_6390098",
+          "settings": {
+            "desktop_width_percent": 100,
+            "eyebrow": "<h5>WHY BAMBOO</h5>",
+            "heading": "<p>Why We Chose<br/>Bamboo.</p>",
+            "description": "<p><strong>Bamboo viscose is silky to the touch, light on the skin and breathes with your baby — so they stay comfortable from the first nap to the last cuddle of the day.</strong></p>",
+            "image": "shopify://shop_images/Cozy_Sunlit_Baby_Portrait_with_Bunny.png",
+            "image_alt": "Baby wearing a soft bamboo outfit",
+            "badge_percent": "<p>95%</p>",
+            "badge_caption": "<p>BAMBOO VISCOSE</p>",
+            "feature_1_icon": "feather",
+            "feature_1_heading": "<p>Ultra soft</p>",
+            "feature_1_description": "<p>A silky, buttery feel that's gentle against delicate newborn skin.</p>",
+            "feature_2_icon": "air",
+            "feature_2_heading": "<p>Naturally breathable</p>",
+            "feature_2_description": "<p>Airy fibres help keep little ones cool, calm and comfortable.</p>",
+            "feature_3_icon": "stretch",
+            "feature_3_heading": "<p>Stretch that moves</p>",
+            "feature_3_description": "<p>A touch of spandex lets every piece move with wiggles, kicks and cuddles.</p>",
+            "feature_4_icon": "heart",
+            "feature_4_heading": "<p>Kind to their skin</p>",
+            "feature_4_description": "<p>Smooth, soft fibres that feel gentle from the very first wear.</p>",
+            "primary_label": "<p>Shop bamboo essentials →</p>",
+            "primary_url": "",
+            "secondary_label": "<p>Read the care guide</p>",
+            "secondary_url": "",
+            "background_color": "#626B4C",
+            "text_color": "#F6F3E5",
+            "secondary_text_color": "#F6F3E5",
+            "badge_color": "#F6F3E5",
+            "badge_text_color": "#5B6344",
+            "icon_color": "#DDAA32",
+            "icon_border_color": "#DDAA32",
+            "ring_color": "#F6F3E5",
+            "button_color": "#F5F2E8",
+            "button_text_color": "#343923"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_6390098_LEnL9H"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "center",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "full-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
     }
   },
   "order": [
@@ -637,6 +713,7 @@
     "178557725789f5537d",
     "1793096834f17255ea",
     "17932706845d413504",
-    "179362741998f798f0"
+    "179362741998f798f0",
+    "179363590433a4f149"
   ]
 }
