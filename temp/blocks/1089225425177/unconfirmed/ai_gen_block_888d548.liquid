@@ -1,6 +1,100 @@
-{% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
-{% endschema %}
+{% doc %}
+  @prompt
+    Create a simple, clean and premium Shopify footer for KISS & KRY, a bamboo babywear brand.
+    
+    ### 1. Design
+    - Full-width dark olive background: #383F2A.
+    - Text colour: warm cream #F5F3E7.
+    - Use Montserrat typography throughout.
+    - Minimal, elegant and uncluttered layout.
+    - Desktop padding: 40px 50px.
+    - No gradients, shadows or decorative graphics.
+    
+    ### 2. Desktop Layout
+    
+    Create four simple columns:
+    
+    **Column 1 – Brand**
+    - Heading: Kiss and Kry
+    - Description: "Born from bamboo. Made for baby. Ultra-soft, naturally breathable essentials for every kiss and every cry."
+    - Four small social icons: Instagram, Facebook, YouTube and Pinterest.
+    
+    **Column 2 – Shop**
+    - Bodysuits
+    - Footies
+    - Rompers
+    - Crib Sheets
+    
+    **Column 3 – Explore**
+    - Why Bamboo
+    - Our Story
+    - Reviews
+    - Care Guide
+    - FAQ
+    
+    **Column 4 – Contact**
+    - Chat on WhatsApp
+    - Send us an email
+    - @kissandkry
+    
+    ### 3. Typography
+    - Brand heading: Montserrat Bold, 20px.
+    - Column headings: Montserrat SemiBold, 11px, uppercase, mustard accent #DDAA32.
+    - Navigation links: Montserrat Regular, 11px.
+    - Description: Montserrat Regular, 11px.
+    - Text colour: #C7C8B8.
+    - Link hover colour: #FFFFFF.
+    
+    ### 4. Bottom Bar
+    
+    Add a thin horizontal divider.
+    
+    Below it, create a simple bottom row:
+    
+    Left:
+    "© 2026 Kiss and Kry. All rights reserved."
+    
+    Centre:
+    Small payment badges for UPI, VISA, Mastercard, RuPay and COD.
+    
+    Right:
+    - Privacy Policy
+    - Terms of Service
+    - Refund Policy
+    
+    Use small 9px Montserrat text.
+    
+    ### 5. Responsive Design
+    - Desktop: Four columns horizontally aligned.
+    - Tablet: Two-column layout.
+    - Mobile: Stack brand information, navigation and contact details vertically.
+    - Centre the bottom copyright and legal links on mobile.
+    - Prevent horizontal scrolling.
+    
+    ### 6. Shopify Functionality
+    - Make all navigation links clickable.
+    - Make social icons link to their respective profiles.
+    - Make WhatsApp and email links functional.
+    - Use Shopify's native policy URLs.
+    - Make text, links, colours and social URLs editable through the Theme Editor.
+    - Generate clean, self-contained Shopify Liquid code.
+    - Ensure compatibility with Shopify 2.0.
+    
+    ### IMPORTANT
+    Keep the footer SIMPLE. Do not add newsletter forms, extra sections, large icons, decorative illustrations, animations, extra columns or unnecessary elements. Prioritise clean spacing, readability and a premium olive-and-cream aesthetic., add this contact details as 
+    ### Kiss & Kry – Complete Contact Details
+    
+    - Instagram: [@kissandkry](https://www.instagram.com/kissandkry/?utm_source=chatgpt.com)
+    - Facebook: [Kiss & Kry Facebook Page](https://www.facebook.com/profile.php?id=61563831763161\&utm_source=chatgpt.com)
+    - WhatsApp: [+91 99997 38480](https://wa.me/919999738480?utm_source=chatgpt.com)
+    - Phone: +91 99997 38480
+    
+    All four details can now be added to your Shopify footer as clickable links., remove payment icons and make the section more professional and at the place of brand name use the PNG icon for kiss and kry also change the background of this section as white or any light color used in site, in contact use WhatsApp and call icon for the same contact number, remove @kiss and kry 
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% style %}
+.ai-footer-{{ ai_gen_id }}{display:block;width:100%;box-sizing:border-box;background:{{ block.settings.background_color }};color:{{ block.settings.text_color }};padding:40px 50px;font-family:{{ block.settings.font.family }},{{ block.settings.font.fallback_families }}}
+.ai-footer-{{ ai_gen_id }}__grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;max-width:1400px;margin:0 auto}.ai-footer-{{ ai_gen_id }}__logo{display:block;max-width:{{ block.settings.logo_width }}px;height:auto;margin-bottom:14px}.ai-footer-{{ ai_gen_id }}__heading{margin:0 0 14px;color:{{ block.settings.accent_color }};font-size:11px;text-transform:uppercase;letter-spacing:.1em}.ai-footer-{{ ai_gen_id }}__description,.ai-footer-{{ ai_gen_id }}__list a{font-size:12px;line-height:1.7}.ai-footer-{{ ai_gen_id }}__description{margin:0;max-width:340px}.ai-footer-{{ ai_gen_id }}__list{list-style:none;margin:0;padding:0;display:grid;gap:10px}.ai-footer-{{ ai_gen_id }} a{color:inherit;text-decoration:none;overflow-wrap:anywhere}.ai-footer-{{ ai_gen_id }} a:hover{color:{{ block.settings.hover_color }};text-decoration:underline;text-underline-offset:3px}.ai-footer-{{ ai_gen_id }} a:focus-visible{outline:2px solid currentColor;outline-offset:3px}.ai-footer-{{ ai_gen_id }}__contact{display:flex;align-items:center;gap:9px}.ai-footer-{{ ai_gen_id }}__contact svg{width:17px;height:17px;flex:none;fill:currentColor}.ai-footer-{{ ai_gen_id }}__bottom{max-width:1400px;margin:28px auto 0;padding-top:15px;border-top:1px solid {{ block.settings.divider_color }};display:flex;justify-content:space-between;gap:18px}.ai-footer-{{ ai_gen_id }}__bottom span,.ai-footer-{{ ai_gen_id }}__bottom a{font-size:10px}.ai-footer-{{ ai_gen_id }}__legal{display:flex;gap:16px;flex-wrap:wrap}@media(max-width:800px){.ai-footer-{{ ai_gen_id }}__grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px}}@media(max-width:560px){.ai-footer-{{ ai_gen_id }}{padding:32px 22px}.ai-footer-{{ ai_gen_id }}__grid{grid-template-columns:1fr;gap:26px}.ai-footer-{{ ai_gen_id }}__bottom{flex-direction:column;align-items:center;text-align:center}.ai-footer-{{ ai_gen_id }}__legal{justify-content:center}}
+{% endstyle %}
+<footer class="ai-footer-{{ ai_gen_id }}" style="width:{{ block.settings.desktop_width_percent }}%" {{ block.shopify_attributes }}><div class="ai-footer-{{ ai_gen_id }}__grid"><div>{% if block.settings.logo != blank %}<img class="ai-footer-{{ ai_gen_id }}__logo" src="{{ block.settings.logo | image_url: width: 600 }}" alt="{{ block.settings.logo.alt | default: block.settings.brand | escape }}" width="{{ block.settings.logo.width }}" height="{{ block.settings.logo.height }}" loading="lazy">{% else %}<strong>{{ block.settings.brand | escape }}</strong>{% endif %}<p class="ai-footer-{{ ai_gen_id }}__description">{{ block.settings.description | escape }}</p></div><div><h3 class="ai-footer-{{ ai_gen_id }}__heading">Shop</h3><ul class="ai-footer-{{ ai_gen_id }}__list">{% for i in (1..4) %}{% assign label='shop_' | append:i | append:'_label' %}{% assign link='shop_' | append:i | append:'_url' %}<li><a href="{{ block.settings[link] | default: routes.all_products_collection_url }}">{{ block.settings[label] | escape }}</a></li>{% endfor %}</ul></div><div><h3 class="ai-footer-{{ ai_gen_id }}__heading">Explore</h3><ul class="ai-footer-{{ ai_gen_id }}__list">{% for i in (1..5) %}{% assign label='explore_' | append:i | append:'_label' %}{% assign link='explore_' | append:i | append:'_url' %}<li><a href="{{ block.settings[link] | default: routes.root_url }}">{{ block.settings[label] | escape }}</a></li>{% endfor %}</ul></div><div><h3 class="ai-footer-{{ ai_gen_id }}__heading">Contact</h3><ul class="ai-footer-{{ ai_gen_id }}__list">{% assign phone=block.settings.phone | remove:'+' | remove:' ' | remove:'-' | remove:'(' | remove:')' %}<li><a class="ai-footer-{{ ai_gen_id }}__contact" href="https://wa.me/{{ phone }}" aria-label="WhatsApp {{ block.settings.phone | escape }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.9 11.9 0 0 0 12 0C5.4 0 .1 5.3.1 11.9c0 2.1.6 4.2 1.6 6L0 24l6.3-1.6a12 12 0 0 0 5.7 1.4h.1c6.6 0 11.9-5.3 11.9-11.9 0-3.2-1.2-6.2-3.5-8.4zM12 21.8a10 10 0 0 1-5.1-1.4l-.4-.2-3.7 1 1-3.6-.2-.4a9.8 9.8 0 1 1 8.4 4.6z"/></svg>{{ block.settings.phone | escape }}</a></li><li><a class="ai-footer-{{ ai_gen_id }}__contact" href="tel:+{{ phone }}" aria-label="Call {{ block.settings.phone | escape }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.8-.4 1.2-.3 1.3.4 2.6.6 4 .6.7 0 1.2.5 1.2 1.2v3.5c0 .7-.5 1.2-1.2 1.2C9.2 21.4 2.6 14.8 2.6 3.4c0-.7.5-1.2 1.2-1.2h3.5c.7 0 1.2.5 1.2 1.2 0 1.4.2 2.7.6 4 .1.4 0 .9-.3 1.2z"/></svg>{{ block.settings.phone | escape }}</a></li><li><a href="mailto:{{ block.settings.email | escape }}">{{ block.settings.email | escape }}</a></li></ul></div></div><div class="ai-footer-{{ ai_gen_id }}__bottom"><span>© {{ 'now' | date: '%Y' }} {{ block.settings.brand | escape }}. All rights reserved.</span><nav class="ai-footer-{{ ai_gen_id }}__legal" aria-label="Policies">{% if shop.privacy_policy != blank %}<a href="{{ routes.privacy_policy_url }}">Privacy policy</a>{% endif %}{% if shop.terms_of_service != blank %}<a href="{{ routes.terms_of_service_url }}">Terms of service</a>{% endif %}{% if shop.refund_policy != blank %}<a href="{{ routes.refund_policy_url }}">Refund policy</a>{% endif %}</nav></div></footer>
+{% schema %}{"name":"Kiss and Kry footer","settings":[{"type":"image_picker","id":"logo","label":"Brand logo"},{"type":"text","id":"brand","label":"Brand name","default":"Kiss and Kry"},{"type":"textarea","id":"description","label":"Description","default":"Born from bamboo. Made for baby. Ultra-soft, naturally breathable essentials for every kiss and every cry."},{"type":"range","id":"logo_width","label":"Logo width","min":80,"max":300,"step":10,"unit":"px","default":160},{"type":"range","id":"desktop_width_percent","label":"Desktop width","min":50,"max":100,"step":5,"unit":"%","default":100},{"type":"font_picker","id":"font","label":"Font","default":"montserrat_n4"},{"type":"color","id":"background_color","label":"Background","default":"#FFFFFF"},{"type":"color","id":"text_color","label":"Text","default":"#383F2A"},{"type":"color","id":"accent_color","label":"Headings","default":"#5E6539"},{"type":"color","id":"hover_color","label":"Link hover","default":"#5E6539"},{"type":"color","id":"divider_color","label":"Divider","default":"#DFDFDF"},{"type":"header","content":"Shop links"},{"type":"text","id":"shop_1_label","label":"Shop link 1","default":"Bodysuits"},{"type":"url","id":"shop_1_url","label":"Shop URL 1"},{"type":"text","id":"shop_2_label","label":"Shop link 2","default":"Footies"},{"type":"url","id":"shop_2_url","label":"Shop URL 2"},{"type":"text","id":"shop_3_label","label":"Shop link 3","default":"Rompers"},{"type":"url","id":"shop_3_url","label":"Shop URL 3"},{"type":"text","id":"shop_4_label","label":"Shop link 4","default":"Crib Sheets"},{"type":"url","id":"shop_4_url","label":"Shop URL 4"},{"type":"header","content":"Explore links"},{"type":"text","id":"explore_1_label","label":"Explore link 1","default":"Why Bamboo"},{"type":"url","id":"explore_1_url","label":"Explore URL 1"},{"type":"text","id":"explore_2_label","label":"Explore link 2","default":"Our Story"},{"type":"url","id":"explore_2_url","label":"Explore URL 2"},{"type":"text","id":"explore_3_label","label":"Explore link 3","default":"Reviews"},{"type":"url","id":"explore_3_url","label":"Explore URL 3"},{"type":"text","id":"explore_4_label","label":"Explore link 4","default":"Care Guide"},{"type":"url","id":"explore_4_url","label":"Explore URL 4"},{"type":"text","id":"explore_5_label","label":"Explore link 5","default":"FAQ"},{"type":"url","id":"explore_5_url","label":"Explore URL 5"},{"type":"header","content":"Contact"},{"type":"text","id":"phone","label":"WhatsApp and call number","default":"+91 99997 38480"},{"type":"text","id":"email","label":"Email address"}],"presets":[{"name":"Kiss and Kry footer"}],"tag":null,"class":"kiss-and-kry-footer"}{% endschema %}
