@@ -984,6 +984,81 @@
         "padding-block-start": 0,
         "padding-block-end": 0
       }
+    },
+    "1793640689e18de4ac": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_390ddf4_Ve3p69": {
+          "type": "ai_gen_block_390ddf4",
+          "settings": {
+            "desktop_width_percent": 100,
+            "eyebrow": "<h5>&nbsp;FAQ's</h5>",
+            "heading": "<p>Questions?<br/>We've Got Answers.</p>",
+            "description": "<p>Can't find what you're looking for? We're happy to help with sizing, orders and returns.</p>",
+            "background_color": "#F5F3E7",
+            "heading_color": "#626B4C",
+            "body_color": "#858575",
+            "whatsapp_label": "<p>Chat on WhatsApp</p>",
+            "whatsapp_number": "",
+            "email_label": "<p>Email us</p>",
+            "support_email": "",
+            "section_padding": 75,
+            "column_spacing": 45,
+            "card_radius": 14,
+            "default_expanded": "1",
+            "enable_1": true,
+            "question_1": "<p>Is delivery really free?</p>",
+            "answer_1": "<p>Yes. Delivery is free on every order, and you can choose cash on delivery at checkout if you'd rather pay when your parcel arrives.</p>",
+            "enable_2": true,
+            "question_2": "<p>How do returns work?</p>",
+            "answer_2": "<p>We want you to love every Kiss and Kry purchase. If something isn't right, contact our support team within the applicable return period and we'll guide you through the return or exchange process.</p>",
+            "enable_3": true,
+            "question_3": "<p>How do I choose the right size?</p>",
+            "answer_3": "<p>Check our size guide before ordering. It includes measurements and fit guidance to help you choose the right size for your little one. If you're unsure, contact us and we'll help.</p>",
+            "enable_4": true,
+            "question_4": "<p>What is bamboo viscose?</p>",
+            "answer_4": "<p>Bamboo viscose is a soft, smooth fabric made from bamboo-derived cellulose. It has a gentle feel and comfortable drape, making it a lovely choice for everyday babywear.</p>",
+            "enable_5": true,
+            "question_5": "<p>Is bamboo suitable for newborns?</p>",
+            "answer_5": "<p>Our bamboo viscose babywear is designed with softness and comfort in mind. Choose the appropriate size and follow the garment's care instructions for everyday use.</p>",
+            "enable_6": true,
+            "question_6": "<p>How should I wash my Kiss and Kry pieces?</p>",
+            "answer_6": "<p>Machine wash at 30°C or below on a gentle cycle, preferably inside out. Use mild baby-safe detergent, avoid bleach and fabric softener, and dry in the shade.</p>"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_390ddf4_Ve3p69"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "center",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "full-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
     }
   },
   "order": [
@@ -1002,6 +1077,7 @@
     "17936373274cfbb107",
     "1793638112b374a0ec",
     "1793638704ea5290b8",
-    "17936399751f07d88a"
+    "17936399751f07d88a",
+    "1793640689e18de4ac"
   ]
 }
