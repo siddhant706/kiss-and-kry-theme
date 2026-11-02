@@ -392,7 +392,7 @@
           "type": "ai_gen_block_99a49ae",
           "settings": {
             "section_padding": 65,
-            "background_color": "#F2F3EE",
+            "background_color": "{{ settings.color_palette.background }}",
             "eyebrow": "<p>MADE FOR LITTLE MOMENTS</p>",
             "eyebrow_size": 12,
             "eyebrow_color": "#5e6539",
@@ -768,6 +768,81 @@
         "padding-block-start": 0,
         "padding-block-end": 0
       }
+    },
+    "1793638112b374a0ec": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_2f2f21c_mKzVUJ": {
+          "type": "ai_gen_block_2f2f21c",
+          "settings": {
+            "desktop_width_percent": 100,
+            "section_background": "#FFFFFF",
+            "card_background": "#F5F3E7",
+            "heading_color": "#626B4C",
+            "star_color": "#E7AE2E",
+            "review_color": "#555849",
+            "vertical_padding": 65,
+            "card_radius": 17,
+            "eyebrow": "<h5>&nbsp;LOVED BY PARENTS</h5>",
+            "heading": "<h2><strong>Little Ones Approve.</strong></h2>",
+            "quote_1": "<p>The softest thing my daughter owns. She naps so much better in these, and they still feel brand new after plenty of washes.</p>",
+            "name_1": "<p>Ananya R.</p>",
+            "initials_1": "<p>AR</p>",
+            "product_name_1": "<p>Snugly Footies</p>",
+            "rating_1": 5,
+            "avatar_1": "shopify://shop_images/67.jpg",
+            "product_image_1": "shopify://shop_images/DSC03282_copy.jpg",
+            "quote_2": "<p>Bought the full-sleeve bodysuits for the cooler months and they're perfect — cosy but never sweaty. Lovely stretch, easy to dress.</p>",
+            "name_2": "<p>Meera K.</p>",
+            "initials_2": "<p>MK</p>",
+            "product_name_2": "<p>Luxurious Bodysuits</p>",
+            "rating_2": 5,
+            "avatar_2": "shopify://shop_images/66.jpg",
+            "product_image_2": "shopify://shop_images/Sunlit_Nursery_with_Smiling_Baby.png",
+            "quote_3": "<p>Free delivery and cash on delivery made it easy to try. The romper is so soft it's now my go-to gift for every baby shower.</p>",
+            "name_3": "<p>Priya S.</p>",
+            "initials_3": "<p>PS</p>",
+            "product_name_3": "<p>Cosy Rompers</p>",
+            "rating_3": 5,
+            "avatar_3": "shopify://shop_images/Visual_Bu_Anindika.jpg",
+            "product_image_3": "shopify://shop_images/DSC02950.webp",
+            "autoplay": false,
+            "autoplay_interval": 5
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_2f2f21c_mKzVUJ"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "center",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "full-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
     }
   },
   "order": [
@@ -783,6 +858,7 @@
     "17932706845d413504",
     "179362741998f798f0",
     "179363590433a4f149",
-    "17936373274cfbb107"
+    "17936373274cfbb107",
+    "1793638112b374a0ec"
   ]
 }
