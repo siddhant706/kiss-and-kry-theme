@@ -143,7 +143,7 @@
           "settings": {
             "show_section": true,
             "desktop_width_percent": 100,
-            "background_color": "#f6f3e5",
+            "background_color": "#F2F3EE",
             "circle_color": "#f7f5ec",
             "text_color": "#344536",
             "icon_color": "#344536",
@@ -392,7 +392,7 @@
           "type": "ai_gen_block_99a49ae",
           "settings": {
             "section_padding": 65,
-            "background_color": "#f6f2ee",
+            "background_color": "#F2F3EE",
             "eyebrow": "<p>MADE FOR LITTLE MOMENTS</p>",
             "eyebrow_size": 12,
             "eyebrow_color": "#5e6539",
@@ -580,10 +580,10 @@
             "card_radius": 8,
             "product_title_size": 18,
             "trust_image": "shopify://shop_images/Born_From_Bamboo_Baby_Badge.png",
-            "background_color": "{{ settings.color_palette.background }}",
-            "text_color": "#5B6344",
-            "button_color": "#5B6344",
-            "button_text_color": "#FFFFFF",
+            "background_color": "#F2F3EE",
+            "text_color": "#5b6344",
+            "button_color": "#5b6344",
+            "button_text_color": "#ffffff",
             "product_1": "tranquil-crib-sheets",
             "product_2": "cozy-rompers",
             "product_3": "snuggly-footies",
@@ -655,15 +655,15 @@
             "primary_url": "",
             "secondary_label": "<p>Read the care guide</p>",
             "secondary_url": "",
-            "background_color": "#626B4C",
-            "text_color": "#F6F3E5",
-            "secondary_text_color": "#F6F3E5",
-            "badge_color": "#F6F3E5",
-            "badge_text_color": "#5B6344",
-            "icon_color": "#DDAA32",
-            "icon_border_color": "#DDAA32",
-            "ring_color": "#F6F3E5",
-            "button_color": "#F5F2E8",
+            "background_color": "#626b4c",
+            "text_color": "#f6f3e5",
+            "secondary_text_color": "#f6f3e5",
+            "badge_color": "#f6f3e5",
+            "badge_text_color": "#5b6344",
+            "icon_color": "#ddaa32",
+            "icon_border_color": "#ddaa32",
+            "ring_color": "#f6f3e5",
+            "button_color": "#f5f2e8",
             "button_text_color": "#343923"
           },
           "blocks": {}
@@ -671,6 +671,74 @@
       },
       "block_order": [
         "ai_gen_block_6390098_LEnL9H"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "center",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "full-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "17936373274cfbb107": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_8953eb6_6TNfwz": {
+          "type": "ai_gen_block_8953eb6",
+          "settings": {
+            "desktop_width_percent": 100,
+            "eyebrow": "<h5>OUR STORY</h5>",
+            "heading": "<h2><strong>For Every Kiss.<br/>For Every Cry.</strong></h2>",
+            "paragraph_one": "<p><strong>Kiss and Kry began with a simple belief: the very first things a baby wears should be the softest, kindest things they ever touch.</strong></p>",
+            "paragraph_two": "<p>So we chose bamboo, kept every design simple to dress and easy to love, and finished each piece with care. Considered essentials, made to bring a little more meaning to every day.</p>",
+            "signature": "<p>With love, Team Kiss and Kry</p>",
+            "tagline": "<p>Thoughtfully made. For every comfort.</p>",
+            "badge_1": "<p><strong>Thoughtfully made</strong></p>",
+            "badge_1_icon": "sparkle",
+            "badge_2": "<p><strong>Bamboo viscose</strong></p>",
+            "badge_2_icon": "leaf",
+            "badge_3": "<p><strong>Everyday comfort</strong></p>",
+            "badge_3_icon": "heart",
+            "story_image": "shopify://shop_images/DSC03126-copy.jpg",
+            "detail_image": "shopify://shop_images/DSC03113-copy.webp",
+            "quote": "<p>As gentle as a first kiss. As comforting as a hug after every cry.</p>",
+            "attribution": "<p>THE KISS AND KRY PROMISE</p>",
+            "background_color": "#F2F3EE",
+            "heading_color": "#626B4C",
+            "body_color": "#858575",
+            "quote_background": "#626B4C",
+            "section_padding": 65,
+            "image_height": 205,
+            "image_radius": 18,
+            "heading_font": "montserrat_n7",
+            "body_font": "montserrat_n4"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_8953eb6_6TNfwz"
       ],
       "settings": {
         "content_direction": "column",
@@ -714,6 +782,7 @@
     "1793096834f17255ea",
     "17932706845d413504",
     "179362741998f798f0",
-    "179363590433a4f149"
+    "179363590433a4f149",
+    "17936373274cfbb107"
   ]
 }
