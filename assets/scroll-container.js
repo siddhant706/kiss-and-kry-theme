@@ -52,12 +52,10 @@ function scrollTo(options) {
  * `pageshow` fires on every navigation (both bfcache and fresh loads). `popstate` is not
  * used because it doesn't fire for cross-document back navigation.
  */
-if (SQUEEZE_QUERY.matches) {
-  history.scrollRestoration = 'manual';
-}
+history.scrollRestoration = 'manual';
 
 SQUEEZE_QUERY.addEventListener('change', () => {
-  history.scrollRestoration = SQUEEZE_QUERY.matches ? 'manual' : 'auto';
+  history.scrollRestoration = 'manual';
 });
 
 /**
@@ -86,11 +84,25 @@ function restoreSavedScrollTop(savedScrollTop) {
   const maxScrollTop = Math.max(0, container.scrollHeight - container.clientHeight);
   const targetScrollTop = Math.min(savedScrollTop, maxScrollTop);
 
-  // Use scrollTo with 'instant' to override CSS scroll-behavior: smooth on .page-wrapper
-  container.scrollTo({ top: targetScrollTop, behavior: 'instant' });
+  // Temporarily bypass smooth scrolling so restoration is instant without a visible glide
+  const prevBehavior = container.style.scrollBehavior;
+  container.style.scrollBehavior = 'auto';
+  container.scrollTop = targetScrollTop;
+  container.style.scrollBehavior = prevBehavior;
 }
 
-window.addEventListener('pageshow', () => {
+window.addEventListener('pageshow', (event) => {
+  // bfcache restores keep their scroll position natively
+  if (event.persisted || window.location.hash) return;
+
+  // Only back/forward navigations restore a saved position. Fresh loads and reloads always start at the top,
+  // otherwise the position saved on `pagehide` re-scrolls the page to wherever the visitor left it.
+  const navEntry = window.performance?.getEntriesByType?.('navigation')?.[0];
+  if (navEntry && navEntry.type !== 'back_forward') {
+    restoreSavedScrollTop(0);
+    return;
+  }
+
   const scrollTop = history.state?.scrollTop;
   if (scrollTop == null) return;
 
@@ -113,6 +125,8 @@ history.pushState = function (state, title, url) {
 };
 
 window.addEventListener('popstate', () => {
+  if (window.location.hash) return;
+
   const scrollTop = history.state?.scrollTop;
   if (scrollTop == null) return;
 

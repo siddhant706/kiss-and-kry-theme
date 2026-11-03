@@ -1,9 +1,13 @@
 {% doc %}
   Cover hero: full-width cover image with eyebrow, heading, subheading and context at the top left,
   trust indicators at the bottom left, and a subheading, supporting text and CTA at the bottom right.
-  Every component has a visibility toggle; every image has opacity and brightness controls.
-  Separate mobile image support with responsive focal point and opacity/brightness.
-  Customizable entrance animations with reduced-motion support. Fully responsive layout.
+  Orchestrated entrance animations:
+    1. Hero background: fade-in with subtle scale from 1.04 to 1.00 + gentle scroll parallax (max 15-20px).
+    2. Eyebrow: fade-in and slide upward.
+    3. Main heading: line-by-line reveal with smooth opacity and translateY.
+    4. Supporting text: fade-in with slight upward movement.
+    5. CTA button: fade-in with subtle scale-in + 300ms hover with 1.03 scale and 4px arrow move.
+    6. Circular trust indicators: appear with soft stagger.
 {% enddoc %}
 
 {%- liquid
@@ -171,9 +175,7 @@
   --cv-img-position: {{ s.image_position | default: 'center center' }};
   --cv-trust-opacity: {{ trust_opacity | divided_by: 100.0 }};
   --cv-trust-brightness: {{ trust_brightness }}%;
-  --cv-dur: {{ s.animation_duration | default: 800 }}ms;
-  --cv-delay: {{ s.animation_delay | default: 0 }}ms;
-  --cv-stagger: {{ s.animation_stagger | default: 100 }}ms;
+  --cv-parallax-y: 0px;
 }
 
 @media (max-width: 767px) {
@@ -213,14 +215,17 @@
   margin: 0;
 }
 
-.ai-cover-{{ ai_gen_id }}__media,
-.ai-cover-{{ ai_gen_id }}__shade {
-  position: absolute;
-  inset: 0;
-}
-
+/* Background image & gentle parallax bleed */
 .ai-cover-{{ ai_gen_id }}__media {
+  position: absolute;
+  top: -12px;
+  bottom: -12px;
+  left: 0;
+  right: 0;
+  height: calc(100% + 24px);
   z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 .ai-cover-{{ ai_gen_id }}__media picture {
@@ -237,9 +242,13 @@
   object-position: var(--cv-img-position);
   opacity: var(--cv-img-opacity);
   filter: brightness(var(--cv-img-brightness));
+  transform: translateY(var(--cv-parallax-y, 0px));
+  will-change: transform, opacity;
 }
 
 .ai-cover-{{ ai_gen_id }}__shade {
+  position: absolute;
+  inset: 0;
   z-index: 1;
   pointer-events: none;
   background: {{ s.overlay_color | default: '#000000' | color_modify: 'alpha', overlay_val | divided_by: 100.0 }};
@@ -392,10 +401,12 @@
   line-height: 1.55;
 }
 
+/* CTA Button & Hover interaction */
 .ai-cover-{{ ai_gen_id }}__button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
   min-height: 48px;
   padding: 12px 28px;
   border: 1px solid {{ s.button_border_color | default: '#5B6344' }};
@@ -407,13 +418,30 @@
   text-decoration: none;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 300ms cubic-bezier(0.25, 1, 0.5, 1),
+              background-color 300ms cubic-bezier(0.25, 1, 0.5, 1),
+              box-shadow 300ms cubic-bezier(0.25, 1, 0.5, 1),
+              opacity 300ms ease;
+  will-change: transform;
+}
+
+.ai-cover-{{ ai_gen_id }}__button-arrow {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  transition: transform 300ms cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
 }
 
 .ai-cover-{{ ai_gen_id }}__button:hover {
-  transform: translateY(-2px);
-  opacity: 0.92;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  transform: scale(1.03);
+  background: {{ s.button_background | default: '#5B6344' | color_darken: 5 }};
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
+}
+
+.ai-cover-{{ ai_gen_id }}__button:hover .ai-cover-{{ ai_gen_id }}__button-arrow {
+  transform: translateX(4px);
 }
 
 .ai-cover-{{ ai_gen_id }}__button:focus-visible {
@@ -449,43 +477,189 @@
   }
 }
 
-/* Animations */
+/* =====================================================================
+   ORCHESTRATED ENTRANCE ANIMATIONS
+   Order on initial page load:
+   1. Hero background: fade-in with subtle scale 1.04 to 1.00 (0ms)
+   2. Eyebrow: fade-in & slide upward (200ms)
+   3. Heading: line-by-line reveal with smooth opacity & translateY (380ms)
+   4. Supporting paragraphs: fade-in with slight upward movement (680ms, 820ms)
+   5. CTA button: fade-in & subtle scale-in (1100ms)
+   6. Decorative circular indicators: soft stagger appear (1200ms+)
+   ===================================================================== */
 {%- if enable_anim -%}
-.ai-cover-{{ ai_gen_id }} [data-cv-anim]:not([data-cv-anim='none']) {
-  animation-duration: var(--cv-dur);
-  animation-timing-function: cubic-bezier(.22, .61, .36, 1);
-  animation-fill-mode: backwards;
-  animation-delay: calc(var(--cv-delay) + var(--cv-i, 0) * var(--cv-stagger));
+/* 1. Hero background image: subtle fade-in with very small scale from 1.04 to 1 */
+.ai-cover-{{ ai_gen_id }}__media :is(img, svg) {
+  animation: cv-hero-bg-reveal 1.25s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
-.ai-cover-{{ ai_gen_id }} [data-cv-anim='fade-in'] { animation-name: cv-fade-in; }
-.ai-cover-{{ ai_gen_id }} [data-cv-anim='fade-up'] { animation-name: cv-fade-up; }
-.ai-cover-{{ ai_gen_id }} [data-cv-anim='fade-down'] { animation-name: cv-fade-down; }
-.ai-cover-{{ ai_gen_id }} [data-cv-anim='slide-left'] { animation-name: cv-slide-left; }
-.ai-cover-{{ ai_gen_id }} [data-cv-anim='slide-right'] { animation-name: cv-slide-right; }
-.ai-cover-{{ ai_gen_id }} [data-cv-anim='zoom-in'] { animation-name: cv-zoom-in; }
-.ai-cover-{{ ai_gen_id }} [data-cv-anim='zoom-out'] { animation-name: cv-zoom-out; }
 
-@keyframes cv-fade-in { from { opacity: 0; } to { opacity: 1; } }
-@keyframes cv-fade-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes cv-fade-down { from { opacity: 0; transform: translateY(-24px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes cv-slide-left { from { opacity: 0; transform: translateX(-32px); } to { opacity: 1; transform: translateX(0); } }
-@keyframes cv-slide-right { from { opacity: 0; transform: translateX(32px); } to { opacity: 1; transform: translateX(0); } }
-@keyframes cv-zoom-in { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: scale(1); } }
-@keyframes cv-zoom-out { from { opacity: 0; transform: scale(1.08); } to { opacity: 1; transform: scale(1); } }
-
-@media (prefers-reduced-motion: reduce) {
-  .ai-cover-{{ ai_gen_id }} [data-cv-anim] { animation: none !important; }
+@keyframes cv-hero-bg-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(1.04) translateY(0);
+  }
+  100% {
+    opacity: var(--cv-img-opacity);
+    transform: scale(1) translateY(var(--cv-parallax-y, 0px));
+  }
 }
-{%- else -%}
-.ai-cover-{{ ai_gen_id }} [data-cv-anim] {
-  animation: none !important;
+
+/* 2. Eyebrow text: fade-in and slide upward */
+.ai-cover-{{ ai_gen_id }}__eyebrow {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: cv-elem-fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 200ms;
+  will-change: transform, opacity;
+}
+
+/* 3. Main heading: line-by-line reveal */
+.ai-cover-{{ ai_gen_id }}__heading:not(.ai-cover-{{ ai_gen_id }}__heading--split) {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: cv-elem-fade-up 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 380ms;
+  will-change: transform, opacity;
+}
+
+.ai-cover-{{ ai_gen_id }}__heading--split {
+  opacity: 1;
+  transform: none;
+}
+
+.ai-cover-{{ ai_gen_id }}__heading-line {
+  display: block;
+  overflow: hidden;
+}
+
+.ai-cover-{{ ai_gen_id }}__heading-line-inner {
+  display: block;
+  opacity: 0;
+  transform: translateY(28px);
+  animation: cv-heading-line-reveal 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: calc(380ms + var(--line-idx, 0) * 160ms);
+  will-change: transform, opacity;
+}
+
+@keyframes cv-heading-line-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 4. Supporting text: fade-in with slight upward movement */
+.ai-cover-{{ ai_gen_id }}__subheading {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: cv-elem-fade-up 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 680ms;
+  will-change: transform, opacity;
+}
+
+.ai-cover-{{ ai_gen_id }}__context {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: cv-elem-fade-up 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 820ms;
+  will-change: transform, opacity;
+}
+
+.ai-cover-{{ ai_gen_id }}__right-title {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: cv-elem-fade-up 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 920ms;
+  will-change: transform, opacity;
+}
+
+.ai-cover-{{ ai_gen_id }}__right-copy {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: cv-elem-fade-up 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 1020ms;
+  will-change: transform, opacity;
+}
+
+@keyframes cv-elem-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 5. CTA button: fade-in and subtle scale-in */
+.ai-cover-{{ ai_gen_id }}__button {
+  opacity: 0;
+  transform: scale(0.92) translateY(12px);
+  animation: cv-cta-appear 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 1100ms;
+}
+
+@keyframes cv-cta-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* 6. Circular decorative indicators: appear with a soft stagger */
+.ai-cover-{{ ai_gen_id }}__trust-card {
+  opacity: 0;
+  transform: scale(0.86) translateY(14px);
+  animation: cv-circle-appear 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: calc(1200ms + var(--card-idx, 0) * 130ms);
+  will-change: transform, opacity;
+}
+
+@keyframes cv-circle-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.86) translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 {%- endif -%}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-cover-{{ ai_gen_id }}__eyebrow,
+  .ai-cover-{{ ai_gen_id }}__heading,
+  .ai-cover-{{ ai_gen_id }}__heading-line-inner,
+  .ai-cover-{{ ai_gen_id }}__subheading,
+  .ai-cover-{{ ai_gen_id }}__context,
+  .ai-cover-{{ ai_gen_id }}__right-title,
+  .ai-cover-{{ ai_gen_id }}__right-copy,
+  .ai-cover-{{ ai_gen_id }}__button,
+  .ai-cover-{{ ai_gen_id }}__trust-card,
+  .ai-cover-{{ ai_gen_id }}__media :is(img, svg) {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .ai-cover-{{ ai_gen_id }}__media :is(img, svg) {
+    opacity: var(--cv-img-opacity) !important;
+  }
+}
 {% endstyle %}
 
 <section class="ai-cover-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
   {%- if show_bg -%}
-    <div class="ai-cover-{{ ai_gen_id }}__media" data-cv-anim="{{ s.anim_background | default: 'fade-in' }}">
+    <div class="ai-cover-{{ ai_gen_id }}__media">
       {%- if bg != blank or bg_mobile != blank -%}
         {%- assign desktop_img = bg | default: bg_mobile -%}
         <picture>
@@ -521,25 +695,25 @@
 
   <div class="ai-cover-{{ ai_gen_id }}__left">
     {%- if show_eyebrow and s.eyebrow != blank -%}
-      <div class="ai-cover-{{ ai_gen_id }}__eyebrow" data-cv-anim="{{ s.anim_eyebrow | default: 'fade-up' }}" style="--cv-i:0">{{ s.eyebrow }}</div>
+      <div class="ai-cover-{{ ai_gen_id }}__eyebrow">{{ s.eyebrow }}</div>
     {%- endif -%}
     {%- if show_heading and s.heading != blank -%}
-      <div class="ai-cover-{{ ai_gen_id }}__heading" data-cv-anim="{{ s.anim_heading | default: 'fade-up' }}" style="--cv-i:1">{{ s.heading }}</div>
+      <div class="ai-cover-{{ ai_gen_id }}__heading">{{ s.heading }}</div>
     {%- endif -%}
     {%- if show_subheading and s.subheading != blank -%}
-      <div class="ai-cover-{{ ai_gen_id }}__subheading" data-cv-anim="{{ s.anim_subheading | default: 'fade-up' }}" style="--cv-i:2">{{ s.subheading }}</div>
+      <div class="ai-cover-{{ ai_gen_id }}__subheading">{{ s.subheading }}</div>
     {%- endif -%}
     {%- if show_context and s.context != blank -%}
-      <div class="ai-cover-{{ ai_gen_id }}__context{{ hide_context_class }}" data-cv-anim="{{ s.anim_context | default: 'fade-up' }}" style="--cv-i:3">{{ s.context }}</div>
+      <div class="ai-cover-{{ ai_gen_id }}__context{{ hide_context_class }}">{{ s.context }}</div>
     {%- endif -%}
   </div>
 
   {%- if has_trust or has_right -%}
     <div class="ai-cover-{{ ai_gen_id }}__bottom">
       {%- if has_trust -%}
-        <div class="ai-cover-{{ ai_gen_id }}__trust{{ hide_trust_class }}" role="group" aria-label="Trust indicators" data-cv-anim="{{ s.anim_trust | default: 'fade-up' }}" style="--cv-i:4">
+        <div class="ai-cover-{{ ai_gen_id }}__trust{{ hide_trust_class }}" role="group" aria-label="Trust indicators">
           {%- if show_trust_one and s.trust_image_one != blank -%}
-            <div class="ai-cover-{{ ai_gen_id }}__trust-card">
+            <div class="ai-cover-{{ ai_gen_id }}__trust-card" style="--card-idx:0">
               <div class="ai-cover-{{ ai_gen_id }}__circle">
                 <img src="{{ s.trust_image_one | image_url: width: 300 }}" alt="{{ s.trust_image_one.alt | default: s.trust_label_one | escape }}" width="{{ s.trust_image_one.width }}" height="{{ s.trust_image_one.height }}" loading="lazy">
               </div>
@@ -549,7 +723,7 @@
             </div>
           {%- endif -%}
           {%- if show_trust_two and s.trust_image_two != blank -%}
-            <div class="ai-cover-{{ ai_gen_id }}__trust-card">
+            <div class="ai-cover-{{ ai_gen_id }}__trust-card" style="--card-idx:1">
               <div class="ai-cover-{{ ai_gen_id }}__circle">
                 <img src="{{ s.trust_image_two | image_url: width: 300 }}" alt="{{ s.trust_image_two.alt | default: s.trust_label_two | escape }}" width="{{ s.trust_image_two.width }}" height="{{ s.trust_image_two.height }}" loading="lazy">
               </div>
@@ -559,7 +733,7 @@
             </div>
           {%- endif -%}
           {%- if show_trust_three and s.trust_image_three != blank -%}
-            <div class="ai-cover-{{ ai_gen_id }}__trust-card">
+            <div class="ai-cover-{{ ai_gen_id }}__trust-card" style="--card-idx:2">
               <div class="ai-cover-{{ ai_gen_id }}__circle">
                 <img src="{{ s.trust_image_three | image_url: width: 300 }}" alt="{{ s.trust_image_three.alt | default: s.trust_label_three | escape }}" width="{{ s.trust_image_three.width }}" height="{{ s.trust_image_three.height }}" loading="lazy">
               </div>
@@ -574,19 +748,72 @@
       {%- if has_right -%}
         <div class="ai-cover-{{ ai_gen_id }}__right{{ hide_right_class }}">
           {%- if show_right_heading and s.right_heading != blank -%}
-            <div class="ai-cover-{{ ai_gen_id }}__right-title" data-cv-anim="{{ s.anim_right_heading | default: 'fade-up' }}" style="--cv-i:5">{{ s.right_heading }}</div>
+            <div class="ai-cover-{{ ai_gen_id }}__right-title">{{ s.right_heading }}</div>
           {%- endif -%}
           {%- if show_right_context and s.right_context != blank -%}
-            <div class="ai-cover-{{ ai_gen_id }}__right-copy" data-cv-anim="{{ s.anim_right_context | default: 'fade-up' }}" style="--cv-i:6">{{ s.right_context }}</div>
+            <div class="ai-cover-{{ ai_gen_id }}__right-copy">{{ s.right_context }}</div>
           {%- endif -%}
           {%- if show_cta and s.cta_label != blank -%}
-            <a class="ai-cover-{{ ai_gen_id }}__button" href="{{ s.cta_link | default: routes.all_products_collection_url }}" data-cv-anim="{{ s.anim_button | default: 'zoom-in' }}" style="--cv-i:7">{{ s.cta_label | escape }}</a>
+            <a class="ai-cover-{{ ai_gen_id }}__button" href="{{ s.cta_link | default: routes.all_products_collection_url }}">
+              <span class="ai-cover-{{ ai_gen_id }}__button-text">{{ s.cta_label | escape }}</span>
+              <svg class="ai-cover-{{ ai_gen_id }}__button-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+                <path d="M6 3.5L10.5 8L6 12.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
           {%- endif -%}
         </div>
       {%- endif -%}
     </div>
   {%- endif -%}
 </section>
+
+<script>
+(function() {
+  const hero = document.querySelector('.ai-cover-{{ ai_gen_id }}');
+  if (!hero) return;
+
+  // Split heading into separate lines if <br> tags exist
+  const heading = hero.querySelector('.ai-cover-{{ ai_gen_id }}__heading');
+  if (heading) {
+    const targetEl = heading.querySelector('h1, h2, h3, h4, p') || heading;
+    const rawHTML = targetEl.innerHTML;
+    if (/<br\s*[\/]?>/i.test(rawHTML)) {
+      const parts = rawHTML.split(/<br\s*[\/]?>/i);
+      targetEl.innerHTML = parts.map((part, idx) => {
+        return `<span class="ai-cover-{{ ai_gen_id }}__heading-line"><span class="ai-cover-{{ ai_gen_id }}__heading-line-inner" style="--line-idx:${idx}">${part.trim()}</span></span>`;
+      }).join('');
+      heading.classList.add('ai-cover-{{ ai_gen_id }}__heading--split');
+    }
+  }
+
+  // Gentle scroll parallax (max 15-20px) keeping baby and product clearly visible
+  {%- if enable_anim -%}
+  const media = hero.querySelector('.ai-cover-{{ ai_gen_id }}__media');
+  if (media && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let ticking = false;
+    const maxParallax = 18; // gentle movement approx 15-20px
+    const updateParallax = () => {
+      const rect = hero.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      if (rect.bottom > 0 && rect.top < windowHeight) {
+        const progress = Math.min(1, Math.max(0, -rect.top / Math.max(rect.height, 1)));
+        const translateY = progress * maxParallax;
+        media.style.setProperty('--cv-parallax-y', `${translateY.toFixed(1)}px`);
+      }
+      ticking = false;
+    };
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(updateParallax);
+        ticking = true;
+      }
+    }, { passive: true });
+    updateParallax();
+  }
+  {%- endif -%}
+})();
+</script>
 
 {% schema %}
 {
@@ -697,88 +924,7 @@
     { "type": "range", "id": "button_radius", "label": "Corner radius", "min": 0, "max": 30, "step": 2, "unit": "px", "default": 30 },
 
     { "type": "header", "content": "Animations" },
-    { "type": "checkbox", "id": "enable_animations", "label": "Enable entrance animations", "default": true },
-    { "type": "range", "id": "animation_duration", "label": "Duration", "min": 200, "max": 2000, "step": 100, "unit": "ms", "default": 800 },
-    { "type": "range", "id": "animation_delay", "label": "Start delay", "min": 0, "max": 1500, "step": 100, "unit": "ms", "default": 0 },
-    { "type": "range", "id": "animation_stagger", "label": "Delay between components", "min": 0, "max": 500, "step": 50, "unit": "ms", "default": 100, "info": "Each component starts this much later than the one before it. Animations are skipped for visitors who prefer reduced motion." },
-    { "type": "select", "id": "anim_background", "label": "Background image", "options": [
-      { "value": "none", "label": "None" },
-      { "value": "fade-in", "label": "Fade in" },
-      { "value": "zoom-in", "label": "Zoom in" },
-      { "value": "zoom-out", "label": "Zoom out" }
-    ], "default": "fade-in" },
-    { "type": "select", "id": "anim_eyebrow", "label": "Eyebrow", "options": [
-      { "value": "none", "label": "None" },
-      { "value": "fade-in", "label": "Fade in" },
-      { "value": "fade-up", "label": "Fade up" },
-      { "value": "fade-down", "label": "Fade down" },
-      { "value": "slide-left", "label": "Slide from left" },
-      { "value": "slide-right", "label": "Slide from right" },
-      { "value": "zoom-in", "label": "Zoom in" }
-    ], "default": "fade-up" },
-    { "type": "select", "id": "anim_heading", "label": "Heading", "options": [
-      { "value": "none", "label": "None" },
-      { "value": "fade-in", "label": "Fade in" },
-      { "value": "fade-up", "label": "Fade up" },
-      { "value": "fade-down", "label": "Fade down" },
-      { "value": "slide-left", "label": "Slide from left" },
-      { "value": "slide-right", "label": "Slide from right" },
-      { "value": "zoom-in", "label": "Zoom in" }
-    ], "default": "fade-up" },
-    { "type": "select", "id": "anim_subheading", "label": "Subheading", "options": [
-      { "value": "none", "label": "None" },
-      { "value": "fade-in", "label": "Fade in" },
-      { "value": "fade-up", "label": "Fade up" },
-      { "value": "fade-down", "label": "Fade down" },
-      { "value": "slide-left", "label": "Slide from left" },
-      { "value": "slide-right", "label": "Slide from right" },
-      { "value": "zoom-in", "label": "Zoom in" }
-    ], "default": "fade-up" },
-    { "type": "select", "id": "anim_context", "label": "Context", "options": [
-      { "value": "none", "label": "None" },
-      { "value": "fade-in", "label": "Fade in" },
-      { "value": "fade-up", "label": "Fade up" },
-      { "value": "fade-down", "label": "Fade down" },
-      { "value": "slide-left", "label": "Slide from left" },
-      { "value": "slide-right", "label": "Slide from right" },
-      { "value": "zoom-in", "label": "Zoom in" }
-    ], "default": "fade-up" },
-    { "type": "select", "id": "anim_trust", "label": "Trust indicators", "options": [
-      { "value": "none", "label": "None" },
-      { "value": "fade-in", "label": "Fade in" },
-      { "value": "fade-up", "label": "Fade up" },
-      { "value": "fade-down", "label": "Fade down" },
-      { "value": "slide-left", "label": "Slide from left" },
-      { "value": "slide-right", "label": "Slide from right" },
-      { "value": "zoom-in", "label": "Zoom in" }
-    ], "default": "fade-up" },
-    { "type": "select", "id": "anim_right_heading", "label": "Right subheading", "options": [
-      { "value": "none", "label": "None" },
-      { "value": "fade-in", "label": "Fade in" },
-      { "value": "fade-up", "label": "Fade up" },
-      { "value": "fade-down", "label": "Fade down" },
-      { "value": "slide-left", "label": "Slide from left" },
-      { "value": "slide-right", "label": "Slide from right" },
-      { "value": "zoom-in", "label": "Zoom in" }
-    ], "default": "fade-up" },
-    { "type": "select", "id": "anim_right_context", "label": "Right supporting text", "options": [
-      { "value": "none", "label": "None" },
-      { "value": "fade-in", "label": "Fade in" },
-      { "value": "fade-up", "label": "Fade up" },
-      { "value": "fade-down", "label": "Fade down" },
-      { "value": "slide-left", "label": "Slide from left" },
-      { "value": "slide-right", "label": "Slide from right" },
-      { "value": "zoom-in", "label": "Zoom in" }
-    ], "default": "fade-up" },
-    { "type": "select", "id": "anim_button", "label": "Button", "options": [
-      { "value": "none", "label": "None" },
-      { "value": "fade-in", "label": "Fade in" },
-      { "value": "fade-up", "label": "Fade up" },
-      { "value": "fade-down", "label": "Fade down" },
-      { "value": "slide-left", "label": "Slide from left" },
-      { "value": "slide-right", "label": "Slide from right" },
-      { "value": "zoom-in", "label": "Zoom in" }
-    ], "default": "zoom-in" }
+    { "type": "checkbox", "id": "enable_animations", "label": "Enable animations", "default": true }
   ],
   "presets": [{ "name": "Cover hero" }]
 }
