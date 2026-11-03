@@ -395,10 +395,671 @@
     , make all the text in this section as rich text, fix the badges perfectly might look good and professionally made and perfectly aligned
 {% enddoc %}
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
 {% style %}
-.ai-story-{{ ai_gen_id }}{display:block;width:{{ block.settings.desktop_width_percent }}%;max-width:100%;margin:auto;background:{{ block.settings.background_color }};box-sizing:border-box}.ai-story-{{ ai_gen_id }} *{box-sizing:border-box}.ai-story-{{ ai_gen_id }}__inner{max-width:1200px;margin:auto;padding:{{ block.settings.section_padding }}px 55px;display:grid;grid-template-columns:46% 54%;align-items:center}.ai-story-{{ ai_gen_id }}__copy{max-width:440px;padding-right:28px}.ai-story-{{ ai_gen_id }}__eyebrow{margin:0 0 17px;color:#777D5D;font:500 10px/1.4 {{ block.settings.body_font.family }},sans-serif;letter-spacing:2px;text-transform:uppercase}.ai-story-{{ ai_gen_id }}__heading{margin:0 0 19px;color:{{ block.settings.heading_color }};font:800 40px/1.05 {{ block.settings.heading_font.family }},sans-serif;letter-spacing:-1.5px}.ai-story-{{ ai_gen_id }}__heading p,.ai-story-{{ ai_gen_id }}__paragraph p,.ai-story-{{ ai_gen_id }}__quote-text p,.ai-story-{{ ai_gen_id }}__signoff p,.ai-story-{{ ai_gen_id }}__tagline p,.ai-story-{{ ai_gen_id }}__eyebrow p,.ai-story-{{ ai_gen_id }}__attribution p,.ai-story-{{ ai_gen_id }}__badge-label p{margin:0}.ai-story-{{ ai_gen_id }}__paragraph{margin:0 0 12px;color:{{ block.settings.body_color }};font:400 12px/1.65 {{ block.settings.body_font.family }},sans-serif}.ai-story-{{ ai_gen_id }}__signature{margin-top:19px}.ai-story-{{ ai_gen_id }}__signoff{margin:0 0 4px;color:{{ block.settings.heading_color }};font:700 12px/1.5 {{ block.settings.heading_font.family }},sans-serif}.ai-story-{{ ai_gen_id }}__tagline{margin:0;color:#777D5D;font:400 10px/1.5 {{ block.settings.body_font.family }},sans-serif}.ai-story-{{ ai_gen_id }}__badges{display:flex;align-items:center;gap:8px;margin-top:20px;flex-wrap:nowrap;width:100%}.ai-story-{{ ai_gen_id }}__badge{min-height:32px;display:inline-flex;flex:0 1 auto;align-items:center;justify-content:flex-start;gap:7px;padding:6px 10px;border:1px solid #EAE5D4;border-radius:999px;background:#fff;color:#626B4C;font:500 9px/1.2 {{ block.settings.body_font.family }},sans-serif;white-space:nowrap}.ai-story-{{ ai_gen_id }}__badge-label{display:block}.ai-story-{{ ai_gen_id }}__badge-label p{color:inherit;font:inherit;white-space:nowrap}.ai-story-{{ ai_gen_id }}__icon{width:18px;height:18px;flex:0 0 18px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;background:#EAE5D4;color:#626B4C}.ai-story-{{ ai_gen_id }}__icon svg{width:11px;height:11px;display:block}.ai-story-{{ ai_gen_id }}__visual{min-width:0;padding-left:18px}.ai-story-{{ ai_gen_id }}__collage{position:relative;width:100%;max-width:600px;min-height:390px}.ai-story-{{ ai_gen_id }}__photo,.ai-story-{{ ai_gen_id }}__placeholder{position:absolute;top:0;right:0;width:77%;height:{{ block.settings.image_height }}px;object-fit:cover;border-radius:{{ block.settings.image_radius }}px}.ai-story-{{ ai_gen_id }}__placeholder,.ai-story-{{ ai_gen_id }}__small-placeholder{overflow:hidden;background:#EAE5D4}.ai-story-{{ ai_gen_id }}__placeholder svg,.ai-story-{{ ai_gen_id }}__small-placeholder svg{width:100%;height:100%;display:block}.ai-story-{{ ai_gen_id }}__photo-small,.ai-story-{{ ai_gen_id }}__small-placeholder{position:absolute;z-index:2;top:165px;left:0;width:43%;height:225px;object-fit:cover;border:5px solid #fff;border-radius:12px}.ai-story-{{ ai_gen_id }}__quote{position:absolute;top:240px;right:0;z-index:1;width:44%;min-height:150px;padding:16px 18px;border-radius:16px;background:{{ block.settings.quote_background }};display:flex;flex-direction:column;justify-content:center}.ai-story-{{ ai_gen_id }}__quote-mark{margin:0;color:#E7B13A;font-size:30px;font-weight:700;line-height:.9}.ai-story-{{ ai_gen_id }}__quote-text{margin:0 0 9px;color:#F5F3E7;font:600 15px/1.4 {{ block.settings.heading_font.family }},sans-serif}.ai-story-{{ ai_gen_id }}__attribution{margin:0;color:#EAE5D4;font:500 8px/1.4 {{ block.settings.body_font.family }},sans-serif;letter-spacing:2px}.ai-story-{{ ai_gen_id }}__empty{position:absolute;inset:auto 8px 8px;color:#626B4C;font-size:10px;text-align:center}@media(max-width:989px){.ai-story-{{ ai_gen_id }}__inner{padding:48px 32px;grid-template-columns:1fr 1fr}.ai-story-{{ ai_gen_id }}__copy{padding-right:18px}.ai-story-{{ ai_gen_id }}__visual{padding-left:8px}.ai-story-{{ ai_gen_id }}__badges{gap:5px;flex-wrap:wrap}.ai-story-{{ ai_gen_id }}__badge{padding:5px 8px;font-size:8px}.ai-story-{{ ai_gen_id }}__collage{min-height:340px}.ai-story-{{ ai_gen_id }}__photo,.ai-story-{{ ai_gen_id }}__placeholder{height:175px}.ai-story-{{ ai_gen_id }}__photo-small,.ai-story-{{ ai_gen_id }}__small-placeholder{top:142px;height:195px}.ai-story-{{ ai_gen_id }}__quote{top:205px;min-height:132px;padding:13px}.ai-story-{{ ai_gen_id }}__quote-text{font-size:13px}}@media(max-width:749px){.ai-story-{{ ai_gen_id }}{width:100%}.ai-story-{{ ai_gen_id }}__inner{padding:42px 22px;grid-template-columns:1fr;gap:30px}.ai-story-{{ ai_gen_id }}__copy,.ai-story-{{ ai_gen_id }}__visual{max-width:100%;padding:0}.ai-story-{{ ai_gen_id }}__heading{font-size:30px}.ai-story-{{ ai_gen_id }}__badges{flex-wrap:wrap;gap:8px}.ai-story-{{ ai_gen_id }}__badge{font-size:9px;padding:6px 10px}.ai-story-{{ ai_gen_id }}__collage{min-height:340px}.ai-story-{{ ai_gen_id }}__photo,.ai-story-{{ ai_gen_id }}__placeholder{width:78%;height:175px}.ai-story-{{ ai_gen_id }}__photo-small,.ai-story-{{ ai_gen_id }}__small-placeholder{top:142px;width:44%;height:190px}.ai-story-{{ ai_gen_id }}__quote{top:208px;width:48%;min-height:126px;padding:12px}.ai-story-{{ ai_gen_id }}__quote-text{font-size:12px}.ai-story-{{ ai_gen_id }}__attribution{font-size:7px;letter-spacing:1px}}
+  .ai-story-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent | default: 100 }}%;
+    max-width: 100%;
+    margin: auto;
+    background: {{ block.settings.background_color | default: '#F5F3E7' }};
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .ai-story-{{ ai_gen_id }} *,
+  .ai-story-{{ ai_gen_id }} *:before,
+  .ai-story-{{ ai_gen_id }} *:after {
+    box-sizing: border-box;
+  }
+
+  .ai-story-{{ ai_gen_id }}__inner {
+    max-width: 1200px;
+    margin: auto;
+    padding: {{ block.settings.section_padding | default: 65 }}px 55px;
+    display: grid;
+    grid-template-columns: 46% 54%;
+    align-items: center;
+  }
+
+  .ai-story-{{ ai_gen_id }}__copy {
+    max-width: 440px;
+    padding-right: 28px;
+  }
+
+  /* Eyebrow text fades upward */
+  .ai-story-{{ ai_gen_id }}__eyebrow {
+    margin: 0 0 17px;
+    color: #777d5d;
+    font: 500 10px/1.4 {{ block.settings.body_font.family | default: 'Montserrat' }}, sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 600ms ease 60ms,
+                transform 600ms cubic-bezier(0.16, 1, 0.3, 1) 60ms;
+    will-change: opacity, transform;
+  }
+
+  .ai-story-{{ ai_gen_id }}.is-visible .ai-story-{{ ai_gen_id }}__eyebrow {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Main heading reveals line by line */
+  .ai-story-{{ ai_gen_id }}__heading {
+    margin: 0 0 19px;
+    color: {{ block.settings.heading_color | default: '#626B4C' }};
+    font: 800 40px/1.05 {{ block.settings.heading_font.family | default: 'Montserrat' }}, sans-serif;
+    letter-spacing: -1.5px;
+  }
+
+  .ai-story-{{ ai_gen_id }}__heading-line {
+    display: block;
+    overflow: hidden;
+  }
+
+  .ai-story-{{ ai_gen_id }}__heading-line-inner {
+    display: block;
+    opacity: 0;
+    transform: translateY(105%);
+    transition: opacity 700ms cubic-bezier(0.16, 1, 0.3, 1) calc(140ms + var(--line-idx, 0) * 130ms),
+                transform 700ms cubic-bezier(0.16, 1, 0.3, 1) calc(140ms + var(--line-idx, 0) * 130ms);
+    will-change: opacity, transform;
+  }
+
+  .ai-story-{{ ai_gen_id }}.is-visible .ai-story-{{ ai_gen_id }}__heading-line-inner {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ai-story-{{ ai_gen_id }}__heading p,
+  .ai-story-{{ ai_gen_id }}__heading h2,
+  .ai-story-{{ ai_gen_id }}__paragraph p,
+  .ai-story-{{ ai_gen_id }}__quote-text p,
+  .ai-story-{{ ai_gen_id }}__signoff p,
+  .ai-story-{{ ai_gen_id }}__tagline p,
+  .ai-story-{{ ai_gen_id }}__eyebrow p,
+  .ai-story-{{ ai_gen_id }}__attribution p,
+  .ai-story-{{ ai_gen_id }}__badge-label p {
+    margin: 0;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+  }
+
+  /* Paragraphs appear with a staggered fade-in */
+  .ai-story-{{ ai_gen_id }}__paragraph {
+    margin: 0 0 12px;
+    color: {{ block.settings.body_color | default: '#858575' }};
+    font: 400 12px/1.65 {{ block.settings.body_font.family | default: 'Montserrat' }}, sans-serif;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 650ms ease calc(380ms + var(--p-idx, 0) * 110ms),
+                transform 650ms cubic-bezier(0.16, 1, 0.3, 1) calc(380ms + var(--p-idx, 0) * 110ms);
+    will-change: opacity, transform;
+  }
+
+  .ai-story-{{ ai_gen_id }}.is-visible .ai-story-{{ ai_gen_id }}__paragraph {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Brand signature appears last */
+  .ai-story-{{ ai_gen_id }}__signature {
+    margin-top: 19px;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 650ms ease 620ms,
+                transform 650ms cubic-bezier(0.16, 1, 0.3, 1) 620ms;
+    will-change: opacity, transform;
+  }
+
+  .ai-story-{{ ai_gen_id }}.is-visible .ai-story-{{ ai_gen_id }}__signature {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ai-story-{{ ai_gen_id }}__signoff {
+    margin: 0 0 4px;
+    color: {{ block.settings.heading_color | default: '#626B4C' }};
+    font: 700 12px/1.5 {{ block.settings.heading_font.family | default: 'Montserrat' }}, sans-serif;
+  }
+
+  .ai-story-{{ ai_gen_id }}__tagline {
+    margin: 0;
+    color: #777d5d;
+    font: 400 10px/1.5 {{ block.settings.body_font.family | default: 'Montserrat' }}, sans-serif;
+  }
+
+  /* Value badges reveal sequentially */
+  .ai-story-{{ ai_gen_id }}__badges {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+
+  @keyframes ai-story-badge-in-{{ ai_gen_id }} {
+    0% {
+      opacity: 0;
+      transform: translateY(12px) scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .ai-story-{{ ai_gen_id }}__badge {
+    min-height: 32px;
+    display: inline-flex;
+    flex: 0 1 auto;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 7px;
+    padding: 6px 10px;
+    border: 1px solid #eae5d4;
+    border-radius: 999px;
+    background: #fff;
+    color: #626b4c;
+    font: 500 9px/1.2 {{ block.settings.body_font.family | default: 'Montserrat' }}, sans-serif;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(12px) scale(0.9);
+    will-change: opacity, transform;
+    cursor: default;
+  }
+
+  .ai-story-{{ ai_gen_id }}.is-visible .ai-story-{{ ai_gen_id }}__badge {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    animation: ai-story-badge-in-{{ ai_gen_id }} 550ms cubic-bezier(0.34, 1.3, 0.64, 1) calc(700ms + var(--badge-idx, 0) * 90ms) backwards;
+    transition: transform 260ms cubic-bezier(0.2, 1, 0.3, 1),
+                box-shadow 260ms ease,
+                border-color 260ms ease;
+  }
+
+  /* Hover effect: Value badges scale to 1.03 */
+  .ai-story-{{ ai_gen_id }}.is-visible .ai-story-{{ ai_gen_id }}__badge:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 16px rgba(98, 107, 76, 0.12);
+    border-color: #d8d2be;
+  }
+
+  .ai-story-{{ ai_gen_id }}__badge-label {
+    display: block;
+  }
+
+  .ai-story-{{ ai_gen_id }}__badge-label p {
+    color: inherit;
+    font: inherit;
+    white-space: nowrap;
+  }
+
+  .ai-story-{{ ai_gen_id }}__icon {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #eae5d4;
+    color: #626b4c;
+    transition: transform 260ms ease;
+  }
+
+  .ai-story-{{ ai_gen_id }}.is-visible .ai-story-{{ ai_gen_id }}__badge:hover .ai-story-{{ ai_gen_id }}__icon {
+    transform: scale(1.08);
+  }
+
+  .ai-story-{{ ai_gen_id }}__icon svg {
+    width: 11px;
+    height: 11px;
+    display: block;
+  }
+
+  /* RIGHT COLUMN: Image Collage */
+  .ai-story-{{ ai_gen_id }}__visual {
+    min-width: 0;
+    padding-left: 18px;
+  }
+
+  .ai-story-{{ ai_gen_id }}__collage {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    min-height: 390px;
+  }
+
+  /* Main baby image reveals using a soft mask or clip transition */
+  .ai-story-{{ ai_gen_id }}__photo-wrap {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 77%;
+    height: {{ block.settings.image_height | default: 205 }}px;
+    border-radius: {{ block.settings.image_radius | default: 18 }}px;
+    overflow: hidden;
+    opacity: 0;
+    clip-path: inset(0 0 20% 0 round {{ block.settings.image_radius | default: 18 }}px);
+    transform: translateY(22px);
+    transition: opacity 850ms cubic-bezier(0.16, 1, 0.3, 1) 140ms,
+                clip-path 900ms cubic-bezier(0.16, 1, 0.3, 1) 140ms,
+                transform 850ms cubic-bezier(0.16, 1, 0.3, 1) 140ms,
+                box-shadow 400ms ease;
+    will-change: opacity, clip-path, transform;
+  }
+
+  .ai-story-{{ ai_gen_id }}.is-visible .ai-story-{{ ai_gen_id }}__photo-wrap {
+    opacity: 1;
+    clip-path: inset(0 0 0 0 round {{ block.settings.image_radius | default: 18 }}px);
+    transform: translateY(0);
+  }
+
+  .ai-story-{{ ai_gen_id }}__photo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+    transform: scale(1);
+    transition: transform 450ms cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
+  }
+
+  /* Hover: Images scale to 1.025 */
+  .ai-story-{{ ai_gen_id }}__photo-wrap:hover .ai-story-{{ ai_gen_id }}__photo {
+    transform: scale(1.025);
+  }
+
+  .ai-story-{{ ai_gen_id }}__photo-wrap:hover {
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
+  }
+
+  .ai-story-{{ ai_gen_id }}__placeholder,
+  .ai-story-{{ ai_gen_id }}__small-placeholder {
+    overflow: hidden;
+    background: #eae5d4;
+  }
+
+  .ai-story-{{ ai_gen_id }}__placeholder svg,
+  .ai-story-{{ ai_gen_id }}__small-placeholder svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Secondary baby image enters with a subtle upward movement */
+  .ai-story-{{ ai_gen_id }}__photo-small-wrap {
+    position: absolute;
+    z-index: 2;
+    top: 165px;
+    left: 0;
+    width: 43%;
+    height: 225px;
+    border: 5px solid #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 800ms cubic-bezier(0.16, 1, 0.3, 1) 320ms,
+                transform 800ms cubic-bezier(0.16, 1, 0.3, 1) 320ms,
+                box-shadow 400ms ease;
+    will-change: opacity, transform;
+  }
+
+  .ai-story-{{ ai_gen_id }}.is-visible .ai-story-{{ ai_gen_id }}__photo-small-wrap {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ai-story-{{ ai_gen_id }}__photo-small {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 7px;
+    transform: scale(1);
+    transition: transform 450ms cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
+  }
+
+  /* Hover: Images scale to 1.025 */
+  .ai-story-{{ ai_gen_id }}__photo-small-wrap:hover .ai-story-{{ ai_gen_id }}__photo-small {
+    transform: scale(1.025);
+  }
+
+  .ai-story-{{ ai_gen_id }}__photo-small-wrap:hover {
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
+  }
+
+  /* Quote card fades in with a gentle scale transition */
+  .ai-story-{{ ai_gen_id }}__quote {
+    position: absolute;
+    top: 240px;
+    right: 0;
+    z-index: 1;
+    width: 44%;
+    min-height: 150px;
+    padding: 16px 18px;
+    border-radius: 16px;
+    background: {{ block.settings.quote_background | default: '#626B4C' }};
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(98, 107, 76, 0.16);
+    opacity: 0;
+    transform: scale(0.92) translateY(16px);
+    transition: opacity 750ms cubic-bezier(0.16, 1, 0.3, 1) 480ms,
+                transform 750ms cubic-bezier(0.16, 1, 0.3, 1) 480ms,
+                box-shadow 350ms ease;
+    will-change: opacity, transform;
+    cursor: default;
+  }
+
+  .ai-story-{{ ai_gen_id }}.is-visible .ai-story-{{ ai_gen_id }}__quote {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  /* Hover: Quote card receives a very subtle elevation effect */
+  .ai-story-{{ ai_gen_id }}.is-visible .ai-story-{{ ai_gen_id }}__quote:hover {
+    transform: translateY(-3px) scale(1.01);
+    box-shadow: 0 16px 36px rgba(98, 107, 76, 0.28);
+  }
+
+  .ai-story-{{ ai_gen_id }}__quote-mark {
+    margin: 0;
+    color: #e7b13a;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 0.9;
+    transition: transform 300ms ease;
+  }
+
+  .ai-story-{{ ai_gen_id }}.is-visible .ai-story-{{ ai_gen_id }}__quote:hover .ai-story-{{ ai_gen_id }}__quote-mark {
+    transform: scale(1.06) translateY(-1px);
+  }
+
+  .ai-story-{{ ai_gen_id }}__quote-text {
+    margin: 0 0 9px;
+    color: #f5f3e7;
+    font: 600 15px/1.4 {{ block.settings.heading_font.family | default: 'Montserrat' }}, sans-serif;
+  }
+
+  .ai-story-{{ ai_gen_id }}__attribution {
+    margin: 0;
+    color: #eae5d4;
+    font: 500 8px/1.4 {{ block.settings.body_font.family | default: 'Montserrat' }}, sans-serif;
+    letter-spacing: 2px;
+  }
+
+  .ai-story-{{ ai_gen_id }}__empty {
+    position: absolute;
+    inset: auto 8px 8px;
+    color: #626b4c;
+    font-size: 10px;
+    text-align: center;
+  }
+
+  /* Tablet Adjustments */
+  @media (max-width: 989px) {
+    .ai-story-{{ ai_gen_id }}__inner {
+      padding: 48px 32px;
+      grid-template-columns: 1fr 1fr;
+    }
+    .ai-story-{{ ai_gen_id }}__copy {
+      padding-right: 18px;
+    }
+    .ai-story-{{ ai_gen_id }}__visual {
+      padding-left: 8px;
+    }
+    .ai-story-{{ ai_gen_id }}__badges {
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+    .ai-story-{{ ai_gen_id }}__badge {
+      padding: 5px 8px;
+      font-size: 8px;
+    }
+    .ai-story-{{ ai_gen_id }}__collage {
+      min-height: 340px;
+    }
+    .ai-story-{{ ai_gen_id }}__photo-wrap {
+      height: 175px;
+    }
+    .ai-story-{{ ai_gen_id }}__photo-small-wrap {
+      top: 142px;
+      height: 195px;
+    }
+    .ai-story-{{ ai_gen_id }}__quote {
+      top: 205px;
+      min-height: 132px;
+      padding: 13px;
+    }
+    .ai-story-{{ ai_gen_id }}__quote-text {
+      font-size: 13px;
+    }
+  }
+
+  /* Mobile Adjustments */
+  @media (max-width: 749px) {
+    .ai-story-{{ ai_gen_id }} {
+      width: 100%;
+    }
+    .ai-story-{{ ai_gen_id }}__inner {
+      padding: 42px 22px;
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+    .ai-story-{{ ai_gen_id }}__copy,
+    .ai-story-{{ ai_gen_id }}__visual {
+      max-width: 100%;
+      padding: 0;
+    }
+    .ai-story-{{ ai_gen_id }}__heading {
+      font-size: 30px;
+    }
+    .ai-story-{{ ai_gen_id }}__badges {
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .ai-story-{{ ai_gen_id }}__badge {
+      font-size: 9px;
+      padding: 6px 10px;
+    }
+    .ai-story-{{ ai_gen_id }}__collage {
+      min-height: 340px;
+    }
+    .ai-story-{{ ai_gen_id }}__photo-wrap {
+      width: 78%;
+      height: 175px;
+    }
+    .ai-story-{{ ai_gen_id }}__photo-small-wrap {
+      top: 142px;
+      width: 44%;
+      height: 190px;
+    }
+    .ai-story-{{ ai_gen_id }}__quote {
+      top: 208px;
+      width: 48%;
+      min-height: 126px;
+      padding: 12px;
+    }
+    .ai-story-{{ ai_gen_id }}__quote-text {
+      font-size: 12px;
+    }
+    .ai-story-{{ ai_gen_id }}__attribution {
+      font-size: 7px;
+      letter-spacing: 1px;
+    }
+  }
+
+  /* Accessibility: Reduced Motion */
+  @media (prefers-reduced-motion: reduce) {
+    .ai-story-{{ ai_gen_id }}__eyebrow,
+    .ai-story-{{ ai_gen_id }}__heading-line-inner,
+    .ai-story-{{ ai_gen_id }}__paragraph,
+    .ai-story-{{ ai_gen_id }}__signature,
+    .ai-story-{{ ai_gen_id }}__badge,
+    .ai-story-{{ ai_gen_id }}__photo-wrap,
+    .ai-story-{{ ai_gen_id }}__photo,
+    .ai-story-{{ ai_gen_id }}__photo-small-wrap,
+    .ai-story-{{ ai_gen_id }}__photo-small,
+    .ai-story-{{ ai_gen_id }}__quote {
+      opacity: 1 !important;
+      transform: none !important;
+      clip-path: none !important;
+      animation: none !important;
+      transition: none !important;
+    }
+  }
 {% endstyle %}
-<section class="ai-story-{{ ai_gen_id }}" {{ block.shopify_attributes }}><div class="ai-story-{{ ai_gen_id }}__inner"><div class="ai-story-{{ ai_gen_id }}__copy"><div class="ai-story-{{ ai_gen_id }}__eyebrow">{{ block.settings.eyebrow }}</div><div class="ai-story-{{ ai_gen_id }}__heading">{{ block.settings.heading }}</div><div class="ai-story-{{ ai_gen_id }}__paragraph">{{ block.settings.paragraph_one }}</div><div class="ai-story-{{ ai_gen_id }}__paragraph">{{ block.settings.paragraph_two }}</div><div class="ai-story-{{ ai_gen_id }}__signature"><div class="ai-story-{{ ai_gen_id }}__signoff">{{ block.settings.signature }}</div><div class="ai-story-{{ ai_gen_id }}__tagline">{{ block.settings.tagline }}</div></div><div class="ai-story-{{ ai_gen_id }}__badges">{% for i in (1..3) %}{% assign label_key = 'badge_' | append: i %}{% assign icon_key = 'badge_' | append: i | append: '_icon' %}<span class="ai-story-{{ ai_gen_id }}__badge"><span class="ai-story-{{ ai_gen_id }}__icon" aria-hidden="true">{% case block.settings[icon_key] %}{% when 'leaf' %}<svg viewBox="0 0 16 16" fill="none"><path d="M14 2C7 2 3 4 3 8c0 2 1.5 3.5 3.5 3.5C11 11.5 14 7 14 2ZM2 14c2-4 5-6 9-8" stroke="currentColor" stroke-width="1.3"/></svg>{% when 'heart' %}<svg viewBox="0 0 16 16" fill="none"><path d="m8 14-5-5C0 6 4 2 7 5l1 1 1-1c3-3 7 1 4 4l-5 5Z" stroke="currentColor" stroke-width="1.3"/></svg>{% else %}<svg viewBox="0 0 16 16" fill="none"><path d="m8 1 1.3 4L13 7l-3.7 1.4L8 12 6.7 8.4 3 7l3.7-2L8 1Z" stroke="currentColor" stroke-width="1.1"/></svg>{% endcase %}</span><span class="ai-story-{{ ai_gen_id }}__badge-label">{{ block.settings[label_key] }}</span></span>{% endfor %}</div></div><div class="ai-story-{{ ai_gen_id }}__visual"><div class="ai-story-{{ ai_gen_id }}__collage">{% if block.settings.story_image %}<img class="ai-story-{{ ai_gen_id }}__photo" src="{{ block.settings.story_image | image_url: width: 1400 }}" alt="{{ block.settings.story_image.alt | escape }}" loading="lazy" width="{{ block.settings.story_image.width }}" height="{{ block.settings.story_image.height }}">{% else %}<div class="ai-story-{{ ai_gen_id }}__placeholder">{{ 'image' | placeholder_svg_tag }}<span class="ai-story-{{ ai_gen_id }}__empty">Add the main baby image</span></div>{% endif %}{% if block.settings.detail_image %}<img class="ai-story-{{ ai_gen_id }}__photo-small" src="{{ block.settings.detail_image | image_url: width: 900 }}" alt="{{ block.settings.detail_image.alt | escape }}" loading="lazy" width="{{ block.settings.detail_image.width }}" height="{{ block.settings.detail_image.height }}">{% else %}<div class="ai-story-{{ ai_gen_id }}__small-placeholder">{{ 'image' | placeholder_svg_tag }}<span class="ai-story-{{ ai_gen_id }}__empty">Add the secondary baby image</span></div>{% endif %}<div class="ai-story-{{ ai_gen_id }}__quote"><p class="ai-story-{{ ai_gen_id }}__quote-mark" aria-hidden="true">“</p><div class="ai-story-{{ ai_gen_id }}__quote-text">{{ block.settings.quote }}</div><div class="ai-story-{{ ai_gen_id }}__attribution">{{ block.settings.attribution }}</div></div></div></div></div></section>
+
+<story-brand-{{ ai_gen_id }} class="ai-story-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-story-{{ ai_gen_id }}__inner">
+    <div class="ai-story-{{ ai_gen_id }}__copy">
+      <div class="ai-story-{{ ai_gen_id }}__eyebrow">{{ block.settings.eyebrow }}</div>
+      <div class="ai-story-{{ ai_gen_id }}__heading">{{ block.settings.heading }}</div>
+      <div class="ai-story-{{ ai_gen_id }}__paragraph" style="--p-idx: 0;">{{ block.settings.paragraph_one }}</div>
+      <div class="ai-story-{{ ai_gen_id }}__paragraph" style="--p-idx: 1;">{{ block.settings.paragraph_two }}</div>
+      <div class="ai-story-{{ ai_gen_id }}__signature">
+        <div class="ai-story-{{ ai_gen_id }}__signoff">{{ block.settings.signature }}</div>
+        <div class="ai-story-{{ ai_gen_id }}__tagline">{{ block.settings.tagline }}</div>
+      </div>
+      <div class="ai-story-{{ ai_gen_id }}__badges">
+        {% for i in (1..3) %}
+          {% assign label_key = 'badge_' | append: i %}
+          {% assign icon_key = 'badge_' | append: i | append: '_icon' %}
+          {% assign badge_idx = forloop.index0 %}
+          <span class="ai-story-{{ ai_gen_id }}__badge" style="--badge-idx: {{ badge_idx }};">
+            <span class="ai-story-{{ ai_gen_id }}__icon" aria-hidden="true">
+              {% case block.settings[icon_key] %}
+                {% when 'leaf' %}
+                  <svg viewBox="0 0 16 16" fill="none"><path d="M14 2C7 2 3 4 3 8c0 2 1.5 3.5 3.5 3.5C11 11.5 14 7 14 2ZM2 14c2-4 5-6 9-8" stroke="currentColor" stroke-width="1.3"/></svg>
+                {% when 'heart' %}
+                  <svg viewBox="0 0 16 16" fill="none"><path d="m8 14-5-5C0 6 4 2 7 5l1 1 1-1c3-3 7 1 4 4l-5 5Z" stroke="currentColor" stroke-width="1.3"/></svg>
+                {% else %}
+                  <svg viewBox="0 0 16 16" fill="none"><path d="m8 1 1.3 4L13 7l-3.7 1.4L8 12 6.7 8.4 3 7l3.7-2L8 1Z" stroke="currentColor" stroke-width="1.1"/></svg>
+              {% endcase %}
+            </span>
+            <span class="ai-story-{{ ai_gen_id }}__badge-label">{{ block.settings[label_key] }}</span>
+          </span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="ai-story-{{ ai_gen_id }}__visual">
+      <div class="ai-story-{{ ai_gen_id }}__collage">
+        {% if block.settings.story_image %}
+          <div class="ai-story-{{ ai_gen_id }}__photo-wrap">
+            <img
+              class="ai-story-{{ ai_gen_id }}__photo"
+              src="{{ block.settings.story_image | image_url: width: 1400 }}"
+              alt="{{ block.settings.story_image.alt | default: 'Baby wearing yellow bamboo babywear' | escape }}"
+              loading="lazy"
+              width="{{ block.settings.story_image.width }}"
+              height="{{ block.settings.story_image.height }}"
+            >
+          </div>
+        {% else %}
+          <div class="ai-story-{{ ai_gen_id }}__photo-wrap ai-story-{{ ai_gen_id }}__placeholder">
+            {{ 'image' | placeholder_svg_tag }}
+            <span class="ai-story-{{ ai_gen_id }}__empty">Add the main baby image</span>
+          </div>
+        {% endif %}
+
+        {% if block.settings.detail_image %}
+          <div class="ai-story-{{ ai_gen_id }}__photo-small-wrap">
+            <img
+              class="ai-story-{{ ai_gen_id }}__photo-small"
+              src="{{ block.settings.detail_image | image_url: width: 900 }}"
+              alt="{{ block.settings.detail_image.alt | default: 'Baby resting comfortably on blanket' | escape }}"
+              loading="lazy"
+              width="{{ block.settings.detail_image.width }}"
+              height="{{ block.settings.detail_image.height }}"
+            >
+          </div>
+        {% else %}
+          <div class="ai-story-{{ ai_gen_id }}__photo-small-wrap ai-story-{{ ai_gen_id }}__small-placeholder">
+            {{ 'image' | placeholder_svg_tag }}
+            <span class="ai-story-{{ ai_gen_id }}__empty">Add the secondary baby image</span>
+          </div>
+        {% endif %}
+
+        <div class="ai-story-{{ ai_gen_id }}__quote">
+          <p class="ai-story-{{ ai_gen_id }}__quote-mark" aria-hidden="true">“</p>
+          <div class="ai-story-{{ ai_gen_id }}__quote-text">{{ block.settings.quote }}</div>
+          <div class="ai-story-{{ ai_gen_id }}__attribution">{{ block.settings.attribution }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</story-brand-{{ ai_gen_id }}>
+
+<script>
+  (() => {
+    const tag = 'story-brand-{{ ai_gen_id }}';
+    if (customElements.get(tag)) return;
+
+    class StoryBrand extends HTMLElement {
+      connectedCallback() {
+        this.initHeadingLines();
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          this.classList.add('is-visible');
+        } else if ('IntersectionObserver' in window) {
+          this.observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  this.classList.add('is-visible');
+                  this.observer?.disconnect();
+                }
+              });
+            },
+            { threshold: 0.15 }
+          );
+          this.observer.observe(this);
+        } else {
+          this.classList.add('is-visible');
+        }
+      }
+
+      initHeadingLines() {
+        const heading = this.querySelector('.ai-story-{{ ai_gen_id }}__heading');
+        if (!heading || heading.dataset.linesPrepared) return;
+        heading.dataset.linesPrepared = 'true';
+
+        const target = heading.querySelector('h1, h2, h3, h4, h5, h6, p') || heading;
+        const rawHtml = target.innerHTML;
+        if (/<br\s*\/?>/i.test(rawHtml)) {
+          const rawParts = rawHtml.split(/<br\s*\/?>/i);
+          target.innerHTML = rawParts
+            .map((part, idx) => {
+              const cleaned = part.replace(/<\/?strong>/gi, '').trim();
+              return `<span class="ai-story-{{ ai_gen_id }}__heading-line" style="--line-idx: ${idx};"><span class="ai-story-{{ ai_gen_id }}__heading-line-inner">${cleaned}</span></span>`;
+            })
+            .join('');
+        } else {
+          const cleaned = rawHtml.replace(/<\/?strong>/gi, '').trim();
+          target.innerHTML = `<span class="ai-story-{{ ai_gen_id }}__heading-line" style="--line-idx: 0;"><span class="ai-story-{{ ai_gen_id }}__heading-line-inner">${cleaned}</span></span>`;
+        }
+      }
+
+      disconnectedCallback() {
+        if (this.observer) this.observer.disconnect();
+      }
+    }
+
+    customElements.define(tag, StoryBrand);
+  })();
+</script>
 {% schema %}
 {"name":"Editorial brand story","settings":[{"type":"range","id":"desktop_width_percent","label":"Desktop width","min":50,"max":100,"step":5,"unit":"%","default":100},{"type":"header","content":"Story content"},{"type":"richtext","id":"eyebrow","label":"Eyebrow text","default":"<p>— OUR STORY</p>"},{"type":"richtext","id":"heading","label":"Main heading","default":"<h2>For Every Kiss.<br>For Every Cry.</h2>"},{"type":"richtext","id":"paragraph_one","label":"First paragraph","default":"<p>Kiss and Kry began with a simple belief: the very first things a baby wears should be the softest, kindest things they ever touch.</p>"},{"type":"richtext","id":"paragraph_two","label":"Second paragraph","default":"<p>So we chose bamboo, kept every design simple to dress and easy to love, and finished each piece with care. Considered essentials, made to bring a little more meaning to every day.</p>"},{"type":"richtext","id":"signature","label":"Signature text","default":"<p>With love, Team Kiss and Kry</p>"},{"type":"richtext","id":"tagline","label":"Signature subtitle","default":"<p>Thoughtfully made. For every comfort.</p>"},{"type":"header","content":"Value badges"},{"type":"richtext","id":"badge_1","label":"First badge label","default":"<p>Thoughtfully made</p>"},{"type":"select","id":"badge_1_icon","label":"First badge icon","options":[{"value":"sparkle","label":"Sparkle"},{"value":"leaf","label":"Leaf"},{"value":"heart","label":"Heart"}],"default":"sparkle"},{"type":"richtext","id":"badge_2","label":"Second badge label","default":"<p>Bamboo viscose</p>"},{"type":"select","id":"badge_2_icon","label":"Second badge icon","options":[{"value":"sparkle","label":"Sparkle"},{"value":"leaf","label":"Leaf"},{"value":"heart","label":"Heart"}],"default":"leaf"},{"type":"richtext","id":"badge_3","label":"Third badge label","default":"<p>Everyday comfort</p>"},{"type":"select","id":"badge_3_icon","label":"Third badge icon","options":[{"value":"sparkle","label":"Sparkle"},{"value":"leaf","label":"Leaf"},{"value":"heart","label":"Heart"}],"default":"heart"},{"type":"header","content":"Photography and quote"},{"type":"image_picker","id":"story_image","label":"Main baby image"},{"type":"image_picker","id":"detail_image","label":"Secondary baby image"},{"type":"richtext","id":"quote","label":"Quote text","default":"<p>As gentle as a first kiss. As comforting as a hug after every cry.</p>"},{"type":"richtext","id":"attribution","label":"Quote attribution","default":"<p>THE KISS AND KRY PROMISE</p>"},{"type":"header","content":"Colours and sizing"},{"type":"color","id":"background_color","label":"Background","default":"#F5F3E7"},{"type":"color","id":"heading_color","label":"Heading","default":"#626B4C"},{"type":"color","id":"body_color","label":"Body text","default":"#858575"},{"type":"color","id":"quote_background","label":"Quote card background","default":"#626B4C"},{"type":"range","id":"section_padding","label":"Section padding","min":30,"max":100,"step":5,"unit":"px","default":65},{"type":"range","id":"image_height","label":"Main image height","min":160,"max":260,"step":5,"unit":"px","default":205},{"type":"range","id":"image_radius","label":"Main image corner radius","min":8,"max":28,"step":2,"unit":"px","default":18},{"type":"font_picker","id":"heading_font","label":"Heading font","default":"montserrat_n7"},{"type":"font_picker","id":"body_font","label":"Body font","default":"montserrat_n4"}],"presets":[{"name":"Editorial brand story"}],"tag":null,"class":"editorial-brand-story"}
 {% endschema %}
