@@ -522,10 +522,10 @@
     "semantic_hash": "b5a8867b3e888dd548323ff5857d03ae"
   },
   "config/settings_data.json": {
-    "mtime": 1792579329.4970596,
-    "seen": 1792584625.7244415,
-    "ast_hash": "a86f727d3961aa19d0b8b25b226eb68e",
-    "semantic_hash": "a86f727d3961aa19d0b8b25b226eb68e"
+    "mtime": 1793689592.4509182,
+    "seen": 1793691347.1083603,
+    "ast_hash": "cfc0b36a5201cdbd40cc22347bf9eb28",
+    "semantic_hash": ""
   },
   "config/settings_schema.json": {
     "mtime": 1792581262.1821313,
@@ -876,16 +876,16 @@
     "semantic_hash": "498b43875b434768ec2fe71a864be40d"
   },
   "sections/footer-group.json": {
-    "mtime": 1792579331.2549725,
-    "seen": 1792584625.7247064,
-    "ast_hash": "ff2eda8aeca97f6132b73996b931f35d",
-    "semantic_hash": "ff2eda8aeca97f6132b73996b931f35d"
+    "mtime": 1793689592.452912,
+    "seen": 1793691347.1086628,
+    "ast_hash": "087266bec3cf015efd1777cae8b75a3e",
+    "semantic_hash": ""
   },
   "sections/header-group.json": {
-    "mtime": 1792579331.2559707,
-    "seen": 1792584625.7247105,
-    "ast_hash": "c695f9687a58acbcf7509343b186fe46",
-    "semantic_hash": "c695f9687a58acbcf7509343b186fe46"
+    "mtime": 1793691114.8064184,
+    "seen": 1793691347.1086664,
+    "ast_hash": "62e4c428f0155eadd33b85fb6b56feb4",
+    "semantic_hash": ""
   },
   "templates/404.json": {
     "mtime": 1792579335.436771,
@@ -918,9 +918,9 @@
     "semantic_hash": "8e13fee61e52776e61deadd4f7c215a1"
   },
   "templates/index.json": {
-    "mtime": 1793608691.7415142,
-    "seen": 1793608800.0015697,
-    "ast_hash": "1c31263f339923fa7fb91b753d56987c",
+    "mtime": 1793689592.55204,
+    "seen": 1793691347.1086957,
+    "ast_hash": "259b4d378a98d0c0c2af5d6223fef4c1",
     "semantic_hash": ""
   },
   "templates/list-collections.json": {
