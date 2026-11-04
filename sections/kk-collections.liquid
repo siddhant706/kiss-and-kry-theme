@@ -1,0 +1,929 @@
+{%- comment -%}
+  KK Collections Showcase
+  Editorial collection grid with filter tabs, grid/list view, feature banner
+  and trust bar. Every text, colour, size and image is editable in the theme editor.
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign item_count = 0
+  assign cat_handles = '|'
+  assign cat_labels = ''
+  for block in section.blocks
+    if block.type == 'card' or block.type == 'feature'
+      assign item_count = item_count | plus: 1
+      assign c = block.settings.category | strip
+      if c != blank
+        assign ch = c | handleize
+        assign needle = '|' | append: ch | append: '|'
+        unless cat_handles contains needle
+          assign cat_handles = cat_handles | append: ch | append: '|'
+          assign cat_labels = cat_labels | append: c | append: '§'
+        endunless
+      endif
+    endif
+  endfor
+  assign cat_handle_list = cat_handles | remove_first: '|' | split: '|'
+  assign cat_label_list = cat_labels | split: '§'
+
+  assign count_label = item_count
+  if item_count < 10
+    assign count_label = '0' | append: item_count
+  endif
+
+  assign help_url = s.help_link
+  if help_url == blank and s.whatsapp_number != blank
+    assign wa = s.whatsapp_number | remove: '+' | remove: ' ' | remove: '-' | remove: '(' | remove: ')'
+    assign help_url = 'https://wa.me/' | append: wa
+    if s.whatsapp_message != blank
+      assign wa_msg = s.whatsapp_message | url_encode
+      assign help_url = help_url | append: '?text=' | append: wa_msg
+    endif
+  endif
+
+  assign trust_count = 0
+  for block in section.blocks
+    if block.type == 'trust'
+      assign trust_count = trust_count | plus: 1
+    endif
+  endfor
+-%}
+
+{%- style -%}
+  {%- if s.use_custom_fonts -%}
+    {{ s.heading_font | font_face: font_display: 'swap' }}
+    {%- assign f_w = s.heading_font | font_modify: 'weight', s.title_light_weight -%}
+    {%- if f_w -%}{{ f_w | font_face: font_display: 'swap' }}{%- endif -%}
+    {%- assign f_w = s.heading_font | font_modify: 'weight', s.title_bold_weight -%}
+    {%- if f_w -%}{{ f_w | font_face: font_display: 'swap' }}{%- endif -%}
+    {%- assign f_w = s.heading_font | font_modify: 'weight', s.card_title_weight -%}
+    {%- if f_w -%}{{ f_w | font_face: font_display: 'swap' }}{%- endif -%}
+    {%- assign f_w = s.heading_font | font_modify: 'weight', s.card_title_bold_weight -%}
+    {%- if f_w -%}{{ f_w | font_face: font_display: 'swap' }}{%- endif -%}
+    {%- assign f_w = s.heading_font | font_modify: 'weight', '600' -%}
+    {%- if f_w -%}{{ f_w | font_face: font_display: 'swap' }}{%- endif -%}
+    {{ s.body_font | font_face: font_display: 'swap' }}
+    {%- assign f_w = s.body_font | font_modify: 'weight', '500' -%}
+    {%- if f_w -%}{{ f_w | font_face: font_display: 'swap' }}{%- endif -%}
+    {%- assign f_w = s.body_font | font_modify: 'weight', '600' -%}
+    {%- if f_w -%}{{ f_w | font_face: font_display: 'swap' }}{%- endif -%}
+  {%- endif -%}
+  #kkc-{{ section.id }} {
+    {%- if s.use_custom_fonts %}
+    --kkc-font-heading: {{ s.heading_font.family }}, {{ s.heading_font.fallback_families }};
+    --kkc-font-body: {{ s.body_font.family }}, {{ s.body_font.fallback_families }};
+    {%- endif %}
+    --kkc-bg: {{ s.color_bg }};
+    --kkc-heading: {{ s.color_heading }};
+    --kkc-text: {{ s.color_text }};
+    --kkc-muted: {{ s.color_muted }};
+    --kkc-accent: {{ s.color_accent }};
+    --kkc-border: {{ s.color_border }};
+    --kkc-icon-bg: {{ s.color_icon_bg }};
+    --kkc-btn: {{ s.color_button }};
+    --kkc-btn-text: {{ s.color_button_text }};
+    --kkc-max: {{ s.max_width }}px;
+    --kkc-pad: {{ s.side_padding }}px;
+    --kkc-pt: {{ s.padding_top }}px;
+    --kkc-pb: {{ s.padding_bottom }}px;
+    --kkc-col-gap: {{ s.column_gap }}px;
+    --kkc-row-gap: {{ s.row_gap }}px;
+    --kkc-card-h: {{ s.card_height }}px;
+    --kkc-card-h-m: {{ s.card_height_mobile }}px;
+    --kkc-radius: {{ s.image_radius }}px;
+    --kkc-title-size: {{ s.title_size }}px;
+    --kkc-title-size-m: {{ s.title_size_mobile }}px;
+    --kkc-title-light: {{ s.title_light_weight }};
+    --kkc-title-bold: {{ s.title_bold_weight }};
+    --kkc-card-title-size: {{ s.card_title_size }}px;
+    --kkc-card-title-weight: {{ s.card_title_weight }};
+    --kkc-card-title-bold: {{ s.card_title_bold_weight }};
+  }
+{%- endstyle -%}
+
+<kk-collections
+  id="kkc-{{ section.id }}"
+  class="kkc{% if s.hover_zoom %} kkc--zoom{% endif %}{% if s.hover_overlay %} kkc--overlay{% endif %} kkc--cta-{{ s.cta_visibility }}"
+  data-default-view="{{ s.default_view }}"
+>
+  <div class="kkc__inner">
+    {%- if s.eyebrow != blank or s.title_light != blank or s.title_bold != blank or s.description != blank or s.help_label != blank -%}
+      <header class="kkc__head">
+        <div class="kkc__head-main">
+          {%- if s.eyebrow != blank -%}
+            <p class="kkc__eyebrow">
+              {%- if s.show_eyebrow_icon -%}
+                <svg class="kkc__spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.6 6.5 5.5 11.4 12 12-6.5.6-11.4 5.5-12 12-.6-6.5-5.5-11.4-12-12C6.5 11.4 11.4 6.5 12 0Z"/></svg>
+              {%- endif -%}
+              <span>{{ s.eyebrow | escape }}</span>
+            </p>
+          {%- endif -%}
+          {%- if s.title_light != blank or s.title_bold != blank -%}
+            <{{ s.title_tag }} class="kkc__title">
+              {%- if s.title_light != blank -%}<span class="kkc__title-light">{{ s.title_light | escape }}</span>{%- endif -%}
+              {%- if s.title_light != blank and s.title_bold != blank %} {% endif -%}
+              {%- if s.title_bold != blank -%}<span class="kkc__title-bold">{{ s.title_bold | escape }}</span>{%- endif -%}
+            </{{ s.title_tag }}>
+          {%- endif -%}
+        </div>
+        {%- if s.description != blank or s.help_label != blank -%}
+          <div class="kkc__head-aside">
+            {%- if s.description != blank -%}
+              <p class="kkc__desc">{{ s.description | escape | newline_to_br }}</p>
+            {%- endif -%}
+            {%- if s.help_label != blank -%}
+              {%- if help_url != blank -%}
+                <a class="kkc__help" href="{{ help_url }}"{% if s.help_new_tab %} target="_blank" rel="noopener"{% endif %}>
+              {%- else -%}
+                <span class="kkc__help">
+              {%- endif -%}
+                <svg class="kkc__help-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+                <span>{{ s.help_label | escape }}</span>
+                <svg class="kkc__help-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+              {%- if help_url != blank -%}</a>{%- else -%}</span>{%- endif -%}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    {%- if s.show_filters or s.show_view_toggle -%}
+      <div class="kkc__bar">
+        <div class="kkc__tabs">
+          {%- if s.show_filters -%}
+            <button type="button" class="kkc__tab is-active" data-kkc-filter="all" aria-pressed="true">
+              {{- s.all_label | escape -}}
+              {%- if s.show_all_count %} ({{ count_label }}){% endif -%}
+            </button>
+            {%- for ch in cat_handle_list -%}
+              {%- assign label = cat_label_list[forloop.index0] -%}
+              <button type="button" class="kkc__tab" data-kkc-filter="{{ ch }}" aria-pressed="false">
+                {{- label | escape -}}
+                {%- if s.show_tab_counts -%}
+                  {%- assign tc = 0 -%}
+                  {%- for b in section.blocks -%}
+                    {%- assign bc = b.settings.category | strip | handleize -%}
+                    {%- if bc == ch and b.type != 'trust' -%}{%- assign tc = tc | plus: 1 -%}{%- endif -%}
+                  {%- endfor -%}
+                  {%- if tc < 10 %} (0{{ tc }}){% else %} ({{ tc }}){% endif -%}
+                {%- endif -%}
+              </button>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+        {%- if s.show_view_toggle -%}
+          <div class="kkc__view">
+            {%- if s.view_label != blank -%}<span class="kkc__view-label">{{ s.view_label | escape }}</span>{%- endif -%}
+            <button type="button" class="kkc__view-btn{% if s.default_view == 'grid' %} is-active{% endif %}" data-kkc-view="grid" aria-label="Grid view" aria-pressed="{% if s.default_view == 'grid' %}true{% else %}false{% endif %}">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="14" rx="1.5"/><rect width="7" height="7" x="3" y="14" rx="1.5"/></svg>
+            </button>
+            <button type="button" class="kkc__view-btn{% if s.default_view == 'list' %} is-active{% endif %}" data-kkc-view="list" aria-label="List view" aria-pressed="{% if s.default_view == 'list' %}true{% else %}false{% endif %}">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="7" x="4" y="3" rx="2"/><rect width="16" height="7" x="4" y="14" rx="2"/></svg>
+            </button>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="kkc__grid" data-kkc-grid data-view="{{ s.default_view }}">
+      {%- assign n = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'trust' -%}{%- continue -%}{%- endif -%}
+        {%- liquid
+          assign n = n | plus: 1
+          assign num = n
+          if n < 10
+            assign num = '0' | append: n
+          endif
+          assign col = block.settings.collection
+          assign img = block.settings.image
+          if img == blank and col != blank
+            assign img = col.featured_image
+          endif
+          assign url = block.settings.link
+          if url == blank
+            if col != blank
+              assign url = col.url
+            else
+              assign url = routes.collections_url
+            endif
+          endif
+          assign cat = block.settings.category | strip
+          assign cat_handle = cat | handleize
+          assign alt = col.title | default: cat
+          if img.alt != blank
+            assign alt = img.alt
+          endif
+        -%}
+
+        {%- case block.type -%}
+          {%- when 'card' -%}
+            {%- liquid
+              assign t_reg = block.settings.title_regular
+              assign t_bold = block.settings.title_bold
+              if t_reg == blank and t_bold == blank
+                if col != blank
+                  assign t_reg = col.title
+                else
+                  assign t_reg = 'Collection title'
+                endif
+              endif
+              if block.settings.size == 'wide'
+                assign sizes = '(min-width: 990px) 66vw, (min-width: 750px) 50vw, 100vw'
+              else
+                assign sizes = '(min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw'
+              endif
+              assign cta = block.settings.cta_label | default: s.cta_label
+            -%}
+            <a
+              href="{{ url }}"
+              class="kkc-card kkc-card--{{ block.settings.size }}"
+              data-kkc-item
+              data-category="{{ cat_handle }}"
+              {{ block.shopify_attributes }}
+            >
+              <span class="kkc-card__media">
+                {%- if img != blank -%}
+                  {{ img | image_url: width: 1800 | image_tag: loading: 'lazy', widths: '360, 540, 720, 900, 1080, 1440, 1800', sizes: sizes, class: 'kkc-card__img', alt: alt }}
+                {%- else -%}
+                  {%- capture ph -%}collection-{% cycle '1', '2', '3', '4', '5', '6' %}{%- endcapture -%}
+                  {{ ph | placeholder_svg_tag: 'kkc-card__img kkc-ph' }}
+                {%- endif -%}
+                {%- if s.show_numbers -%}<span class="kkc-card__num">{{ num }}</span>{%- endif -%}
+                {%- if cta != blank and s.cta_visibility != 'never' -%}
+                  <span class="kkc-card__cta">
+                    {{- cta | escape -}}
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                  </span>
+                {%- endif -%}
+              </span>
+              <span class="kkc-card__info">
+                <span class="kkc-card__text">
+                  {%- if cat != blank -%}<span class="kkc-card__cat">{{ cat | escape }}</span>{%- endif -%}
+                  <span class="kkc-card__title">
+                    {%- if t_reg != blank -%}<span class="kkc-card__title-reg">{{ t_reg | escape }}</span>{%- endif -%}
+                    {%- if t_reg != blank and t_bold != blank %} {% endif -%}
+                    {%- if t_bold != blank -%}<strong class="kkc-card__title-bold">{{ t_bold | escape }}</strong>{%- endif -%}
+                  </span>
+                </span>
+                <span class="kkc-card__arrow" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+                </span>
+              </span>
+            </a>
+
+          {%- when 'feature' -%}
+            {%- liquid
+              assign b = block.settings
+              assign link_label = b.link_label
+            -%}
+            <a
+              href="{{ url }}"
+              class="kkc-feature kkc-feature--{{ b.panel_position }}{% if b.badge_rotate %} kkc-feature--spin{% endif %}"
+              data-kkc-item
+              data-category="{{ cat_handle }}"
+              style="--kkf-panel: {{ b.color_panel }}; --kkf-text: {{ b.color_panel_text }}; --kkf-num: {{ b.color_number }}; --kkf-w: {{ b.panel_width }}%; --kkf-h: {{ b.height }}px; --kkf-h-m: {{ b.height_mobile }}px; --kkf-badge: {{ b.badge_color }}; --kkf-badge-text: {{ b.badge_text_color }}; --kkf-badge-size: {{ b.badge_size }}px; --kkf-title-size: {{ b.title_size }}px;"
+              {{ block.shopify_attributes }}
+            >
+              <span class="kkc-feature__panel">
+                {%- if cat != blank or s.show_numbers -%}
+                  <span class="kkc-feature__eyebrow">
+                    {%- if s.show_numbers -%}<span class="kkc-feature__num">({{ num }})</span>{%- endif -%}
+                    {%- if cat != blank -%}<span>{{ cat | escape }}</span>{%- endif -%}
+                  </span>
+                {%- endif -%}
+                {%- if b.title_light != blank or b.title_bold != blank -%}
+                  <span class="kkc-feature__title">
+                    {%- if b.title_light != blank -%}<span class="kkc-feature__title-light">{{ b.title_light | escape }}</span>{%- endif -%}
+                    {%- if b.title_bold != blank -%}<span class="kkc-feature__title-bold">{{ b.title_bold | escape }}</span>{%- endif -%}
+                  </span>
+                {%- endif -%}
+                {%- if b.description != blank -%}
+                  <span class="kkc-feature__desc">{{ b.description | escape | newline_to_br }}</span>
+                {%- endif -%}
+                {%- if link_label != blank -%}
+                  <span class="kkc-feature__link">
+                    {{- link_label | escape -}}
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                  </span>
+                {%- endif -%}
+              </span>
+              <span class="kkc-feature__media">
+                <span class="kkc-feature__img-wrap">
+                  {%- if img != blank -%}
+                    {{ img | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '540, 720, 900, 1080, 1440, 2000', sizes: '(min-width: 990px) 62vw, 100vw', class: 'kkc-feature__img', alt: alt }}
+                  {%- else -%}
+                    {{ 'lifestyle-1' | placeholder_svg_tag: 'kkc-feature__img kkc-ph' }}
+                  {%- endif -%}
+                </span>
+                {%- if b.show_badge -%}
+                  <span class="kkc-feature__badge" aria-hidden="true">
+                    {%- if b.badge_text != blank -%}
+                      <svg class="kkc-feature__badge-ring" viewBox="0 0 120 120">
+                        <defs><path id="kkc-ring-{{ block.id }}" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
+                        <text><textPath href="#kkc-ring-{{ block.id }}" textLength="281" lengthAdjust="spacing">{{ b.badge_text | upcase | escape }}</textPath></text>
+                      </svg>
+                    {%- endif -%}
+                    {%- if b.badge_image != blank -%}
+                      {{ b.badge_image | image_url: width: 160 | image_tag: class: 'kkc-feature__badge-img', alt: '' }}
+                    {%- else -%}
+                      {%- case b.badge_icon -%}
+                        {%- when 'leaf' -%}<svg class="kkc-feature__badge-icon" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                        {%- when 'heart' -%}<svg class="kkc-feature__badge-icon" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                        {%- when 'star' -%}<svg class="kkc-feature__badge-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        {%- when 'sparkles' -%}<svg class="kkc-feature__badge-icon" viewBox="0 0 24 24"><path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0l1.58 6.14a2 2 0 0 0 1.44 1.44l6.14 1.58a.5.5 0 0 1 0 .96l-6.14 1.58a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0z"/></svg>
+                        {%- when 'moon' -%}<svg class="kkc-feature__badge-icon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                      {%- endcase -%}
+                    {%- endif -%}
+                  </span>
+                {%- endif -%}
+              </span>
+            </a>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if s.show_trust and trust_count > 0 -%}
+      <div class="kkc__trust" style="--kkc-trust-cols: {{ trust_count }};">
+        {%- for block in section.blocks -%}
+          {%- if block.type != 'trust' -%}{%- continue -%}{%- endif -%}
+          <div class="kkc-trust" {{ block.shopify_attributes }}>
+            <span class="kkc-trust__icon" aria-hidden="true">
+              {%- if block.settings.custom_icon != blank -%}
+                {{ block.settings.custom_icon | image_url: width: 80 | image_tag: alt: '' }}
+              {%- else -%}
+                <svg viewBox="0 0 24 24">
+                  {%- case block.settings.icon -%}
+                    {%- when 'package' -%}<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 7.7 4.73a2 2 0 0 0 2 0L20.7 7"/><path d="m7.5 4.27 9 5.15"/>
+                    {%- when 'cash' -%}<rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/>
+                    {%- when 'returns' -%}<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
+                    {%- when 'leaf' -%}<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+                    {%- when 'truck' -%}<path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>
+                    {%- when 'shield' -%}<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>
+                    {%- when 'heart' -%}<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                    {%- when 'star' -%}<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    {%- when 'gift' -%}<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5"/>
+                    {%- when 'chat' -%}<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+                    {%- when 'phone' -%}<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    {%- when 'sparkles' -%}<path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0l1.58 6.14a2 2 0 0 0 1.44 1.44l6.14 1.58a.5.5 0 0 1 0 .96l-6.14 1.58a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0z"/>
+                    {%- when 'lock' -%}<rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  {%- endcase -%}
+                </svg>
+              {%- endif -%}
+            </span>
+            <span class="kkc-trust__text">
+              {%- if block.settings.title != blank -%}<span class="kkc-trust__title">{{ block.settings.title | escape }}</span>{%- endif -%}
+              {%- if block.settings.subtitle != blank -%}<span class="kkc-trust__sub">{{ block.settings.subtitle | escape }}</span>{%- endif -%}
+            </span>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</kk-collections>
+
+{% stylesheet %}
+  .kkc {
+    --kkc-font-heading: var(--font-heading--family, inherit);
+    --kkc-font-body: var(--font-body--family, inherit);
+    display: block;
+    background: var(--kkc-bg);
+    color: var(--kkc-text);
+    font-family: var(--kkc-font-body);
+    padding: var(--kkc-pt) 0 var(--kkc-pb);
+    -webkit-font-smoothing: antialiased;
+  }
+  .kkc *, .kkc *::before, .kkc *::after { box-sizing: border-box; }
+  .kkc [hidden] { display: none !important; }
+  :where(.kkc) :where(p, h1, h2, h3, div) { margin: 0; }
+  :where(.kkc) a { color: inherit; text-decoration: none; }
+  .kkc svg { display: block; }
+  .kkc button {
+    appearance: none; -webkit-appearance: none; background: none; border: 0; padding: 0; margin: 0;
+    font: inherit; color: inherit; cursor: pointer; box-shadow: none; min-height: 0; min-width: 0;
+  }
+  .kkc__inner {
+    max-width: calc(var(--kkc-max) + var(--kkc-pad) * 2);
+    margin: 0 auto;
+    padding: 0 var(--kkc-pad);
+  }
+
+  /* Header */
+  .kkc__head {
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 40px;
+    padding-bottom: 52px;
+  }
+  .kkc__eyebrow {
+    display: flex; align-items: center; gap: 9px;
+    font-size: 10px; line-height: 1.4; font-weight: 600; letter-spacing: 0.21em; text-transform: uppercase;
+    color: var(--kkc-muted);
+    margin-bottom: 22px;
+  }
+  .kkc__spark { width: 9px; height: 9px; fill: var(--kkc-accent); flex: none; }
+  .kkc__title {
+    font-family: var(--kkc-font-heading);
+    font-size: var(--kkc-title-size);
+    line-height: 1; letter-spacing: -0.02em;
+    color: var(--kkc-heading);
+    font-weight: var(--kkc-title-bold);
+    text-transform: none;
+  }
+  .kkc__title-light { font-weight: var(--kkc-title-light); }
+  .kkc__title-bold { font-weight: var(--kkc-title-bold); }
+  .kkc__head-aside {
+    display: flex; flex-direction: column; align-items: flex-end; text-align: right;
+    max-width: 330px; flex: none; margin-bottom: -3px;
+  }
+  .kkc__desc { font-size: 13px; line-height: 1.73; color: var(--kkc-muted); font-weight: 400; }
+  .kkc__help {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 18px;
+    font-size: 11.75px; font-weight: 600; color: var(--kkc-text);
+    padding-bottom: 3px; border-bottom: 1px solid currentColor;
+    transition: opacity .2s ease;
+  }
+  a.kkc__help:hover { opacity: .7; }
+  .kkc__help svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .kkc__help .kkc__help-arrow { width: 11px; height: 11px; margin-left: 2px; }
+
+  /* Filter bar */
+  .kkc__bar {
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    min-height: 56px;
+    border-top: 1px solid var(--kkc-border); border-bottom: 1px solid var(--kkc-border);
+  }
+  .kkc__tabs { display: flex; align-items: center; gap: 30px; overflow-x: auto; scrollbar-width: none; }
+  .kkc__tabs::-webkit-scrollbar { display: none; }
+  .kkc .kkc__tab {
+    flex: none; position: relative;
+    font-size: 9px; line-height: 1; font-weight: 600; letter-spacing: 0.245em; text-transform: uppercase;
+    color: var(--kkc-muted); padding: 21px 0 24px; white-space: nowrap;
+    transition: color .2s ease;
+  }
+  .kkc .kkc__tab::after {
+    content: ""; position: absolute; left: 0; right: 0.245em; bottom: 18px; height: 1.3px;
+    background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .3s ease;
+  }
+  .kkc .kkc__tab:hover, .kkc .kkc__tab.is-active { color: var(--kkc-text); }
+  .kkc .kkc__tab.is-active::after { transform: scaleX(1); }
+  .kkc__view { display: flex; align-items: center; gap: 8px; flex: none; }
+  .kkc__view-label {
+    font-size: 9px; font-weight: 600; letter-spacing: 0.245em; text-transform: uppercase; color: var(--kkc-muted); margin-right: 4px;
+  }
+  .kkc .kkc__view-btn {
+    width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+    color: var(--kkc-muted); transition: background .2s ease, color .2s ease;
+  }
+  .kkc .kkc__view-btn svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+  .kkc .kkc__view-btn.is-active { background: var(--kkc-btn); color: var(--kkc-btn-text); }
+
+  /* Grid */
+  .kkc__grid {
+    display: flex; flex-wrap: wrap; align-items: flex-start;
+    column-gap: var(--kkc-col-gap); row-gap: var(--kkc-row-gap);
+    margin-top: 50px;
+  }
+  .kkc-card {
+    display: flex; flex-direction: column; min-width: 0;
+    flex: 1 1 calc((100% - var(--kkc-col-gap)) / 3 - 1px);
+  }
+  .kkc-card--wide { flex-basis: calc((100% - var(--kkc-col-gap)) * 2 / 3 - 1px); }
+  .kkc-card__media {
+    position: relative; display: block; overflow: hidden;
+    height: var(--kkc-card-h); border-radius: var(--kkc-radius);
+    background: rgba(0,0,0,.04); isolation: isolate;
+  }
+  .kkc-card__img, .kkc-feature__img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform .8s cubic-bezier(.2,.7,.2,1);
+  }
+  .kkc-ph { background: rgba(0,0,0,.05); fill: rgba(0,0,0,.25); }
+  .kkc--overlay .kkc-card__media::after {
+    content: ""; position: absolute; inset: 0; background: rgba(30, 32, 20, .14); opacity: 0;
+    transition: opacity .4s ease; pointer-events: none; z-index: 1;
+  }
+  .kkc-card__num {
+    position: absolute; top: 20px; left: 18px; z-index: 2;
+    min-width: 34px; height: 21px; padding: 0 10px; border-radius: 99px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,.82); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    color: var(--kkc-text); font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
+  }
+  .kkc-card__cta {
+    position: absolute; left: 17px; bottom: 17px; z-index: 2;
+    display: inline-flex; align-items: center; gap: 9px;
+    height: 36px; padding: 0 17px; border-radius: 99px;
+    background: #fff; color: var(--kkc-text);
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.01em; white-space: nowrap;
+    box-shadow: 0 6px 20px rgba(0,0,0,.08);
+    transition: opacity .35s ease, transform .35s ease;
+  }
+  .kkc-card__cta svg, .kkc-feature__link svg { width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .kkc--cta-hover .kkc-card__cta { opacity: 0; transform: translateY(8px); }
+  .kkc-card__info {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding-top: 19px;
+  }
+  .kkc-card__text { display: flex; flex-direction: column; min-width: 0; }
+  .kkc-card__cat {
+    font-size: 9px; line-height: 1.4; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--kkc-muted); margin-bottom: 6px;
+  }
+  .kkc-card__title {
+    font-family: var(--kkc-font-heading);
+    font-size: var(--kkc-card-title-size); line-height: 1.22; letter-spacing: -0.005em;
+    font-weight: var(--kkc-card-title-weight); color: var(--kkc-text);
+  }
+  .kkc-card__title-bold { font-weight: var(--kkc-card-title-bold); }
+  .kkc-card__arrow {
+    flex: none; width: 42px; height: 42px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--kkc-border); color: var(--kkc-text);
+    transition: background .3s ease, border-color .3s ease, color .3s ease, transform .3s ease;
+  }
+  .kkc-card__arrow svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+  @media (hover: hover) {
+    .kkc--zoom .kkc-card:hover .kkc-card__img,
+    .kkc--zoom .kkc-feature:hover .kkc-feature__img { transform: scale(1.045); }
+    .kkc--overlay .kkc-card:hover .kkc-card__media::after { opacity: 1; }
+    .kkc-card:hover .kkc-card__cta { opacity: 1; transform: none; }
+    .kkc-card:hover .kkc-card__arrow { background: var(--kkc-btn); border-color: var(--kkc-btn); color: var(--kkc-btn-text); }
+    .kkc-feature:hover .kkc-feature__link svg { transform: translateX(4px); }
+  }
+  .kkc-card:focus-visible { outline: 2px solid var(--kkc-btn); outline-offset: 6px; border-radius: var(--kkc-radius); }
+  .kkc-card:focus-visible .kkc-card__cta { opacity: 1; transform: none; }
+
+  /* Feature banner */
+  .kkc-feature {
+    flex: 1 1 100%; width: 100%; position: relative; display: flex; min-height: var(--kkf-h);
+    border-radius: var(--kkc-radius); overflow: hidden; background: var(--kkf-panel); isolation: isolate;
+    margin-top: 2px;
+  }
+  .kkc-feature--right { flex-direction: row-reverse; }
+  .kkc-feature__panel {
+    flex: 0 0 var(--kkf-w); display: flex; flex-direction: column; justify-content: center;
+    padding: 40px 50px; color: var(--kkf-text); background: var(--kkf-panel);
+  }
+  .kkc-feature__eyebrow {
+    display: flex; align-items: center; gap: 14px;
+    font-size: 9px; line-height: 1.4; font-weight: 600; letter-spacing: 0.23em; text-transform: uppercase;
+    opacity: .92;
+  }
+  .kkc-feature__num { color: var(--kkf-num); letter-spacing: 0.2em; }
+  .kkc-feature__title {
+    display: flex; flex-direction: column; margin-top: 17px;
+    font-family: var(--kkc-font-heading); font-size: var(--kkf-title-size); line-height: 1.04; letter-spacing: -0.025em;
+  }
+  .kkc-feature__title-light { font-weight: var(--kkc-title-light); }
+  .kkc-feature__title-bold { font-weight: var(--kkc-title-bold); }
+  .kkc-feature__desc { margin-top: 15px; font-size: 13px; line-height: 1.72; opacity: .78; max-width: 340px; }
+  .kkc-feature__link {
+    align-self: flex-start; display: inline-flex; align-items: center; gap: 9px; margin-top: 24px;
+    font-size: 12px; font-weight: 600; padding-bottom: 4px; border-bottom: 1px solid currentColor;
+  }
+  .kkc-feature__link svg { transition: transform .3s ease; }
+  .kkc-feature__media { position: relative; flex: 1 1 auto; display: block; min-width: 0; }
+  .kkc-feature__img-wrap { position: absolute; inset: 0; overflow: hidden; display: block; }
+  .kkc-feature__badge {
+    position: absolute; top: 50%; left: 0; z-index: 3;
+    width: var(--kkf-badge-size); height: var(--kkf-badge-size); margin: calc(var(--kkf-badge-size) / -2) 0 0 calc(var(--kkf-badge-size) / -2);
+    border-radius: 50%; background: var(--kkf-badge); color: var(--kkf-badge-text);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,.12);
+  }
+  .kkc-feature--right .kkc-feature__badge { left: auto; right: 0; margin: calc(var(--kkf-badge-size) / -2) calc(var(--kkf-badge-size) / -2) 0 0; }
+  .kkc-feature__badge-ring { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .kkc-feature__badge-ring text {
+    font-family: var(--kkc-font-body); font-size: 10.5px; font-weight: 700; letter-spacing: 0.22em; fill: currentColor;
+  }
+  .kkc-feature--spin .kkc-feature__badge-ring { animation: kkc-spin 22s linear infinite; }
+  .kkc-feature__badge-icon { width: 30%; height: 30%; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .kkc-feature__badge-img { width: 32%; height: auto; }
+  @keyframes kkc-spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) {
+    .kkc-feature--spin .kkc-feature__badge-ring { animation: none; }
+    .kkc-card__img, .kkc-feature__img { transition: none; }
+  }
+
+  /* Filter + list states */
+  .kkc__grid.is-filtered .kkc-card { flex-basis: calc((100% - var(--kkc-col-gap)) / 2 - 1px); }
+  .kkc-anim { animation: kkc-in .5s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes kkc-in { from { opacity: 0; transform: translateY(14px); } }
+
+  .kkc__grid[data-view="list"] .kkc-card,
+  .kkc__grid[data-view="list"].is-filtered .kkc-card {
+    flex-basis: 100%; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: center; column-gap: 40px;
+  }
+  .kkc__grid[data-view="list"] .kkc-card__media { height: calc(var(--kkc-card-h) * .72); }
+  .kkc__grid[data-view="list"] .kkc-card__info { padding-top: 0; }
+  .kkc__grid[data-view="list"] .kkc-card__title { font-size: calc(var(--kkc-card-title-size) * 1.3); }
+
+  /* Trust bar */
+  .kkc__trust {
+    display: grid; grid-template-columns: repeat(var(--kkc-trust-cols), minmax(0, 1fr));
+    margin-top: 93px; border-top: 1px solid var(--kkc-border); border-bottom: 1px solid var(--kkc-border);
+  }
+  .kkc-trust { display: flex; align-items: center; gap: 15px; padding: 28px 28px; min-height: 96px; }
+  .kkc-trust:first-child { padding-left: 0; }
+  .kkc-trust + .kkc-trust { border-left: 1px solid var(--kkc-border); }
+  .kkc-trust__icon {
+    flex: none; width: 41px; height: 41px; border-radius: 50%; background: var(--kkc-icon-bg);
+    display: inline-flex; align-items: center; justify-content: center; color: var(--kkc-text);
+  }
+  .kkc-trust__icon svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .kkc-trust__icon img { width: 20px; height: 20px; object-fit: contain; }
+  .kkc-trust__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .kkc-trust__title { font-size: 13.5px; line-height: 1.35; font-weight: 600; color: var(--kkc-text); }
+  .kkc-trust__sub { font-size: 10.5px; line-height: 1.4; color: var(--kkc-muted); }
+
+  /* Tablet */
+  @media (max-width: 989px) {
+    .kkc__head { flex-direction: column; align-items: flex-start; gap: 24px; padding-bottom: 36px; }
+    .kkc__head-aside { align-items: flex-start; text-align: left; max-width: 520px; }
+    .kkc__title { font-size: calc((var(--kkc-title-size) + var(--kkc-title-size-m)) / 2); }
+    .kkc-card, .kkc-card--wide, .kkc__grid.is-filtered .kkc-card { flex-basis: calc((100% - var(--kkc-col-gap)) / 2 - 1px); }
+    .kkc-feature__panel { padding: 44px 36px; flex-basis: max(var(--kkf-w), 44%); }
+    .kkc__trust { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .kkc-trust { padding: 22px 20px; }
+    .kkc-trust:nth-child(odd) { padding-left: 0; border-left: 0; }
+    .kkc-trust:nth-child(n+3) { border-top: 1px solid var(--kkc-border); }
+  }
+
+  /* Mobile */
+  @media (max-width: 749px) {
+    .kkc { padding-top: calc(var(--kkc-pt) * .6); padding-bottom: calc(var(--kkc-pb) * .6); }
+    .kkc__inner { padding: 0 max(16px, calc(var(--kkc-pad) * .66)); }
+    .kkc__title { font-size: var(--kkc-title-size-m); }
+    .kkc__eyebrow { margin-bottom: 14px; }
+    .kkc__bar { min-height: 50px; }
+    .kkc__tabs { gap: 22px; margin-right: -16px; padding-right: 16px; }
+    .kkc__view { display: none; }
+    .kkc__grid { margin-top: 32px; }
+    .kkc__grid { row-gap: calc(var(--kkc-row-gap) * .75); }
+    .kkc-card, .kkc-card--wide, .kkc__grid.is-filtered .kkc-card { flex-basis: 100%; }
+    .kkc-card__media { height: var(--kkc-card-h-m); }
+    .kkc-card__title { font-size: calc(var(--kkc-card-title-size) * .9); }
+    .kkc-card__arrow { width: 38px; height: 38px; }
+    .kkc__grid[data-view="list"] .kkc-card { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); column-gap: 16px; }
+    .kkc__grid[data-view="list"] .kkc-card__media { height: calc(var(--kkc-card-h-m) * .55); }
+    .kkc__grid[data-view="list"] .kkc-card__title { font-size: calc(var(--kkc-card-title-size) * .8); }
+    .kkc__grid[data-view="list"] .kkc-card__arrow { display: none; }
+    .kkc__grid[data-view="list"] .kkc-card__cta { display: none; }
+    .kkc-feature, .kkc-feature--right { flex-direction: column; min-height: 0; }
+    .kkc-feature__panel { flex: none; padding: 36px 26px 48px; }
+    .kkc-feature__title { font-size: calc(var(--kkf-title-size) * .75); }
+    .kkc-feature__media { height: var(--kkf-h-m); flex: none; }
+    .kkc-feature__badge, .kkc-feature--right .kkc-feature__badge {
+      top: 0; left: auto; right: 22px;
+      width: calc(var(--kkf-badge-size) * .8); height: calc(var(--kkf-badge-size) * .8);
+      margin: calc(var(--kkf-badge-size) * -.4) 0 0 0;
+    }
+    .kkc__trust { margin-top: 56px; }
+    .kkc-trust { padding: 18px 12px; gap: 12px; align-items: flex-start; }
+    .kkc-trust__icon { width: 36px; height: 36px; }
+    .kkc-trust__title { font-size: 13px; }
+    .kkc-trust__sub { font-size: 11px; }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  if (!customElements.get('kk-collections')) {
+    class KKCollections extends HTMLElement {
+      connectedCallback() {
+        this.grid = this.querySelector('[data-kkc-grid]');
+        this.tabs = Array.from(this.querySelectorAll('[data-kkc-filter]'));
+        this.viewBtns = Array.from(this.querySelectorAll('[data-kkc-view]'));
+        this.tabs.forEach((tab) => tab.addEventListener('click', () => this.filter(tab.dataset.kkcFilter)));
+        this.viewBtns.forEach((btn) => btn.addEventListener('click', () => this.setView(btn.dataset.kkcView)));
+        this.onBlockSelect = (event) => {
+          if (this.contains(event.target)) {
+            this.filter('all');
+          }
+        };
+        document.addEventListener('shopify:block:select', this.onBlockSelect);
+      }
+      disconnectedCallback() {
+        document.removeEventListener('shopify:block:select', this.onBlockSelect);
+      }
+      filter(value) {
+        if (!this.grid) return;
+        this.tabs.forEach((tab) => {
+          const active = tab.dataset.kkcFilter === value;
+          tab.classList.toggle('is-active', active);
+          tab.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+        this.grid.classList.toggle('is-filtered', value !== 'all');
+        this.grid.querySelectorAll('[data-kkc-item]').forEach((item) => {
+          const show = value === 'all' || item.dataset.category === value;
+          item.hidden = !show;
+          item.classList.remove('kkc-anim');
+          if (show) {
+            void item.offsetWidth;
+            item.classList.add('kkc-anim');
+          }
+        });
+      }
+      setView(view) {
+        if (!this.grid) return;
+        this.grid.dataset.view = view;
+        this.viewBtns.forEach((btn) => {
+          const active = btn.dataset.kkcView === view;
+          btn.classList.toggle('is-active', active);
+          btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+      }
+    }
+    customElements.define('kk-collections', KKCollections);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Collections showcase",
+  "tag": "section",
+  "class": "kkc-section",
+  "settings": [
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Bamboo Collection" },
+    { "type": "checkbox", "id": "show_eyebrow_icon", "label": "Show eyebrow star", "default": true },
+    { "type": "text", "id": "title_light", "label": "Title (light part)", "default": "Our" },
+    { "type": "text", "id": "title_bold", "label": "Title (bold part)", "default": "Collections." },
+    {
+      "type": "select", "id": "title_tag", "label": "Title HTML tag", "default": "h1",
+      "options": [ { "value": "h1", "label": "H1" }, { "value": "h2", "label": "H2" }, { "value": "div", "label": "Text" } ]
+    },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "Five soft essentials, each one made from bamboo viscose and made for baby. Pick a collection to explore." },
+    { "type": "text", "id": "help_label", "label": "Help link label", "default": "Need help choosing? Chat on WhatsApp" },
+    { "type": "text", "id": "whatsapp_number", "label": "WhatsApp number", "info": "With country code, e.g. 919876543210. Used when no custom link is set." },
+    { "type": "text", "id": "whatsapp_message", "label": "WhatsApp pre-filled message", "default": "Hi! I need help choosing a collection." },
+    { "type": "url", "id": "help_link", "label": "Custom help link", "info": "Overrides the WhatsApp number." },
+    { "type": "checkbox", "id": "help_new_tab", "label": "Open help link in new tab", "default": true },
+
+    { "type": "header", "content": "Filter bar" },
+    { "type": "checkbox", "id": "show_filters", "label": "Show category tabs", "default": true, "info": "Tabs are built from each card's Category text." },
+    { "type": "text", "id": "all_label", "label": "\"All\" tab label", "default": "All" },
+    { "type": "checkbox", "id": "show_all_count", "label": "Show count on \"All\" tab", "default": true },
+    { "type": "checkbox", "id": "show_tab_counts", "label": "Show count on category tabs", "default": false },
+    { "type": "checkbox", "id": "show_view_toggle", "label": "Show grid / list toggle", "default": true },
+    { "type": "text", "id": "view_label", "label": "View toggle label", "default": "View" },
+    {
+      "type": "select", "id": "default_view", "label": "Default view", "default": "grid",
+      "options": [ { "value": "grid", "label": "Grid" }, { "value": "list", "label": "List" } ]
+    },
+
+    { "type": "header", "content": "Cards" },
+    { "type": "checkbox", "id": "show_numbers", "label": "Show number badges", "default": true },
+    { "type": "range", "id": "card_height", "label": "Image height (desktop)", "min": 200, "max": 600, "step": 4, "unit": "px", "default": 384 },
+    { "type": "range", "id": "card_height_mobile", "label": "Image height (mobile)", "min": 160, "max": 520, "step": 10, "unit": "px", "default": 300 },
+    { "type": "range", "id": "image_radius", "label": "Corner radius", "min": 0, "max": 40, "step": 1, "unit": "px", "default": 16 },
+    { "type": "range", "id": "card_title_size", "label": "Card title size", "min": 14, "max": 36, "step": 1, "unit": "px", "default": 21 },
+    {
+      "type": "select", "id": "card_title_weight", "label": "Card title weight (regular part)", "default": "400",
+      "options": [ { "value": "300", "label": "Light" }, { "value": "400", "label": "Regular" }, { "value": "500", "label": "Medium" } ]
+    },
+    {
+      "type": "select", "id": "card_title_bold_weight", "label": "Card title weight (bold part)", "default": "600",
+      "options": [ { "value": "500", "label": "Medium" }, { "value": "600", "label": "Semi bold" }, { "value": "700", "label": "Bold" } ]
+    },
+    { "type": "text", "id": "cta_label", "label": "Hover button label", "default": "Explore collection" },
+    {
+      "type": "select", "id": "cta_visibility", "label": "Hover button", "default": "hover",
+      "options": [ { "value": "hover", "label": "Show on hover" }, { "value": "always", "label": "Always show" }, { "value": "never", "label": "Hide" } ]
+    },
+    { "type": "checkbox", "id": "hover_zoom", "label": "Zoom image on hover", "default": true },
+    { "type": "checkbox", "id": "hover_overlay", "label": "Darken image on hover", "default": true },
+
+    { "type": "header", "content": "Trust bar" },
+    { "type": "checkbox", "id": "show_trust", "label": "Show trust bar", "default": true, "info": "Add or edit items with \"Trust item\" blocks." },
+
+    { "type": "header", "content": "Typography" },
+    { "type": "checkbox", "id": "use_custom_fonts", "label": "Use custom fonts", "default": true, "info": "Turn off to use the theme fonts." },
+    { "type": "font_picker", "id": "heading_font", "label": "Heading font", "default": "montserrat_n4" },
+    { "type": "font_picker", "id": "body_font", "label": "Body font", "default": "montserrat_n4" },
+    { "type": "range", "id": "title_size", "label": "Title size (desktop)", "min": 40, "max": 140, "step": 2, "unit": "px", "default": 92 },
+    { "type": "range", "id": "title_size_mobile", "label": "Title size (mobile)", "min": 28, "max": 80, "step": 2, "unit": "px", "default": 52 },
+    {
+      "type": "select", "id": "title_light_weight", "label": "Light text weight", "default": "200",
+      "options": [ { "value": "100", "label": "Thin" }, { "value": "200", "label": "Extra light" }, { "value": "300", "label": "Light" }, { "value": "400", "label": "Regular" } ]
+    },
+    {
+      "type": "select", "id": "title_bold_weight", "label": "Bold text weight", "default": "700",
+      "options": [ { "value": "500", "label": "Medium" }, { "value": "600", "label": "Semi bold" }, { "value": "700", "label": "Bold" }, { "value": "800", "label": "Extra bold" } ]
+    },
+
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "color_bg", "label": "Background", "default": "#FBF9F4" },
+    { "type": "color", "id": "color_heading", "label": "Main title", "default": "#5B6344" },
+    { "type": "color", "id": "color_text", "label": "Text", "default": "#3B412B" },
+    { "type": "color", "id": "color_muted", "label": "Muted text", "default": "#70675B" },
+    { "type": "color", "id": "color_accent", "label": "Accent (star)", "default": "#ECAB32" },
+    { "type": "color", "id": "color_border", "label": "Lines & borders", "default": "#DDDED4" },
+    { "type": "color", "id": "color_icon_bg", "label": "Trust icon background", "default": "#F3F0E3" },
+    { "type": "color", "id": "color_button", "label": "Active / hover fill", "default": "#5B6344" },
+    { "type": "color", "id": "color_button_text", "label": "Active / hover icon", "default": "#FFFFFF" },
+
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "max_width", "label": "Content width", "min": 960, "max": 1600, "step": 10, "unit": "px", "default": 1190 },
+    { "type": "range", "id": "side_padding", "label": "Side padding", "min": 0, "max": 80, "step": 2, "unit": "px", "default": 24 },
+    { "type": "range", "id": "column_gap", "label": "Column gap", "min": 0, "max": 60, "step": 2, "unit": "px", "default": 20 },
+    { "type": "range", "id": "row_gap", "label": "Row gap", "min": 0, "max": 100, "step": 2, "unit": "px", "default": 46 },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 200, "step": 2, "unit": "px", "default": 84 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 200, "step": 2, "unit": "px", "default": 100 }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Collection card",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "image_picker", "id": "image", "label": "Custom image", "info": "Optional. Uses the collection image when empty." },
+        { "type": "text", "id": "category", "label": "Category", "default": "Bodysuits", "info": "Shown above the title and used for the filter tabs." },
+        { "type": "text", "id": "title_regular", "label": "Title (regular part)", "info": "Leave both title fields empty to use the collection name." },
+        { "type": "text", "id": "title_bold", "label": "Title (bold part)" },
+        {
+          "type": "select", "id": "size", "label": "Card width", "default": "narrow",
+          "options": [ { "value": "narrow", "label": "Narrow (1/3)" }, { "value": "wide", "label": "Wide (2/3)" } ]
+        },
+        { "type": "text", "id": "cta_label", "label": "Hover button label", "info": "Optional. Overrides the section label." },
+        { "type": "url", "id": "link", "label": "Custom link", "info": "Optional. Uses the collection link when empty." }
+      ]
+    },
+    {
+      "type": "feature",
+      "name": "Feature banner",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "image_picker", "id": "image", "label": "Custom image", "info": "Optional. Uses the collection image when empty." },
+        { "type": "text", "id": "category", "label": "Category", "default": "Bedding" },
+        { "type": "text", "id": "title_light", "label": "Title line 1 (light)", "default": "Tranquil" },
+        { "type": "text", "id": "title_bold", "label": "Title line 2 (bold)", "default": "Crib Sheets." },
+        { "type": "range", "id": "title_size", "label": "Title size", "min": 28, "max": 80, "step": 1, "unit": "px", "default": 53 },
+        { "type": "textarea", "id": "description", "label": "Description", "default": "Breathable bamboo sheets for calm, cozy sleep, night after night." },
+        { "type": "text", "id": "link_label", "label": "Link label", "default": "Explore collection" },
+        { "type": "url", "id": "link", "label": "Custom link", "info": "Optional. Uses the collection link when empty." },
+        {
+          "type": "select", "id": "panel_position", "label": "Text panel position", "default": "left",
+          "options": [ { "value": "left", "label": "Left" }, { "value": "right", "label": "Right" } ]
+        },
+        { "type": "range", "id": "panel_width", "label": "Text panel width", "min": 25, "max": 60, "step": 1, "unit": "%", "default": 38 },
+        { "type": "range", "id": "height", "label": "Height (desktop)", "min": 240, "max": 440, "step": 2, "unit": "px", "default": 354 },
+        { "type": "range", "id": "height_mobile", "label": "Image height (mobile)", "min": 160, "max": 480, "step": 10, "unit": "px", "default": 240 },
+        { "type": "color", "id": "color_panel", "label": "Panel color", "default": "#5B6344" },
+        { "type": "color", "id": "color_panel_text", "label": "Panel text", "default": "#FFFFFF" },
+        { "type": "color", "id": "color_number", "label": "Number color", "default": "#ECAB32" },
+        { "type": "header", "content": "Round badge" },
+        { "type": "checkbox", "id": "show_badge", "label": "Show badge", "default": true },
+        { "type": "text", "id": "badge_text", "label": "Badge text", "default": "Born from bamboo ✦ Made for baby ✦" },
+        {
+          "type": "select", "id": "badge_icon", "label": "Badge icon", "default": "leaf",
+          "options": [
+            { "value": "leaf", "label": "Leaf" }, { "value": "heart", "label": "Heart" }, { "value": "star", "label": "Star" },
+            { "value": "sparkles", "label": "Sparkle" }, { "value": "moon", "label": "Moon" }, { "value": "none", "label": "None" }
+          ]
+        },
+        { "type": "image_picker", "id": "badge_image", "label": "Custom badge icon", "info": "Optional. Replaces the icon." },
+        { "type": "checkbox", "id": "badge_rotate", "label": "Rotate badge text", "default": true },
+        { "type": "range", "id": "badge_size", "label": "Badge size", "min": 80, "max": 160, "step": 2, "unit": "px", "default": 116 },
+        { "type": "color", "id": "badge_color", "label": "Badge color", "default": "#ECAB32" },
+        { "type": "color", "id": "badge_text_color", "label": "Badge text color", "default": "#3B412B" }
+      ]
+    },
+    {
+      "type": "trust",
+      "name": "Trust item",
+      "settings": [
+        {
+          "type": "select", "id": "icon", "label": "Icon", "default": "package",
+          "options": [
+            { "value": "package", "label": "Package" }, { "value": "cash", "label": "Cash" }, { "value": "returns", "label": "Returns" },
+            { "value": "leaf", "label": "Leaf" }, { "value": "truck", "label": "Truck" }, { "value": "shield", "label": "Shield" },
+            { "value": "heart", "label": "Heart" }, { "value": "star", "label": "Star" }, { "value": "gift", "label": "Gift" },
+            { "value": "chat", "label": "Chat" }, { "value": "phone", "label": "Phone" }, { "value": "sparkles", "label": "Sparkle" },
+            { "value": "lock", "label": "Lock" }
+          ]
+        },
+        { "type": "image_picker", "id": "custom_icon", "label": "Custom icon", "info": "Optional. Replaces the icon." },
+        { "type": "text", "id": "title", "label": "Title", "default": "Free delivery" },
+        { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "On every order" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collections showcase",
+      "blocks": [
+        { "type": "card", "settings": { "category": "Bodysuits", "title_regular": "Luxurious Bodysuits —", "title_bold": "Full Sleeves", "size": "wide" } },
+        { "type": "card", "settings": { "category": "Footies", "title_regular": "Snuggly", "title_bold": "Footies", "size": "narrow" } },
+        { "type": "card", "settings": { "category": "Rompers", "title_regular": "Cozy", "title_bold": "Rompers", "size": "narrow" } },
+        { "type": "card", "settings": { "category": "Bodysuits", "title_regular": "Sumptuous Bodysuits —", "title_bold": "Half Sleeves", "size": "wide" } },
+        { "type": "feature" },
+        { "type": "trust", "settings": { "icon": "package", "title": "Free delivery", "subtitle": "On every order" } },
+        { "type": "trust", "settings": { "icon": "cash", "title": "Cash on delivery", "subtitle": "Pay when it arrives" } },
+        { "type": "trust", "settings": { "icon": "returns", "title": "7-day returns", "subtitle": "Simple and easy" } },
+        { "type": "trust", "settings": { "icon": "leaf", "title": "Bamboo viscose", "subtitle": "Ultra soft, breathable" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
