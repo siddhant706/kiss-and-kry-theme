@@ -402,6 +402,28 @@
   .menu-list__link-title {
     padding-inline: var(--gap-sm);
   }
+
+  /* Smooth colour change and a left-to-right underline on hover/focus (text only, padding excluded) */
+  .header:not([transparent]) .menu-list__link {
+    transition: color var(--animation-speed-slow) var(--animation-easing);
+  }
+
+  .menu-list__link-title {
+    background: linear-gradient(currentColor, currentColor) no-repeat left bottom / 0 1px;
+    background-origin: content-box;
+    background-clip: content-box;
+    transition: background-size var(--animation-speed-slow) var(--ease-out-cubic);
+  }
+
+  .menu-list__link:is(:hover, :focus-visible) .menu-list__link-title {
+    background-size: 100% 1px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu-list__link-title {
+      transition: none;
+    }
+  }
   [slot='overflow'] .menu-list__link-title {
     padding-inline: 0;
   }

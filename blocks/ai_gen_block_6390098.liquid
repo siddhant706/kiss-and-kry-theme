@@ -1,0 +1,1156 @@
+{% doc %}
+  Section: Why We Chose Bamboo
+  Features:
+  - Preserves olive-green background, baby photograph, 95% bamboo badge, heading, four benefit features and CTA buttons.
+  - Scroll animation when entering viewport:
+    * Baby photograph reveals with smooth upward fade.
+    * Main heading slides upward.
+    * Description fades in.
+    * Four benefit features appear one by one with staggered delays.
+    * Circular icons scale in gently.
+    * CTA buttons fade in last.
+  - Baby image:
+    * Subtle image reveal.
+    * Gentle parallax effect on scroll without cropping or distorting.
+    * Hover scale maximum: 1.02.
+  - 95% bamboo badge:
+    * Gentle scale-in entrance.
+    * Hover scale: 1.05.
+    * No continuous spinning or pulsing.
+  - Benefit icons:
+    * Staggered fade-in.
+    * Hover scale (250–300ms transition).
+{% enddoc %}
+
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-bamboo-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent | default: 100 }}%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: clamp(40px, 5.5vw, 68px) 24px;
+    background: {{ block.settings.background_color | default: '#626B4C' }};
+    color: {{ block.settings.text_color | default: '#F5F2E8' }};
+    font-family: Montserrat, var(--font-body--family, sans-serif);
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }} *,
+  .ai-bamboo-{{ ai_gen_id }} *:before,
+  .ai-bamboo-{{ ai_gen_id }} *:after {
+    box-sizing: border-box;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__inner {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 45fr) minmax(0, 55fr);
+    align-items: center;
+    gap: clamp(22px, 3vw, 40px);
+  }
+
+  /* Left Column: Visual Container */
+  .ai-bamboo-{{ ai_gen_id }}__visual {
+    position: relative;
+    min-width: 0;
+    width: 100%;
+    min-height: clamp(320px, 37vw, 440px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Decorative Ring behind photo */
+  .ai-bamboo-{{ ai_gen_id }}__ring {
+    position: absolute;
+    width: min(390px, 90%);
+    aspect-ratio: 1;
+    border: 1px solid {{ block.settings.ring_color | default: '#D0D0B9' }};
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0.92);
+    transition: opacity 800ms ease 120ms, transform 800ms cubic-bezier(0.16, 1, 0.3, 1) 120ms;
+    will-change: opacity, transform;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}.is-visible .ai-bamboo-{{ ai_gen_id }}__ring {
+    opacity: 0.58;
+    transform: scale(1);
+  }
+
+  /* Baby lifestyle photograph */
+  .ai-bamboo-{{ ai_gen_id }}__photo {
+    position: relative;
+    z-index: 1;
+    width: min(400px, 90%);
+    aspect-ratio: 20 / 21;
+    overflow: hidden;
+    border-radius: 50% 50% 18px 18px / 34% 34% 18px 18px;
+    background: #777b66;
+    opacity: 0;
+    transform: translateY(32px) scale(0.97);
+    transition: opacity 800ms cubic-bezier(0.16, 1, 0.3, 1) 100ms,
+                transform 800ms cubic-bezier(0.16, 1, 0.3, 1) 100ms,
+                box-shadow 400ms ease;
+    will-change: opacity, transform;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}.is-visible .ai-bamboo-{{ ai_gen_id }}__photo {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__photo:hover {
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.2);
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__photo-parallax {
+    width: 100%;
+    height: calc(100% + 24px);
+    margin-top: -12px;
+    transform: translateY(var(--bamboo-parallax-y, 0px));
+    will-change: transform;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__photo-parallax img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1);
+    transition: transform 350ms cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
+  }
+
+  /* Hover scale maximum: 1.02 */
+  .ai-bamboo-{{ ai_gen_id }}__photo:hover .ai-bamboo-{{ ai_gen_id }}__photo-parallax img {
+    transform: scale(1.02);
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__placeholder {
+    height: 100%;
+    position: relative;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__placeholder svg {
+    width: 100%;
+    height: 100%;
+    background: #777b66;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__placeholder span {
+    position: absolute;
+    bottom: 14px;
+    left: 10px;
+    right: 10px;
+    text-align: center;
+    color: #ffffff;
+    font-size: 12px;
+  }
+
+  @keyframes ai-bamboo-badge-in-{{ ai_gen_id }} {
+    0% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* 95% bamboo badge */
+  .ai-bamboo-{{ ai_gen_id }}__badge {
+    position: absolute;
+    z-index: 2;
+    right: 2%;
+    bottom: 5px;
+    width: 96px;
+    height: 96px;
+    padding: 9px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    background: {{ block.settings.badge_color | default: '#F2B52F' }};
+    color: {{ block.settings.badge_text_color | default: '#343923' }};
+    text-align: center;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+    opacity: 0;
+    transform: scale(0.7);
+    will-change: opacity, transform;
+    cursor: default;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}.is-visible .ai-bamboo-{{ ai_gen_id }}__badge {
+    opacity: 1;
+    transform: scale(1);
+    animation: ai-bamboo-badge-in-{{ ai_gen_id }} 650ms cubic-bezier(0.34, 1.4, 0.64, 1) 320ms backwards;
+    transition: transform 250ms cubic-bezier(0.2, 1, 0.3, 1), box-shadow 250ms ease;
+  }
+
+  /* Subtle hover scale of 1.05. No continuous spinning or pulsing */
+  .ai-bamboo-{{ ai_gen_id }}.is-visible .ai-bamboo-{{ ai_gen_id }}__badge:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__badge p {
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__badge p:first-child {
+    font-size: clamp(21px, 2vw, 25px);
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.6px;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__badge p:last-child {
+    max-width: 72px;
+    font-size: 7px;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0.65px;
+    text-transform: uppercase;
+  }
+
+  /* Right Column: Content */
+  .ai-bamboo-{{ ai_gen_id }}__content {
+    min-width: 0;
+    width: 100%;
+    max-width: 570px;
+    margin-inline: auto;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__eyebrow p,
+  .ai-bamboo-{{ ai_gen_id }}__heading p,
+  .ai-bamboo-{{ ai_gen_id }}__description p,
+  .ai-bamboo-{{ ai_gen_id }}__feature-heading p,
+  .ai-bamboo-{{ ai_gen_id }}__feature-copy p,
+  .ai-bamboo-{{ ai_gen_id }}__button p,
+  .ai-bamboo-{{ ai_gen_id }}__link p {
+    margin: 0;
+  }
+
+  /* Eyebrow entrance */
+  .ai-bamboo-{{ ai_gen_id }}__eyebrow {
+    margin: 0 0 17px;
+    color: {{ block.settings.secondary_text_color | default: '#D0D0B9' }};
+    text-transform: uppercase;
+    font-size: 9px;
+    line-height: 1.4;
+    letter-spacing: 2px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 600ms ease 80ms,
+                transform 600ms cubic-bezier(0.16, 1, 0.3, 1) 80ms;
+    will-change: opacity, transform;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}.is-visible .ai-bamboo-{{ ai_gen_id }}__eyebrow {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Main heading slides upward */
+  .ai-bamboo-{{ ai_gen_id }}__heading {
+    margin: 0 0 16px;
+    max-width: 400px;
+    color: {{ block.settings.text_color | default: '#F5F2E8' }};
+    font-size: clamp(30px, 3.2vw, 38px);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -0.7px;
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 700ms cubic-bezier(0.16, 1, 0.3, 1) 180ms,
+                transform 700ms cubic-bezier(0.16, 1, 0.3, 1) 180ms;
+    will-change: opacity, transform;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}.is-visible .ai-bamboo-{{ ai_gen_id }}__heading {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Description fades in */
+  .ai-bamboo-{{ ai_gen_id }}__description {
+    max-width: 490px;
+    margin: 0 0 22px;
+    color: {{ block.settings.secondary_text_color | default: '#D0D0B9' }};
+    font-size: clamp(12px, 1.1vw, 13px);
+    line-height: 1.6;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 700ms ease 280ms,
+                transform 700ms cubic-bezier(0.16, 1, 0.3, 1) 280ms;
+    will-change: opacity, transform;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}.is-visible .ai-bamboo-{{ ai_gen_id }}__description {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Benefit Features Grid */
+  .ai-bamboo-{{ ai_gen_id }}__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(12px, 2.5vw, 35px);
+    row-gap: 22px;
+  }
+
+  /* Four benefit features appear one by one */
+  .ai-bamboo-{{ ai_gen_id }}__feature {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    column-gap: 10px;
+    align-items: start;
+    min-width: 0;
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 600ms ease calc(360ms + var(--feat-idx, 0) * 85ms),
+                transform 600ms cubic-bezier(0.16, 1, 0.3, 1) calc(360ms + var(--feat-idx, 0) * 85ms);
+    will-change: opacity, transform;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}.is-visible .ai-bamboo-{{ ai_gen_id }}__feature {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @keyframes ai-bamboo-icon-in-{{ ai_gen_id }} {
+    0% {
+      opacity: 0;
+      transform: scale(0.72);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Circular icons scale in gently, slightly scale on hover with 250-300ms transition */
+  .ai-bamboo-{{ ai_gen_id }}__icon {
+    width: 32px;
+    height: 32px;
+    flex: none;
+    border: 1px solid {{ block.settings.icon_border_color | default: '#DDAA32' }};
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: {{ block.settings.icon_color | default: '#DDAA32' }};
+    overflow: hidden;
+    padding: 0;
+    background: transparent;
+    aspect-ratio: 1;
+    opacity: 0;
+    transform: scale(0.72);
+    will-change: opacity, transform;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}.is-visible .ai-bamboo-{{ ai_gen_id }}__icon {
+    opacity: 1;
+    transform: scale(1);
+    animation: ai-bamboo-icon-in-{{ ai_gen_id }} 500ms cubic-bezier(0.34, 1.3, 0.64, 1) calc(380ms + var(--feat-idx, 0) * 85ms) backwards;
+    transition: transform 280ms cubic-bezier(0.2, 1, 0.3, 1),
+                border-color 280ms ease,
+                background-color 280ms ease,
+                box-shadow 280ms ease;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__feature:hover .ai-bamboo-{{ ai_gen_id }}__icon,
+  .ai-bamboo-{{ ai_gen_id }}__icon:hover {
+    transform: scale(1.12);
+    border-color: #f2b52f;
+    background: rgba(242, 181, 47, 0.12);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__icon img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: cover;
+    object-position: center;
+    border: 0;
+    border-radius: 50%;
+    padding: 0;
+    margin: 0;
+    transition: transform 280ms ease;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__feature:hover .ai-bamboo-{{ ai_gen_id }}__icon img {
+    transform: scale(1.08);
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__icon svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 280ms ease;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__feature:hover .ai-bamboo-{{ ai_gen_id }}__icon svg {
+    transform: scale(1.08);
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__feature-heading {
+    margin: 1px 0 5px;
+    color: {{ block.settings.text_color | default: '#F5F2E8' }};
+    font-size: 13px;
+    line-height: 1.3;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__feature-copy {
+    color: {{ block.settings.secondary_text_color | default: '#D0D0B9' }};
+    font-size: 10px;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+
+  /* CTA buttons fade in last */
+  .ai-bamboo-{{ ai_gen_id }}__actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px 21px;
+    margin-top: 24px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 650ms ease 700ms,
+                transform 650ms cubic-bezier(0.16, 1, 0.3, 1) 700ms;
+    will-change: opacity, transform;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}.is-visible .ai-bamboo-{{ ai_gen_id }}__actions {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    max-width: 100%;
+    padding: 12px 24px;
+    border-radius: 999px;
+    background: {{ block.settings.button_color | default: '#F5F2E8' }};
+    color: {{ block.settings.button_text_color | default: '#343923' }};
+    text-decoration: none;
+    font-size: 11px;
+    line-height: 1.35;
+    font-weight: 600;
+    text-align: center;
+    overflow-wrap: anywhere;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: transform 280ms cubic-bezier(0.2, 1, 0.3, 1),
+                box-shadow 280ms ease,
+                filter 280ms ease;
+    will-change: transform;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__button:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    filter: brightness(1.04);
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__button:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__link {
+    max-width: 100%;
+    color: {{ block.settings.text_color | default: '#F5F2E8' }};
+    font-size: 11px;
+    line-height: 1.5;
+    text-decoration: none;
+    text-underline-offset: 4px;
+    overflow-wrap: anywhere;
+    display: inline-flex;
+    align-items: center;
+    transition: color 250ms ease, transform 250ms ease;
+  }
+
+  .ai-bamboo-{{ ai_gen_id }}__link:hover {
+    text-decoration: underline;
+    transform: translateX(3px);
+  }
+
+  .ai-bamboo-{{ ai_gen_id }} a:focus-visible {
+    outline: 2px solid {{ block.settings.badge_color | default: '#F2B52F' }};
+    outline-offset: 4px;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 900px) and (min-width: 701px) {
+    .ai-bamboo-{{ ai_gen_id }} {
+      padding: 48px 22px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__inner {
+      grid-template-columns: minmax(0, 42fr) minmax(0, 58fr);
+      gap: 22px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__visual {
+      min-height: 350px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__photo {
+      width: min(340px, 92%);
+    }
+    .ai-bamboo-{{ ai_gen_id }}__heading {
+      font-size: 32px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__grid {
+      column-gap: 12px;
+      row-gap: 18px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__feature {
+      grid-template-columns: 28px minmax(0, 1fr);
+      column-gap: 8px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__icon {
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .ai-bamboo-{{ ai_gen_id }} {
+      width: 100%;
+      padding: 38px 24px;
+      overflow: clip;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__visual {
+      min-height: 0;
+      width: 100%;
+      max-width: 460px;
+      margin: 0 auto;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__photo {
+      width: min(400px, 86%);
+      aspect-ratio: 20 / 21;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__ring {
+      width: min(360px, 86%);
+    }
+    .ai-bamboo-{{ ai_gen_id }}__badge {
+      right: 4%;
+      bottom: 5px;
+      width: 88px;
+      height: 88px;
+      padding: 8px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__badge p:first-child {
+      font-size: 23px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__badge p:last-child {
+      font-size: 6.5px;
+      max-width: 67px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__content {
+      max-width: 540px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__eyebrow {
+      margin-bottom: 13px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__heading {
+      font-size: clamp(28px, 8vw, 34px);
+      margin-bottom: 13px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__description {
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__grid {
+      column-gap: 16px;
+      row-gap: 19px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__feature {
+      grid-template-columns: 30px minmax(0, 1fr);
+      column-gap: 8px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__icon {
+      width: 30px;
+      height: 30px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__actions {
+      gap: 12px 18px;
+      margin-top: 22px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .ai-bamboo-{{ ai_gen_id }} {
+      padding: 32px 18px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__grid {
+      column-gap: 10px;
+      row-gap: 17px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__feature {
+      grid-template-columns: 26px minmax(0, 1fr);
+      column-gap: 7px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__icon {
+      width: 26px;
+      height: 26px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__feature-heading {
+      font-size: 11px;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__feature-copy {
+      font-size: 9px;
+      line-height: 1.5;
+    }
+    .ai-bamboo-{{ ai_gen_id }}__button {
+      padding: 11px 17px;
+    }
+  }
+
+  /* Reduced Motion Support */
+  @media (prefers-reduced-motion: reduce) {
+    .ai-bamboo-{{ ai_gen_id }}__ring,
+    .ai-bamboo-{{ ai_gen_id }}__photo,
+    .ai-bamboo-{{ ai_gen_id }}__photo img,
+    .ai-bamboo-{{ ai_gen_id }}__badge,
+    .ai-bamboo-{{ ai_gen_id }}__eyebrow,
+    .ai-bamboo-{{ ai_gen_id }}__heading,
+    .ai-bamboo-{{ ai_gen_id }}__description,
+    .ai-bamboo-{{ ai_gen_id }}__feature,
+    .ai-bamboo-{{ ai_gen_id }}__icon,
+    .ai-bamboo-{{ ai_gen_id }}__actions,
+    .ai-bamboo-{{ ai_gen_id }}__button,
+    .ai-bamboo-{{ ai_gen_id }}__link {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+{% endstyle %}
+
+<why-bamboo-{{ ai_gen_id }} class="ai-bamboo-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-bamboo-{{ ai_gen_id }}__inner">
+    <div class="ai-bamboo-{{ ai_gen_id }}__visual">
+      <span class="ai-bamboo-{{ ai_gen_id }}__ring" aria-hidden="true"></span>
+      <div class="ai-bamboo-{{ ai_gen_id }}__photo">
+        {% if block.settings.image != blank %}
+          <div class="ai-bamboo-{{ ai_gen_id }}__photo-parallax">
+            <img
+              src="{{ block.settings.image | image_url: width: 1000 }}"
+              alt="{{ block.settings.image.alt | default: block.settings.image_alt | escape }}"
+              loading="lazy"
+              width="{{ block.settings.image.width }}"
+              height="{{ block.settings.image.height }}"
+            >
+          </div>
+        {% else %}
+          <div class="ai-bamboo-{{ ai_gen_id }}__placeholder">
+            {{ 'image' | placeholder_svg_tag }}
+            <span>Add a lifestyle image in block settings</span>
+          </div>
+        {% endif %}
+      </div>
+      <div class="ai-bamboo-{{ ai_gen_id }}__badge">
+        {{ block.settings.badge_percent }}
+        {{ block.settings.badge_caption }}
+      </div>
+    </div>
+
+    <div class="ai-bamboo-{{ ai_gen_id }}__content">
+      {% if block.settings.eyebrow != blank %}
+        <div class="ai-bamboo-{{ ai_gen_id }}__eyebrow">{{ block.settings.eyebrow }}</div>
+      {% endif %}
+      <div class="ai-bamboo-{{ ai_gen_id }}__heading">{{ block.settings.heading }}</div>
+      <div class="ai-bamboo-{{ ai_gen_id }}__description">{{ block.settings.description }}</div>
+
+      <div class="ai-bamboo-{{ ai_gen_id }}__grid">
+        {% for i in (1..4) %}
+          {% liquid
+            assign title_key = 'feature_' | append: i | append: '_heading'
+            assign desc_key = 'feature_' | append: i | append: '_description'
+            assign icon_key = 'feature_' | append: i | append: '_icon'
+            assign image_key = 'feature_' | append: i | append: '_icon_image'
+            assign feature_title = block.settings[title_key]
+            assign feature_desc = block.settings[desc_key]
+            assign feature_icon = block.settings[icon_key]
+            assign feature_image = block.settings[image_key]
+            assign feat_idx = forloop.index0
+          %}
+          <article class="ai-bamboo-{{ ai_gen_id }}__feature" style="--feat-idx: {{ feat_idx }};">
+            <span class="ai-bamboo-{{ ai_gen_id }}__icon" aria-hidden="true">
+              {% if feature_image != blank %}
+                <img src="{{ feature_image | image_url: width: 120 }}" alt="" loading="lazy" width="32" height="32">
+              {% else %}
+                {% case feature_icon %}
+                  {% when 'feather' %}
+                    <svg viewBox="0 0 24 24"><path d="M20 4c-6 0-11 2-14 7-2 3-2 6-2 9 3 0 6 0 9-2 5-3 7-8 7-14Z"/><path d="M4 20c3-5 7-8 12-11"/></svg>
+                  {% when 'air' %}
+                    <svg viewBox="0 0 24 24"><path d="M3 8h12a3 3 0 1 0-3-3M3 12h16a2 2 0 1 1-2 2M3 16h9a3 3 0 1 1-3 3"/></svg>
+                  {% when 'stretch' %}
+                    <svg viewBox="0 0 24 24"><path d="M8 4 4 8l4 4M4 8h12a4 4 0 0 1 0 8h-2m2 4 4-4-4-4"/></svg>
+                  {% else %}
+                    <svg viewBox="0 0 24 24"><path d="M20.8 8.6c0 5.2-8.8 11-8.8 11S3.2 13.8 3.2 8.6A4.6 4.6 0 0 1 12 6.4a4.6 4.6 0 0 1 8.8 2.2Z"/></svg>
+                {% endcase %}
+              {% endif %}
+            </span>
+            <div>
+              <div class="ai-bamboo-{{ ai_gen_id }}__feature-heading">{{ feature_title }}</div>
+              <div class="ai-bamboo-{{ ai_gen_id }}__feature-copy">{{ feature_desc }}</div>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+
+      <div class="ai-bamboo-{{ ai_gen_id }}__actions">
+        {% if block.settings.primary_label != blank or block.settings.primary_url != blank %}
+          <a class="ai-bamboo-{{ ai_gen_id }}__button" href="{{ block.settings.primary_url | default: '#' }}">
+            {{ block.settings.primary_label }}
+          </a>
+        {% endif %}
+        {% if block.settings.secondary_label != blank or block.settings.secondary_url != blank %}
+          <a class="ai-bamboo-{{ ai_gen_id }}__link" href="{{ block.settings.secondary_url | default: '#' }}">
+            {{ block.settings.secondary_label }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</why-bamboo-{{ ai_gen_id }}>
+
+<script>
+  (() => {
+    const tag = 'why-bamboo-{{ ai_gen_id }}';
+    if (customElements.get(tag)) return;
+
+    class WhyBamboo extends HTMLElement {
+      connectedCallback() {
+        // 1. Entrance animation via IntersectionObserver
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          this.classList.add('is-visible');
+        } else if ('IntersectionObserver' in window) {
+          this.observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  this.classList.add('is-visible');
+                  this.observer?.disconnect();
+                }
+              });
+            },
+            { threshold: 0.12 }
+          );
+          this.observer.observe(this);
+        } else {
+          this.classList.add('is-visible');
+        }
+
+        // 2. Subtle parallax effect on baby photograph
+        this.initParallax();
+      }
+
+      initParallax() {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const photoTarget = this.querySelector('.ai-bamboo-{{ ai_gen_id }}__photo-parallax') ||
+                            this.querySelector('.ai-bamboo-{{ ai_gen_id }}__photo img');
+        if (!photoTarget) return;
+
+        let ticking = false;
+        const maxParallax = 12; // very slight parallax approx 10-12px
+
+        const updateParallax = () => {
+          const rect = this.getBoundingClientRect();
+          const winH = window.innerHeight;
+          if (rect.bottom > 0 && rect.top < winH) {
+            const progress = (winH - rect.top) / (winH + rect.height);
+            const clamped = Math.max(0, Math.min(1, progress));
+            const translateY = (clamped - 0.5) * maxParallax * 2;
+            photoTarget.style.setProperty('--bamboo-parallax-y', `${translateY.toFixed(1)}px`);
+          }
+          ticking = false;
+        };
+
+        this.onScroll = () => {
+          if (!ticking) {
+            requestAnimationFrame(updateParallax);
+            ticking = true;
+          }
+        };
+
+        const pageWrapper = document.querySelector('.page-wrapper');
+        if (pageWrapper) {
+          pageWrapper.addEventListener('scroll', this.onScroll, { passive: true });
+        }
+        window.addEventListener('scroll', this.onScroll, { passive: true });
+        updateParallax();
+      }
+
+      disconnectedCallback() {
+        if (this.observer) this.observer.disconnect();
+        if (this.onScroll) {
+          const pageWrapper = document.querySelector('.page-wrapper');
+          if (pageWrapper) {
+            pageWrapper.removeEventListener('scroll', this.onScroll);
+          }
+          window.removeEventListener('scroll', this.onScroll);
+        }
+      }
+    }
+
+    customElements.define(tag, WhyBamboo);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Why we chose bamboo",
+  "settings": [
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "richtext",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "<p>— WHY BAMBOO</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<p>Why We Chose<br>Bamboo.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Bamboo viscose is silky to the touch, light on the skin and breathes with your baby — so they stay comfortable from the first nap to the last cuddle of the day.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Baby lifestyle image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text",
+      "default": "Baby wearing a soft bamboo outfit"
+    },
+    {
+      "type": "richtext",
+      "id": "badge_percent",
+      "label": "Badge percentage",
+      "default": "<p>95%</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "badge_caption",
+      "label": "Badge caption",
+      "default": "<p>BAMBOO VISCOSE</p>"
+    },
+    {
+      "type": "header",
+      "content": "Benefits"
+    },
+    {
+      "type": "select",
+      "id": "feature_1_icon",
+      "label": "Benefit 1 fallback icon",
+      "options": [
+        {
+          "value": "feather",
+          "label": "Feather"
+        },
+        {
+          "value": "air",
+          "label": "Air"
+        },
+        {
+          "value": "stretch",
+          "label": "Stretch"
+        },
+        {
+          "value": "heart",
+          "label": "Heart"
+        }
+      ],
+      "default": "feather"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_1_icon_image",
+      "label": "Benefit 1 PNG icon"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_1_heading",
+      "label": "Benefit 1 heading",
+      "default": "<p>Ultra soft</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_1_description",
+      "label": "Benefit 1 description",
+      "default": "<p>A silky, buttery feel that's gentle against delicate newborn skin.</p>"
+    },
+    {
+      "type": "select",
+      "id": "feature_2_icon",
+      "label": "Benefit 2 fallback icon",
+      "options": [
+        {
+          "value": "feather",
+          "label": "Feather"
+        },
+        {
+          "value": "air",
+          "label": "Air"
+        },
+        {
+          "value": "stretch",
+          "label": "Stretch"
+        },
+        {
+          "value": "heart",
+          "label": "Heart"
+        }
+      ],
+      "default": "air"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_2_icon_image",
+      "label": "Benefit 2 PNG icon"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_2_heading",
+      "label": "Benefit 2 heading",
+      "default": "<p>Naturally breathable</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_2_description",
+      "label": "Benefit 2 description",
+      "default": "<p>Airy fibres help keep little ones cool, calm and comfortable.</p>"
+    },
+    {
+      "type": "select",
+      "id": "feature_3_icon",
+      "label": "Benefit 3 fallback icon",
+      "options": [
+        {
+          "value": "feather",
+          "label": "Feather"
+        },
+        {
+          "value": "air",
+          "label": "Air"
+        },
+        {
+          "value": "stretch",
+          "label": "Stretch"
+        },
+        {
+          "value": "heart",
+          "label": "Heart"
+        }
+      ],
+      "default": "stretch"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_3_icon_image",
+      "label": "Benefit 3 PNG icon"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_3_heading",
+      "label": "Benefit 3 heading",
+      "default": "<p>Stretch that moves</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_3_description",
+      "label": "Benefit 3 description",
+      "default": "<p>A touch of spandex lets every piece move with wiggles, kicks and cuddles.</p>"
+    },
+    {
+      "type": "select",
+      "id": "feature_4_icon",
+      "label": "Benefit 4 fallback icon",
+      "options": [
+        {
+          "value": "feather",
+          "label": "Feather"
+        },
+        {
+          "value": "air",
+          "label": "Air"
+        },
+        {
+          "value": "stretch",
+          "label": "Stretch"
+        },
+        {
+          "value": "heart",
+          "label": "Heart"
+        }
+      ],
+      "default": "heart"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_4_icon_image",
+      "label": "Benefit 4 PNG icon"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_4_heading",
+      "label": "Benefit 4 heading",
+      "default": "<p>Kind to their skin</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_4_description",
+      "label": "Benefit 4 description",
+      "default": "<p>Smooth, soft fibres that feel gentle from the very first wear.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Links"
+    },
+    {
+      "type": "richtext",
+      "id": "primary_label",
+      "label": "Primary button label",
+      "default": "<p>Shop bamboo essentials →</p>"
+    },
+    {
+      "type": "url",
+      "id": "primary_url",
+      "label": "Primary button link"
+    },
+    {
+      "type": "richtext",
+      "id": "secondary_label",
+      "label": "Secondary link label",
+      "default": "<p>Read the care guide</p>"
+    },
+    {
+      "type": "url",
+      "id": "secondary_url",
+      "label": "Secondary link"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#626B4C"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Primary text",
+      "default": "#F5F2E8"
+    },
+    {
+      "type": "color",
+      "id": "secondary_text_color",
+      "label": "Secondary text",
+      "default": "#D0D0B9"
+    },
+    {
+      "type": "color",
+      "id": "badge_color",
+      "label": "Badge",
+      "default": "#F2B52F"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge text",
+      "default": "#343923"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon stroke",
+      "default": "#DDAA32"
+    },
+    {
+      "type": "color",
+      "id": "icon_border_color",
+      "label": "Icon circle border",
+      "default": "#DDAA32"
+    },
+    {
+      "type": "color",
+      "id": "ring_color",
+      "label": "Decorative outline",
+      "default": "#D0D0B9"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button background",
+      "default": "#F5F2E8"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#343923"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Why we chose bamboo"
+    }
+  ],
+  "tag": null,
+  "class": "why-we-chose-bamboo"
+}
+{% endschema %}

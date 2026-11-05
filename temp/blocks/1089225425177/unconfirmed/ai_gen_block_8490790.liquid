@@ -1,0 +1,302 @@
+{% doc %}
+  @prompt
+    Create a premium, minimalist FAQ section for the babywear brand KISS & KRY, replicating the supplied reference screenshot as closely as possible.
+    
+    STRICT INSTRUCTION: The uploaded screenshot is the exact visual reference. Do not redesign, reinterpret, or introduce a different layout. Reproduce the same two-column structure, typography, colours, spacing, accordion styling, button shapes, and alignment.
+    
+    1. OVERALL SECTION DESIGN
+    
+    Full-width Shopify section.
+    
+    Background colour: warm pale cream (#F5F3E7).
+    
+    Maximum content width: 1200px.
+    
+    Desktop horizontal padding: 60px.
+    
+    Desktop vertical padding: 75px.
+    
+    Two-column layout.
+    
+    Left column: approximately 42% width.
+    
+    Right column: approximately 58% width.
+    
+    Column gap: 45px.
+    
+    Vertically align both columns towards the top.
+    
+    Premium, minimal, Scandinavian-inspired aesthetic.
+    
+    Use Montserrat typography throughout.
+    
+    2. LEFT COLUMN – FAQ INTRODUCTION
+    
+    Create a vertically aligned content block on the left.
+    
+    Eyebrow text:
+    
+    "— FAQ"
+    
+    Font: Montserrat Medium.
+    
+    Size: 10px.
+    
+    Uppercase.
+    
+    Letter spacing: 2px.
+    
+    Colour: muted olive (#777D5D).
+    
+    Small margin below.
+    
+    Main heading:
+    
+    "Questions?
+    We've Got Answers."
+    
+    Font: Montserrat Bold.
+    
+    Desktop font size: 38px.
+    
+    Line height: 1.08.
+    
+    Colour: dark olive (#626B4C).
+    
+    Left aligned.
+    
+    Maximum width: 400px.
+    
+    Maintain the exact two-line structure.
+    
+    Description:
+    
+    "Can't find what you're looking for? We're happy to help with sizing, orders and returns."
+    
+    Font: Montserrat Regular.
+    
+    Size: 13px.
+    
+    Line height: 1.6.
+    
+    Colour: muted grey olive (#858575).
+    
+    Maximum width: 370px.
+    
+    Margin-top: 16px.
+    
+    Margin-bottom: 25px., 3. CONTACT BUTTONS
+    
+    Create two horizontally aligned pill-shaped buttons below the description.
+    
+    Button 1 – WhatsApp
+    
+    Text: "Chat on WhatsApp"
+    
+    Background: dark olive (#626B4C).
+    
+    Text colour: white (#FFFFFF).
+    
+    Small white WhatsApp/chat icon on the left.
+    
+    Font: Montserrat SemiBold.
+    
+    Size: 11px.
+    
+    Height: 42px.
+    
+    Horizontal padding: 20px.
+    
+    Border radius: 30px.
+    
+    No heavy shadow.
+    
+    Functionality:
+    
+    Link to the store's configurable WhatsApp contact number.
+    
+    Use a Shopify theme setting for the WhatsApp number.
+    
+    Open WhatsApp in a new tab.
+    
+    Use a properly formatted wa.me link.
+    
+    Button 2 – Email Us
+    
+    Text: "Email us"
+    
+    Transparent background.
+    
+    Thin olive border (#A8AD91).
+    
+    Dark olive text.
+    
+    Small envelope icon on the left.
+    
+    Font: Montserrat Medium.
+    
+    Size: 11px.
+    
+    Height: 42px.
+    
+    Horizontal padding: 20px.
+    
+    Border radius: 30px.
+    
+    Functionality:
+    
+    Link to the configurable customer support email address using a mailto link.
+    
+    Button spacing: 10px.
+    
+    4. RIGHT COLUMN – FAQ ACCORDION
+    
+    Create exactly SIX accordion items stacked vertically.
+    
+    The accordion must have the same appearance as the reference screenshot.
+    
+    ACCORDION STRUCTURE
+    
+    Each accordion item:
+    
+    Full available column width.
+    
+    White background (#FFFFFF).
+    
+    Border radius: 14px.
+    
+    No prominent border.
+    
+    No heavy shadow.
+    
+    Minimum height when collapsed: 62px.
+    
+    Horizontal padding: 22px.
+    
+    Vertical padding: 16px.
+    
+    Margin-bottom: 9px.
+    
+    Each question must be left aligned.
+    
+    Each expand/collapse button must be positioned at the far right.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign whatsapp_number = block.settings.whatsapp_number | remove: ' ' | remove: '+' | remove: '-' | remove: '(' | remove: ')' %}
+{% style %}
+  {{ settings.type_body_font | font_face }}
+  {{ settings.type_heading_font | font_face }}
+  .ai-faq-{{ ai_gen_id }} { display:block; width:100%; background:{{ block.settings.background_color }}; padding:75px 60px; }
+  .ai-faq-{{ ai_gen_id }}__inner { width:{{ block.settings.desktop_width_percent }}%; max-width:1200px; margin:0 auto; display:grid; grid-template-columns:42fr 58fr; gap:45px; align-items:start; }
+  .ai-faq-{{ ai_gen_id }}__intro { min-width:0; }
+  .ai-faq-{{ ai_gen_id }}__eyebrow { margin:0 0 13px; color:{{ block.settings.eyebrow_color }}; font-family:{{ settings.type_body_font.family }},{{ settings.type_body_font.fallback_families }}; font-size:10px; font-weight:500; letter-spacing:2px; line-height:1.4; text-transform:uppercase; }
+  .ai-faq-{{ ai_gen_id }}__heading { max-width:400px; margin:0; color:{{ block.settings.heading_color }}; font-family:{{ settings.type_heading_font.family }},{{ settings.type_heading_font.fallback_families }}; font-size:38px; font-weight:700; line-height:1.08; }
+  .ai-faq-{{ ai_gen_id }}__description { max-width:370px; margin:16px 0 25px; color:{{ block.settings.description_color }}; font-family:{{ settings.type_body_font.family }},{{ settings.type_body_font.fallback_families }}; font-size:13px; line-height:1.6; }
+  .ai-faq-{{ ai_gen_id }}__actions { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+  .ai-faq-{{ ai_gen_id }}__button { min-height:42px; display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:0 20px; border:1px solid {{ block.settings.heading_color }}; border-radius:30px; color:{{ block.settings.heading_color }}; font-family:{{ settings.type_body_font.family }},{{ settings.type_body_font.fallback_families }}; font-size:11px; font-weight:600; line-height:1.2; text-decoration:none; }
+  .ai-faq-{{ ai_gen_id }}__button--whatsapp { background:{{ block.settings.heading_color }}; color:#FFFFFF; }
+  .ai-faq-{{ ai_gen_id }}__button--email { background:transparent; border-color:#A8AD91; }
+  .ai-faq-{{ ai_gen_id }}__button svg { width:15px; height:15px; flex:0 0 15px; }
+  .ai-faq-{{ ai_gen_id }}__button:focus-visible,.ai-faq-{{ ai_gen_id }}__question:focus-visible { outline:2px solid {{ block.settings.heading_color }}; outline-offset:4px; }
+  .ai-faq-{{ ai_gen_id }}__list { min-width:0; }
+  .ai-faq-{{ ai_gen_id }}__item { margin-bottom:9px; border-radius:14px; background:#FFFFFF; overflow:hidden; }
+  .ai-faq-{{ ai_gen_id }}__question { width:100%; min-height:62px; display:flex; align-items:center; justify-content:space-between; gap:18px; padding:16px 22px; border:0; background:#FFFFFF; color:{{ block.settings.heading_color }}; text-align:left; cursor:pointer; font-family:{{ settings.type_body_font.family }},{{ settings.type_body_font.fallback_families }}; font-size:14px; font-weight:600; line-height:1.45; }
+  .ai-faq-{{ ai_gen_id }}__icon { flex:0 0 18px; width:18px; height:18px; position:relative; color:{{ block.settings.heading_color }}; }
+  .ai-faq-{{ ai_gen_id }}__icon::before,.ai-faq-{{ ai_gen_id }}__icon::after { content:''; position:absolute; top:8px; left:3px; width:12px; height:1px; background:currentColor; }
+  .ai-faq-{{ ai_gen_id }}__icon::after { transform:rotate(90deg); }
+  .ai-faq-{{ ai_gen_id }}__question[aria-expanded='true'] .ai-faq-{{ ai_gen_id }}__icon::after { display:none; }
+  .ai-faq-{{ ai_gen_id }}__answer { padding:0 52px 19px 22px; color:{{ block.settings.description_color }}; font-family:{{ settings.type_body_font.family }},{{ settings.type_body_font.fallback_families }}; font-size:13px; line-height:1.65; }
+  .ai-faq-{{ ai_gen_id }}__answer p { margin:0; }
+  @media screen and (max-width:749px) { .ai-faq-{{ ai_gen_id }} { padding:48px 22px; } .ai-faq-{{ ai_gen_id }}__inner { width:100%; grid-template-columns:1fr; gap:30px; } .ai-faq-{{ ai_gen_id }}__heading { font-size:32px; } .ai-faq-{{ ai_gen_id }}__question { font-size:13px; } }
+{% endstyle %}
+<faq-accordion-{{ ai_gen_id }} class="ai-faq-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-faq-{{ ai_gen_id }}__inner">
+    <div class="ai-faq-{{ ai_gen_id }}__intro">
+      <p class="ai-faq-{{ ai_gen_id }}__eyebrow">{{ block.settings.eyebrow | escape }}</p>
+      <h2 class="ai-faq-{{ ai_gen_id }}__heading">{{ block.settings.heading | escape | newline_to_br }}</h2>
+      <p class="ai-faq-{{ ai_gen_id }}__description">{{ block.settings.description | escape }}</p>
+      <div class="ai-faq-{{ ai_gen_id }}__actions">
+        {% if whatsapp_number != blank %}
+          <a class="ai-faq-{{ ai_gen_id }}__button ai-faq-{{ ai_gen_id }}__button--whatsapp" href="https://wa.me/{{ whatsapp_number }}" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp (opens in a new tab)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20l1.2-4.4A8.4 8.4 0 1 1 20 11.5Z"/><path d="M8.5 8.5c.4 2.2 2.2 4 4.5 4.5"/></svg>
+            <span>Chat on WhatsApp</span>
+          </a>
+        {% endif %}
+        {% if block.settings.support_email != blank %}
+          <a class="ai-faq-{{ ai_gen_id }}__button ai-faq-{{ ai_gen_id }}__button--email" href="mailto:{{ block.settings.support_email | escape }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
+            <span>Email us</span>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="ai-faq-{{ ai_gen_id }}__list">
+      {% for i in (1..6) %}
+        {% liquid
+          assign question_key = 'question_' | append: i
+          assign answer_key = 'answer_' | append: i
+          assign question_text = block.settings[question_key]
+          assign answer_text = block.settings[answer_key]
+        %}
+        {% if question_text != blank %}
+          <div class="ai-faq-{{ ai_gen_id }}__item">
+            <button class="ai-faq-{{ ai_gen_id }}__question" type="button" aria-expanded="false" aria-controls="ai-faq-answer-{{ ai_gen_id }}-{{ i }}"><span>{{ question_text | escape }}</span><span class="ai-faq-{{ ai_gen_id }}__icon" aria-hidden="true"></span></button>
+            <div class="ai-faq-{{ ai_gen_id }}__answer" id="ai-faq-answer-{{ ai_gen_id }}-{{ i }}" hidden>{{ answer_text }}</div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  <script>
+    (() => {
+      class FaqAccordion{{ ai_gen_id }} extends HTMLElement {
+        connectedCallback() {
+          this.querySelectorAll('.ai-faq-{{ ai_gen_id }}__question').forEach((button) => {
+            button.addEventListener('click', () => {
+              const expanded = button.getAttribute('aria-expanded') === 'true';
+              button.setAttribute('aria-expanded', String(!expanded));
+              this.querySelector(`#${button.getAttribute('aria-controls')}`).hidden = expanded;
+            });
+          });
+        }
+      }
+      const tagName = 'faq-accordion-{{ ai_gen_id }}';
+      if (!customElements.get(tagName)) customElements.define(tagName, FaqAccordion{{ ai_gen_id }});
+    })();
+  </script>
+</faq-accordion-{{ ai_gen_id }}>
+{% schema %}
+{
+  "name": "Minimal FAQ",
+  "settings": [
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "header", "content": "Introduction" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "— FAQ" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Questions?\nWe've Got Answers." },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "Can't find what you're looking for? We're happy to help with sizing, orders and returns." },
+    { "type": "text", "id": "whatsapp_number", "label": "WhatsApp number", "info": "Include country code; formatting characters are removed automatically." },
+    { "type": "text", "id": "support_email", "label": "Support email" },
+    { "type": "header", "content": "FAQ items" },
+    { "type": "text", "id": "question_1", "label": "Question 1", "default": "How do I choose the right size?" },
+    { "type": "richtext", "id": "answer_1", "label": "Answer 1", "default": "<p>Use our size guide to find the best fit for your little one. If you need help, reach out and we’ll be happy to assist.</p>" },
+    { "type": "text", "id": "question_2", "label": "Question 2", "default": "What materials are your babywear made from?" },
+    { "type": "richtext", "id": "answer_2", "label": "Answer 2", "default": "<p>Our garments are thoughtfully made with soft, comfortable materials selected for everyday wear.</p>" },
+    { "type": "text", "id": "question_3", "label": "Question 3", "default": "When will my order ship?" },
+    { "type": "richtext", "id": "answer_3", "label": "Answer 3", "default": "<p>Order processing and delivery estimates are shared at checkout and in your order confirmation.</p>" },
+    { "type": "text", "id": "question_4", "label": "Question 4", "default": "What is your return policy?" },
+    { "type": "richtext", "id": "answer_4", "label": "Answer 4", "default": "<p>Please review our returns page for current eligibility and instructions. Contact us if you have questions.</p>" },
+    { "type": "text", "id": "question_5", "label": "Question 5", "default": "Can I change or cancel my order?" },
+    { "type": "richtext", "id": "answer_5", "label": "Answer 5", "default": "<p>Contact us as soon as possible after placing your order and we’ll let you know what options are available.</p>" },
+    { "type": "text", "id": "question_6", "label": "Question 6", "default": "Do you ship internationally?" },
+    { "type": "richtext", "id": "answer_6", "label": "Answer 6", "default": "<p>Available destinations and shipping options are shown during checkout. Contact us if you need assistance.</p>" },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#F5F3E7" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#626B4C" },
+    { "type": "color", "id": "eyebrow_color", "label": "Eyebrow", "default": "#777D5D" },
+    { "type": "color", "id": "description_color", "label": "Body text", "default": "#666657" }
+  ],
+  "presets": [{ "name": "Minimal FAQ" }],
+  "tag": null,
+  "class": "minimal-faq-block"
+}
+{% endschema %}

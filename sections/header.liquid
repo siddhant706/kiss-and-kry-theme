@@ -690,7 +690,12 @@
       var(--color-background-top-row) 0 var(--top-row-height),
       var(--color-background-bottom-row) var(--top-row-height) var(--header-height)
     );
-    transition: height var(--animation-speed-slow) var(--ease-out-cubic);
+    transition: height var(--animation-speed-slow) var(--ease-out-cubic), box-shadow var(--animation-speed-slow) var(--ease-out-cubic);
+  }
+
+  /* Subtle depth once the sticky header is pinned; only paints a shadow, so header height never changes */
+  .header[data-sticky-state='active'] .header__underlay-closed {
+    box-shadow: 0 1px 12px rgb(var(--color-foreground-rgb) / 0.08);
   }
 
   .header__underlay-open {
@@ -1018,6 +1023,98 @@
   .header-actions__action:not(.account-button) svg {
     width: var(--icon-size-md);
     height: var(--icon-size-md);
+  }
+
+  /* Icon hover/press feedback */
+  @media (hover: hover) {
+    .header-actions__action :is(.svg-wrapper, .account-button__icon),
+    .header__icon--menu .svg-wrapper {
+      transition: transform var(--animation-speed-slow) var(--ease-out-cubic);
+    }
+
+    .header-actions__action:hover :is(.svg-wrapper, .account-button__icon),
+    .header__icon--menu:hover .svg-wrapper {
+      transform: scale(1.12);
+    }
+
+    .header-actions__action.action__cart:hover .svg-wrapper {
+      transform: translateY(-1px) scale(1.12);
+    }
+  }
+
+  .header-actions__action:active :is(.svg-wrapper, .account-button__icon),
+  .header__icon--menu:active .svg-wrapper {
+    transform: scale(0.94);
+  }
+
+  /* Page-load intro: logo, nav links and icons fade in with a short stagger */
+  .header {
+    --header-intro-duration: 0.6s;
+    --header-intro-stagger: 0.12s;
+  }
+
+  .header .header-logo,
+  .header .menu-list__list-item,
+  .header .header-actions,
+  .header .header__icon--menu {
+    animation: header-intro-fade var(--header-intro-duration) var(--ease-out-cubic) backwards;
+  }
+
+  .header .header-logo {
+    animation-name: header-intro-fade-up;
+  }
+
+  .header .menu-list__list-item {
+    animation-delay: calc(var(--header-intro-stagger) * 1);
+  }
+
+  .header .menu-list__list-item:nth-child(2) {
+    animation-delay: calc(var(--header-intro-stagger) * 2);
+  }
+
+  .header .menu-list__list-item:nth-child(3) {
+    animation-delay: calc(var(--header-intro-stagger) * 3);
+  }
+
+  .header .menu-list__list-item:nth-child(4) {
+    animation-delay: calc(var(--header-intro-stagger) * 4);
+  }
+
+  .header .menu-list__list-item:nth-child(n + 5) {
+    animation-delay: calc(var(--header-intro-stagger) * 5);
+  }
+
+  .header .header-actions,
+  .header .header__icon--menu {
+    animation-delay: calc(var(--header-intro-stagger) * 4);
+  }
+
+  @keyframes header-intro-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes header-intro-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .header .header-logo,
+    .header .menu-list__list-item,
+    .header .header-actions,
+    .header .header__icon--menu {
+      animation: none;
+    }
+
+    .header-actions__action :is(.svg-wrapper, .account-button__icon),
+    .header__icon--menu .svg-wrapper {
+      transition: none;
+      transform: none;
+    }
   }
 
   .header:has(#Details-menu-drawer-container[open]) {

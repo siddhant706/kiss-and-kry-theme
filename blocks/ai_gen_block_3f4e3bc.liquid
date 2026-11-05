@@ -1,0 +1,1311 @@
+{% doc %}
+  Bento product grid section:
+  - Preserves existing collection layout, featured image and product grid.
+  - Section entrance:
+    * Eyebrow fades in.
+    * Heading reveals upward.
+    * Category filters appear with staggered animation.
+    * Featured collection image reveals with a subtle clipping mask transition.
+    * Product cards appear sequentially.
+  - Product card hover:
+    * Product image zoom: 1.04 (400ms transition).
+    * Wishlist icon appears/highlights smoothly.
+    * Product badge transitions gently.
+    * Add-to-cart button receives subtle hover response.
+    * Product details do not jump or shift.
+  - Category filters:
+    * Smooth color transition when selecting categories.
+    * Selected category remains visually distinct.
+    * Preserves filtering functionality without breaking grid structure.
+  - Featured image:
+    * Subtle scroll reveal and gentle parallax effect.
+    * Product prices and information remain static and un-animated.
+{% enddoc %}
+
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-bento-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    padding: {{ block.settings.section_padding | default: 50 }}px 20px;
+    background: {{ block.settings.background_color | default: '#FFFFFF' }};
+    color: {{ block.settings.text_color | default: '#1A1A1A' }};
+    --radius: {{ block.settings.card_radius | default: 8 | times: 1.3 }}px;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__inner {
+    width: {{ block.settings.desktop_width_percent | default: 100 }}%;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* Header & Category Filters */
+  .ai-bento-{{ ai_gen_id }}__header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  @media (min-width: 768px) {
+    .ai-bento-{{ ai_gen_id }}__header {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+    }
+  }
+
+  .ai-bento-{{ ai_gen_id }}__header-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Entrance: Eyebrow fades in */
+  .ai-bento-{{ ai_gen_id }}__eyebrow {
+    margin: 0 0 8px;
+    font-size: 11px;
+    line-height: 1.4;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) 40ms,
+                transform 600ms cubic-bezier(0.16, 1, 0.3, 1) 40ms;
+    will-change: opacity, transform;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__eyebrow p,
+  .ai-bento-{{ ai_gen_id }}__heading p {
+    margin: 0;
+  }
+
+  .ai-bento-{{ ai_gen_id }}.is-visible .ai-bento-{{ ai_gen_id }}__eyebrow {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Entrance: Heading reveals upward */
+  .ai-bento-{{ ai_gen_id }}__heading-mask {
+    display: block;
+    overflow: hidden;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__heading {
+    margin: 0;
+    font-size: clamp(32px, 5vw, 60px);
+    line-height: 1.05;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: opacity 700ms cubic-bezier(0.16, 1, 0.3, 1) 120ms,
+                transform 700ms cubic-bezier(0.16, 1, 0.3, 1) 120ms;
+    will-change: opacity, transform;
+  }
+
+  .ai-bento-{{ ai_gen_id }}.is-visible .ai-bento-{{ ai_gen_id }}__heading {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Category filters */
+  .ai-bento-{{ ai_gen_id }}__filters {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 4px 0;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__filter-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.2;
+    cursor: pointer;
+    background: rgba(91, 99, 68, 0.08);
+    color: {{ block.settings.text_color | default: '#5b6344' }};
+    border: 1px solid rgba(91, 99, 68, 0.2);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 500ms ease calc(180ms + var(--f-idx, 0) * 70ms),
+                transform 500ms cubic-bezier(0.16, 1, 0.3, 1) calc(180ms + var(--f-idx, 0) * 70ms),
+                background-color 300ms ease,
+                color 300ms ease,
+                border-color 300ms ease,
+                box-shadow 300ms ease;
+    will-change: opacity, transform, background-color, color;
+  }
+
+  .ai-bento-{{ ai_gen_id }}.is-visible .ai-bento-{{ ai_gen_id }}__filter-btn {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ai-bento-{{ ai_gen_id }}__filter-btn:hover {
+    background: rgba(91, 99, 68, 0.15);
+    transform: translateY(-1px);
+  }
+
+  .ai-bento-{{ ai_gen_id }}__filter-btn.is-active {
+    background: {{ block.settings.button_color | default: '#5b6344' }};
+    color: {{ block.settings.button_text_color | default: '#ffffff' }};
+    border-color: {{ block.settings.button_color | default: '#5b6344' }};
+    font-weight: 600;
+    box-shadow: 0 3px 10px rgba(91, 99, 68, 0.22);
+  }
+
+  /* Bento Grid */
+  .ai-bento-{{ ai_gen_id }}__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(340px, auto));
+    gap: 14px;
+  }
+
+  /* Cards - Sequential entrance */
+  .ai-bento-{{ ai_gen_id }}__card {
+    position: relative;
+    overflow: hidden;
+    min-width: 0;
+    border-radius: var(--radius);
+    background: #eeeeee;
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 650ms ease calc(220ms + var(--card-idx, 0) * 85ms),
+                transform 650ms cubic-bezier(0.16, 1, 0.3, 1) calc(220ms + var(--card-idx, 0) * 85ms),
+                filter 350ms ease,
+                box-shadow 350ms ease;
+    will-change: opacity, transform;
+  }
+
+  .ai-bento-{{ ai_gen_id }}.is-visible .ai-bento-{{ ai_gen_id }}__card {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Filter transition states without altering grid dimensions */
+  .ai-bento-{{ ai_gen_id }}__card.is-filtered-out {
+    opacity: 0.22 !important;
+    filter: grayscale(60%);
+    transform: scale(0.98);
+    pointer-events: none;
+    transition: opacity 350ms ease, transform 350ms ease, filter 350ms ease !important;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__card.is-filtered-match {
+    box-shadow: 0 0 0 2px {{ block.settings.button_color | default: '#5b6344' | color_modify: 'alpha', 0.28 }};
+  }
+
+  /* Card grid placements */
+  .ai-bento-{{ ai_gen_id }}__card:nth-child(1) {
+    grid-column: 1 / span 2;
+    grid-row: 1 / span 2;
+  }
+  .ai-bento-{{ ai_gen_id }}__card:nth-child(2) {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  .ai-bento-{{ ai_gen_id }}__card:nth-child(3) {
+    grid-column: 4;
+    grid-row: 1;
+  }
+  .ai-bento-{{ ai_gen_id }}__card:nth-child(4) {
+    grid-column: 3;
+    grid-row: 2;
+  }
+  .ai-bento-{{ ai_gen_id }}__card:nth-child(5) {
+    grid-column: 4;
+    grid-row: 2;
+  }
+
+  /* Featured Collection Image (Card 1): Subtle clipping mask entrance + gentle parallax */
+  .ai-bento-{{ ai_gen_id }}__media-wrap--featured {
+    position: absolute;
+    inset: -14px 0 -14px 0;
+    width: 100%;
+    height: calc(100% + 28px);
+    overflow: hidden;
+    clip-path: inset(8% round var(--radius));
+    transition: clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1) 250ms;
+    will-change: clip-path;
+  }
+
+  .ai-bento-{{ ai_gen_id }}.is-visible .ai-bento-{{ ai_gen_id }}__media-wrap--featured {
+    clip-path: inset(0 round var(--radius));
+  }
+
+  .ai-bento-{{ ai_gen_id }}__image--featured {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translateY(var(--bento-parallax-y, 0px)) scale(var(--img-zoom, 1.05));
+    transition: transform 400ms cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
+  }
+
+  .ai-bento-{{ ai_gen_id }}.is-visible .ai-bento-{{ ai_gen_id }}__image--featured {
+    --img-zoom: 1;
+  }
+
+  /* Product image zoom: 1.04, transition: 400ms */
+  .ai-bento-{{ ai_gen_id }}__image,
+  .ai-bento-{{ ai_gen_id }}__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 190px;
+    object-fit: cover;
+    border-radius: var(--radius);
+    clip-path: inset(0 round var(--radius));
+    transition: transform 400ms cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__card:hover .ai-bento-{{ ai_gen_id }}__image--featured {
+    transform: translateY(var(--bento-parallax-y, 0px)) scale(1.04);
+  }
+
+  .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2):hover .ai-bento-{{ ai_gen_id }}__image {
+    transform: scale(1.04);
+  }
+
+  .ai-bento-{{ ai_gen_id }}__placeholder {
+    overflow: hidden;
+    background: #ecece8;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__placeholder svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Product badges */
+  .ai-bento-{{ ai_gen_id }}__label {
+    position: absolute;
+    z-index: 2;
+    top: 14px;
+    left: 14px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: #f6f3e5;
+    color: #1a1a1a;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    transition: transform 300ms ease, background-color 300ms ease, box-shadow 300ms ease;
+    will-change: transform;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__card:hover .ai-bento-{{ ai_gen_id }}__label {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .ai-bento-{{ ai_gen_id }}__trust {
+    position: absolute;
+    z-index: 3;
+    top: 12px;
+    right: 12px;
+    width: 73px;
+    height: 73px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    display: block;
+    transition: transform 300ms ease;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__card:hover .ai-bento-{{ ai_gen_id }}__trust {
+    transform: scale(1.04);
+  }
+
+  .ai-bento-{{ ai_gen_id }}__trust img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+  }
+
+  /* Wishlist icon hover & highlight */
+  .ai-bento-{{ ai_gen_id }}__wishlist {
+    position: absolute;
+    z-index: 3;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #111111;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 300ms cubic-bezier(0.2, 1, 0.3, 1),
+                background-color 300ms ease,
+                box-shadow 300ms ease,
+                color 300ms ease;
+    will-change: transform, box-shadow;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__card:hover .ai-bento-{{ ai_gen_id }}__wishlist {
+    transform: scale(1.08);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+  }
+
+  .ai-bento-{{ ai_gen_id }}__wishlist:hover {
+    transform: scale(1.15) !important;
+    background-color: #faf8f2;
+    color: #a32335;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__wishlist svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    transition: fill 300ms ease, stroke 300ms ease, transform 300ms ease;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__wishlist[aria-pressed='true'] svg {
+    fill: #a32335;
+    stroke: #a32335;
+    transform: scale(1.08);
+  }
+
+  /* Overlays & Card Content */
+  .ai-bento-{{ ai_gen_id }}__overlay {
+    position: absolute;
+    inset: 35% 0 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 20px;
+    color: #ffffff;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    pointer-events: none;
+    contain: layout;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__card:nth-child(1) .ai-bento-{{ ai_gen_id }}__overlay {
+    gap: {{ block.settings.product_one_info_gap | default: 8 }}px;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__overlay h3 {
+    margin: 0;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__card:nth-child(1) .ai-bento-{{ ai_gen_id }}__overlay h3 {
+    font-size: {{ block.settings.product_title_size | default: 18 | times: 1.4 }}px;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2) .ai-bento-{{ ai_gen_id }}__overlay h3 {
+    font-size: {{ block.settings.product_title_size | default: 18 | times: 0.78 }}px;
+    font-weight: 700;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__overlay span {
+    font-size: 14px;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__product-eyebrow {
+    font-size: 6.5px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    line-height: 1.2;
+    transition: color 300ms ease;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__description {
+    margin: 0 0 8px;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__description p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__card form {
+    position: absolute;
+    z-index: 4;
+    right: 12px;
+    bottom: 12px;
+    margin: 0;
+  }
+
+  /* Add to Cart button hover response */
+  .ai-bento-{{ ai_gen_id }}__cart-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 32px;
+    padding: 6px 11px;
+    border: 1px solid {{ block.settings.button_color | default: '#1A1A1A' }};
+    border-radius: 999px;
+    background: {{ block.settings.button_color | default: '#1A1A1A' }};
+    color: {{ block.settings.button_text_color | default: '#FFFFFF' }};
+    font: inherit;
+    font-size: 11px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: transform 300ms cubic-bezier(0.2, 1, 0.3, 1),
+                background-color 300ms ease,
+                box-shadow 300ms ease,
+                filter 300ms ease;
+    will-change: transform, box-shadow;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__cart-button:hover {
+    transform: translateY(-1px) scale(1.03);
+    box-shadow: 0 5px 14px rgba(91, 99, 68, 0.28);
+    filter: brightness(1.06);
+  }
+
+  .ai-bento-{{ ai_gen_id }}__cart-button:active {
+    transform: translateY(0) scale(0.97);
+  }
+
+  .ai-bento-{{ ai_gen_id }}__cart-button svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    transition: transform 300ms ease;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__cart-button:hover svg {
+    transform: scale(1.1);
+  }
+
+  .ai-bento-{{ ai_gen_id }}__product-one-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    pointer-events: auto;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__product-one-actions form,
+  .ai-bento-{{ ai_gen_id }}__card:nth-child(1) .ai-bento-{{ ai_gen_id }}__product-one-actions form {
+    position: static;
+    z-index: auto;
+    margin: 0;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__product-one-price {
+    font-weight: 700;
+    color: #ffe27a;
+    font-size: 16px !important;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__product-one-details {
+    color: #ffffff;
+    font-size: 12px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: opacity 250ms ease;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__product-one-details:hover {
+    opacity: 0.85;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__product-one-button {
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  /* Cards 2-5: Overlay below image */
+  .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2) {
+    overflow: visible;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2) .ai-bento-{{ ai_gen_id }}__image,
+  .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2) .ai-bento-{{ ai_gen_id }}__placeholder {
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 1 / 1;
+    clip-path: inset(0 round var(--radius));
+  }
+
+  .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2) .ai-bento-{{ ai_gen_id }}__overlay {
+    position: static;
+    inset: auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto auto;
+    align-items: center;
+    justify-content: initial;
+    gap: 5px 10px;
+    padding: 10px 0 4px;
+    color: {{ block.settings.text_color | default: '#1A1A1A' }};
+    background: none;
+    pointer-events: auto;
+    contain: layout;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2) .ai-bento-{{ ai_gen_id }}__overlay .ai-bento-{{ ai_gen_id }}__product-eyebrow {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    font-size: 6.5px;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2) .ai-bento-{{ ai_gen_id }}__overlay h3 {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2) .ai-bento-{{ ai_gen_id }}__overlay > span:not(.ai-bento-{{ ai_gen_id }}__product-eyebrow) {
+    grid-column: 1;
+    grid-row: 3;
+    font-size: 13px;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2) .ai-bento-{{ ai_gen_id }}__overlay form {
+    position: static;
+    grid-column: 2;
+    grid-row: 2;
+    align-self: center;
+    justify-self: end;
+    margin: 0;
+  }
+
+  .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2) .ai-bento-{{ ai_gen_id }}__cart-button {
+    min-height: 30px;
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+
+  .ai-bento-{{ ai_gen_id }} a:focus-visible,
+  .ai-bento-{{ ai_gen_id }} button:focus-visible {
+    outline: 3px solid #111111;
+    outline-offset: 3px;
+  }
+
+  /* Responsive Mobile Layout (≤749px) */
+  @media (max-width: 749px) {
+    .ai-bento-{{ ai_gen_id }} {
+      padding: {{ block.settings.section_padding | default: 50 | times: 0.6 }}px 14px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__inner {
+      width: 100%;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__header {
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__eyebrow {
+      font-size: 9px;
+      margin-bottom: 6px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__heading {
+      font-size: clamp(26px, 8vw, 40px);
+      line-height: 1.05;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__filters {
+      gap: 6px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__filter-btn {
+      padding: 5px 12px;
+      font-size: 11px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: auto;
+      gap: 14px 9px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__card:nth-child(1) {
+      grid-column: 1 / -1;
+      grid-row: auto;
+      aspect-ratio: 1.15;
+      min-height: 300px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__card:nth-child(1) .ai-bento-{{ ai_gen_id }}__image,
+    .ai-bento-{{ ai_gen_id }}__card:nth-child(1) .ai-bento-{{ ai_gen_id }}__placeholder {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2) {
+      grid-column: span 1;
+      grid-row: auto;
+      min-width: 0;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2) .ai-bento-{{ ai_gen_id }}__image,
+    .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2) .ai-bento-{{ ai_gen_id }}__placeholder {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      min-height: 0;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2) .ai-bento-{{ ai_gen_id }}__label {
+      top: 8px;
+      left: 8px;
+      padding: 4px 7px;
+      font-size: 8px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__wishlist {
+      top: 7px;
+      right: 7px;
+      width: 31px;
+      height: 31px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__wishlist svg {
+      width: 16px;
+      height: 16px;
+      flex-basis: 16px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__trust {
+      top: 9px;
+      right: 9px;
+      width: 58px;
+      height: 58px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__label {
+      top: 10px;
+      left: 10px;
+      padding: 4px 8px;
+      font-size: 8px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__card:nth-child(1) .ai-bento-{{ ai_gen_id }}__overlay {
+      inset: 28% 0 0;
+      gap: 6px;
+      padding: 14px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__card:nth-child(1) .ai-bento-{{ ai_gen_id }}__overlay h3 {
+      font-size: clamp(20px, 6vw, 28px);
+      line-height: 1.1;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__description {
+      margin-bottom: 5px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__description p {
+      font-size: clamp(11px, 3.2vw, 13px);
+      line-height: 1.35;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__product-one-actions {
+      gap: 7px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__product-one-price {
+      font-size: 14px !important;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__product-one-button {
+      font-size: 10px;
+      padding: 5px 8px;
+      min-height: 29px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__product-one-details {
+      font-size: 10px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2) .ai-bento-{{ ai_gen_id }}__overlay {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 4px 5px;
+      padding: 7px 0 2px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2) .ai-bento-{{ ai_gen_id }}__overlay h3 {
+      font-size: clamp(10px, 3.1vw, 13px);
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2) .ai-bento-{{ ai_gen_id }}__overlay .ai-bento-{{ ai_gen_id }}__product-eyebrow {
+      font-size: 6px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2) .ai-bento-{{ ai_gen_id }}__overlay > span:not(.ai-bento-{{ ai_gen_id }}__product-eyebrow) {
+      font-size: 11px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2) .ai-bento-{{ ai_gen_id }}__cart-button {
+      min-height: 27px;
+      padding: 4px 6px;
+      font-size: 10px;
+      gap: 3px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__card:nth-child(n+2) .ai-bento-{{ ai_gen_id }}__cart-button svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .ai-bento-{{ ai_gen_id }} {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__grid {
+      gap: 12px 7px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__card:nth-child(1) {
+      min-height: 280px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__product-one-actions {
+      gap: 5px;
+    }
+
+    .ai-bento-{{ ai_gen_id }}__product-one-details {
+      font-size: 9px;
+    }
+  }
+
+  /* Reduced Motion Support */
+  @media (prefers-reduced-motion: reduce) {
+    .ai-bento-{{ ai_gen_id }}__eyebrow,
+    .ai-bento-{{ ai_gen_id }}__heading,
+    .ai-bento-{{ ai_gen_id }}__filter-btn,
+    .ai-bento-{{ ai_gen_id }}__card,
+    .ai-bento-{{ ai_gen_id }}__media-wrap--featured,
+    .ai-bento-{{ ai_gen_id }}__image,
+    .ai-bento-{{ ai_gen_id }}__wishlist,
+    .ai-bento-{{ ai_gen_id }}__label,
+    .ai-bento-{{ ai_gen_id }}__cart-button {
+      opacity: 1 !important;
+      transform: none !important;
+      clip-path: none !important;
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+{% endstyle %}
+
+<product-bento-{{ ai_gen_id }} class="ai-bento-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-bento-{{ ai_gen_id }}__inner">
+    <div class="ai-bento-{{ ai_gen_id }}__header">
+      <div class="ai-bento-{{ ai_gen_id }}__header-text">
+        {% if block.settings.eyebrow != blank %}
+          <div class="ai-bento-{{ ai_gen_id }}__eyebrow">{{ block.settings.eyebrow }}</div>
+        {% endif %}
+        {% if block.settings.heading != blank %}
+          <div class="ai-bento-{{ ai_gen_id }}__heading-mask">
+            <div class="ai-bento-{{ ai_gen_id }}__heading">{{ block.settings.heading }}</div>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="ai-bento-{{ ai_gen_id }}__filters" role="tablist" aria-label="Filter products by category">
+        <button
+          type="button"
+          class="ai-bento-{{ ai_gen_id }}__filter-btn is-active"
+          data-filter="all"
+          role="tab"
+          aria-selected="true"
+          style="--f-idx: 0;"
+        >
+          All
+        </button>
+        <button
+          type="button"
+          class="ai-bento-{{ ai_gen_id }}__filter-btn"
+          data-filter="bedding"
+          role="tab"
+          aria-selected="false"
+          style="--f-idx: 1;"
+        >
+          Bedding
+        </button>
+        <button
+          type="button"
+          class="ai-bento-{{ ai_gen_id }}__filter-btn"
+          data-filter="bodysuits"
+          role="tab"
+          aria-selected="false"
+          style="--f-idx: 2;"
+        >
+          Bodysuits
+        </button>
+        <button
+          type="button"
+          class="ai-bento-{{ ai_gen_id }}__filter-btn"
+          data-filter="rompers"
+          role="tab"
+          aria-selected="false"
+          style="--f-idx: 3;"
+        >
+          Rompers & Footies
+        </button>
+      </div>
+    </div>
+
+    <div class="ai-bento-{{ ai_gen_id }}__grid">
+      {% for i in (1..5) %}
+        {% liquid
+          assign product_key = 'product_' | append: i
+          assign item = block.settings[product_key]
+          assign card_idx = forloop.index0
+          assign card_category = 'bamboo'
+          if i == 1
+            assign card_category = 'bedding'
+          elsif i == 2 or i == 3
+            assign card_category = 'rompers'
+          elsif i == 4 or i == 5
+            assign card_category = 'bodysuits'
+          endif
+        %}
+        <article
+          class="ai-bento-{{ ai_gen_id }}__card{% if i == 1 %} ai-bento-{{ ai_gen_id }}__card--featured{% endif %}"
+          data-category="{{ card_category }}"
+          style="--card-idx: {{ card_idx }};"
+        >
+          {% if i == 1 %}
+            <span class="ai-bento-{{ ai_gen_id }}__trust" aria-label="Trust indicator">
+              {% if block.settings.trust_image %}
+                <img
+                  src="{{ block.settings.trust_image | image_url: width: 300 }}"
+                  alt="{{ block.settings.trust_image.alt | default: 'Trust indicator' | escape }}"
+                  loading="lazy"
+                  width="300"
+                  height="300"
+                >
+              {% else %}
+                TRUST<br>BADGE
+              {% endif %}
+            </span>
+            <span class="ai-bento-{{ ai_gen_id }}__label">BEDDING</span>
+          {% else %}
+            <span class="ai-bento-{{ ai_gen_id }}__label">BAMBOO</span>
+            <button
+              class="ai-bento-{{ ai_gen_id }}__wishlist"
+              type="button"
+              aria-label="Add product to wishlist"
+              aria-pressed="false"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.8 8.6c0 4.3-8.8 10-8.8 10s-8.8-5.7-8.8-10a4.6 4.6 0 0 1 8.8-1.8 4.6 4.6 0 0 1 8.8 1.8Z"/>
+              </svg>
+            </button>
+          {% endif %}
+
+          {% if item != blank and item.featured_image %}
+            {% if i == 1 %}
+              <div class="ai-bento-{{ ai_gen_id }}__media-wrap--featured">
+                <img
+                  class="ai-bento-{{ ai_gen_id }}__image ai-bento-{{ ai_gen_id }}__image--featured"
+                  src="{{ item.featured_image | image_url: width: 1200 }}"
+                  alt="{{ item.featured_image.alt | default: item.title | escape }}"
+                  loading="lazy"
+                  width="{{ item.featured_image.width }}"
+                  height="{{ item.featured_image.height }}"
+                >
+              </div>
+            {% else %}
+              <img
+                class="ai-bento-{{ ai_gen_id }}__image"
+                src="{{ item.featured_image | image_url: width: 1000 }}"
+                alt="{{ item.featured_image.alt | default: item.title | escape }}"
+                loading="lazy"
+                width="{{ item.featured_image.width }}"
+                height="{{ item.featured_image.height }}"
+              >
+            {% endif %}
+          {% else %}
+            <div class="ai-bento-{{ ai_gen_id }}__placeholder">
+              {{ 'product-apparel-1' | placeholder_svg_tag }}
+            </div>
+          {% endif %}
+
+          <div class="ai-bento-{{ ai_gen_id }}__overlay">
+            {% if i > 1 %}
+              <span class="ai-bento-{{ ai_gen_id }}__product-eyebrow">
+                {% if i == 2 or i == 3 %}
+                  {% if i == 2 %}ROMPERS{% else %}FOOTIES{% endif %}
+                {% else %}
+                  BODYSUITS
+                {% endif %}
+              </span>
+            {% endif %}
+
+            <h3>
+              {% if item != blank %}
+                {{ item.title | escape }}
+              {% else %}
+                Choose product {{ i }}
+              {% endif %}
+            </h3>
+
+            {% if i == 1 and block.settings.product_one_description != blank %}
+              <div class="ai-bento-{{ ai_gen_id }}__description">
+                {{ block.settings.product_one_description }}
+              </div>
+            {% endif %}
+
+            {% if item != blank and i == 1 %}
+              <div class="ai-bento-{{ ai_gen_id }}__product-one-actions">
+                <span class="ai-bento-{{ ai_gen_id }}__product-one-price">{{ item.price | money }}</span>
+                {% form 'product', item %}
+                  <input
+                    type="hidden"
+                    name="id"
+                    value="{{ item.selected_or_first_available_variant.id }}"
+                  >
+                  <button
+                    type="submit"
+                    class="ai-bento-{{ ai_gen_id }}__cart-button ai-bento-{{ ai_gen_id }}__product-one-button"
+                    {% unless item.available %}disabled{% endunless %}
+                  >
+                    {% if item.available %}
+                      Add to cart
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 1.9-1.4L21 8H6"/>
+                        <circle cx="10" cy="20" r="1"/>
+                        <circle cx="18" cy="20" r="1"/>
+                      </svg>
+                    {% else %}
+                      Sold out
+                    {% endif %}
+                  </button>
+                {% endform %}
+                <a class="ai-bento-{{ ai_gen_id }}__product-one-details" href="{{ item.url }}">
+                  View product details
+                </a>
+              </div>
+            {% elsif item != blank %}
+              <span>{{ item.price | money }}</span>
+              {% if i > 1 %}
+                {% form 'product', item %}
+                  <input
+                    type="hidden"
+                    name="id"
+                    value="{{ item.selected_or_first_available_variant.id }}"
+                  >
+                  <button
+                    type="submit"
+                    class="ai-bento-{{ ai_gen_id }}__cart-button"
+                    aria-label="{% if item.available %}Add {{ item.title | escape }} to cart{% else %}Sold out{% endif %}"
+                    {% unless item.available %}disabled{% endunless %}
+                  >
+                    {% if item.available %}
+                      Add
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 1.9-1.4L21 8H6"/>
+                        <circle cx="10" cy="20" r="1"/>
+                        <circle cx="18" cy="20" r="1"/>
+                      </svg>
+                    {% else %}
+                      Sold out
+                    {% endif %}
+                  </button>
+                {% endform %}
+              {% endif %}
+            {% else %}
+              <span>Add a product in block settings</span>
+            {% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</product-bento-{{ ai_gen_id }}>
+
+<script>
+  (() => {
+    const tag = 'product-bento-{{ ai_gen_id }}';
+    if (customElements.get(tag)) return;
+
+    class Bento extends HTMLElement {
+      connectedCallback() {
+        // 1. Wishlist toggle
+        this.querySelectorAll('.ai-bento-{{ ai_gen_id }}__wishlist').forEach((btn) => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const isPressed = btn.getAttribute('aria-pressed') === 'true';
+            btn.setAttribute('aria-pressed', String(!isPressed));
+            btn.setAttribute('aria-label', isPressed ? 'Add product to wishlist' : 'Remove product from wishlist');
+          });
+        });
+
+        // 2. Category filters
+        const filterBtns = this.querySelectorAll('.ai-bento-{{ ai_gen_id }}__filter-btn');
+        const cards = this.querySelectorAll('.ai-bento-{{ ai_gen_id }}__card');
+
+        filterBtns.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const filter = btn.dataset.filter;
+            filterBtns.forEach((b) => {
+              const active = b === btn;
+              b.classList.toggle('is-active', active);
+              b.setAttribute('aria-selected', String(active));
+            });
+
+            cards.forEach((card) => {
+              const cat = card.dataset.category || '';
+              const matches = filter === 'all' || cat.includes(filter);
+              card.classList.toggle('is-filtered-out', !matches);
+              card.classList.toggle('is-filtered-match', matches && filter !== 'all');
+            });
+          });
+        });
+
+        // 3. Section entrance animation observer
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          this.classList.add('is-visible');
+        } else if ('IntersectionObserver' in window) {
+          this.observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  this.classList.add('is-visible');
+                  this.observer?.disconnect();
+                }
+              });
+            },
+            { threshold: 0.1 }
+          );
+          this.observer.observe(this);
+        } else {
+          this.classList.add('is-visible');
+        }
+
+        // 4. Subtle parallax effect on featured collection image
+        this.initParallax();
+      }
+
+      initParallax() {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const featuredImg = this.querySelector('.ai-bento-{{ ai_gen_id }}__image--featured');
+        if (!featuredImg) return;
+
+        let ticking = false;
+        const maxParallax = 16; // gentle movement approx 15-20px
+
+        const updateParallax = () => {
+          const rect = this.getBoundingClientRect();
+          const winH = window.innerHeight;
+          if (rect.bottom > 0 && rect.top < winH) {
+            const progress = (winH - rect.top) / (winH + rect.height);
+            const clamped = Math.max(0, Math.min(1, progress));
+            const translateY = (clamped - 0.5) * maxParallax * 2;
+            featuredImg.style.setProperty('--bento-parallax-y', `${translateY.toFixed(1)}px`);
+          }
+          ticking = false;
+        };
+
+        this.onScroll = () => {
+          if (!ticking) {
+            requestAnimationFrame(updateParallax);
+            ticking = true;
+          }
+        };
+
+        const pageWrapper = document.querySelector('.page-wrapper');
+        if (pageWrapper) {
+          pageWrapper.addEventListener('scroll', this.onScroll, { passive: true });
+        }
+        window.addEventListener('scroll', this.onScroll, { passive: true });
+        updateParallax();
+      }
+
+      disconnectedCallback() {
+        if (this.observer) this.observer.disconnect();
+        if (this.onScroll) {
+          const pageWrapper = document.querySelector('.page-wrapper');
+          if (pageWrapper) {
+            pageWrapper.removeEventListener('scroll', this.onScroll);
+          }
+          window.removeEventListener('scroll', this.onScroll);
+        }
+      }
+    }
+
+    customElements.define(tag, Bento);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Bento product grid",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "<p>Thoughtfully made for every day</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<p>Everyday Essentials, Made Soft.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "product_one_description",
+      "label": "Product 1 description",
+      "default": "<p>Soft, breathable bedding designed for everyday comfort.<br>Made with thoughtfully selected materials for a restful feel.</p>"
+    },
+    {
+      "type": "range",
+      "id": "product_one_info_gap",
+      "label": "Product 1 text spacing",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop content width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Vertical spacing",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card corner radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "product_title_size",
+      "label": "Product name size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "image_picker",
+      "id": "trust_image",
+      "label": "Trust badge PNG"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button background",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "product",
+      "id": "product_1",
+      "label": "Product 1"
+    },
+    {
+      "type": "product",
+      "id": "product_2",
+      "label": "Product 2"
+    },
+    {
+      "type": "product",
+      "id": "product_3",
+      "label": "Product 3"
+    },
+    {
+      "type": "product",
+      "id": "product_4",
+      "label": "Product 4"
+    },
+    {
+      "type": "product",
+      "id": "product_5",
+      "label": "Product 5"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bento product grid"
+    }
+  ],
+  "tag": null,
+  "class": "bento-product-grid-block"
+}
+{% endschema %}
