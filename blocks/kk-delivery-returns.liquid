@@ -1,0 +1,149 @@
+{% doc %}
+  Delivery and returns row with diamond separators.
+{% enddoc %}
+
+{% liquid
+  assign has_items = false
+  if block.settings.item_1 != blank or block.settings.item_2 != blank or block.settings.item_3 != blank or block.settings.item_4 != blank
+    assign has_items = true
+  endif
+%}
+
+<div
+  class="kk-delivery"
+  style="
+    --kk-delivery-accent: {{ block.settings.accent_color | default: '#EDAA2E' }};
+    padding-block-start: {{ block.settings.padding-block-start }}px;
+    padding-block-end: {{ block.settings.padding-block-end }}px;
+  "
+  {{ block.shopify_attributes }}
+>
+  {% if has_items %}
+    <ul class="kk-delivery__items list-unstyled">
+      {% if block.settings.item_1 != blank %}
+        <li class="kk-delivery__item">{{ block.settings.item_1 | escape }}</li>
+      {% endif %}
+      {% if block.settings.item_2 != blank %}
+        <li class="kk-delivery__item">{{ block.settings.item_2 | escape }}</li>
+      {% endif %}
+      {% if block.settings.item_3 != blank %}
+        <li class="kk-delivery__item">{{ block.settings.item_3 | escape }}</li>
+      {% endif %}
+      {% if block.settings.item_4 != blank %}
+        <li class="kk-delivery__item">{{ block.settings.item_4 | escape }}</li>
+      {% endif %}
+    </ul>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .kk-delivery {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+    gap: var(--gap-xs);
+  }
+
+  .kk-delivery__items {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-size: var(--font-size--3xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-foreground);
+    line-height: 1.4;
+  }
+
+  .kk-delivery__item {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .kk-delivery__item:not(:last-child)::after {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    background-color: var(--kk-delivery-accent, #EDAA2E);
+    transform: rotate(45deg);
+    margin-inline: var(--gap-sm);
+    flex-shrink: 0;
+  }
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:names.kk_delivery_returns",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "item_1",
+      "label": "t:settings.item_1",
+      "default": "Free delivery"
+    },
+    {
+      "type": "text",
+      "id": "item_2",
+      "label": "t:settings.item_2",
+      "default": "Cash on delivery"
+    },
+    {
+      "type": "text",
+      "id": "item_3",
+      "label": "t:settings.item_3",
+      "default": "7-day returns"
+    },
+    {
+      "type": "text",
+      "id": "item_4",
+      "label": "t:settings.item_4"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "t:settings.accent_color",
+      "default": "#EDAA2E"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.kk_delivery_returns",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

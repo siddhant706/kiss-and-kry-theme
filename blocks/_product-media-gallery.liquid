@@ -252,6 +252,149 @@
       "default": 4
     },
     {
+      "type": "select",
+      "id": "media_shape",
+      "label": "t:settings.media_shape",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:options.default"
+        },
+        {
+          "value": "arch",
+          "label": "t:options.arch"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "checkbox",
+      "id": "arch_outline",
+      "label": "t:settings.arch_outline",
+      "default": true,
+      "visible_if": "{{ block.settings.media_shape == 'arch' }}"
+    },
+    {
+      "type": "header",
+      "content": "Hallmark badge"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_seal",
+      "label": "t:settings.show_seal",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "seal_text",
+      "label": "t:settings.seal_text",
+      "default": "Super soft • Stretchy • Gentle",
+      "visible_if": "{{ block.settings.show_seal == true }}"
+    },
+    {
+      "type": "range",
+      "id": "seal_size",
+      "label": "t:settings.seal_size",
+      "min": 56,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 72,
+      "visible_if": "{{ block.settings.show_seal == true }}"
+    },
+    {
+      "type": "range",
+      "id": "seal_size_mobile",
+      "label": "t:settings.seal_size_mobile",
+      "min": 44,
+      "max": 84,
+      "step": 4,
+      "unit": "px",
+      "default": 56,
+      "visible_if": "{{ block.settings.show_seal == true }}"
+    },
+    {
+      "type": "color",
+      "id": "seal_background",
+      "label": "t:settings.seal_background",
+      "default": "#EDAA2E",
+      "visible_if": "{{ block.settings.show_seal == true }}"
+    },
+    {
+      "type": "color",
+      "id": "seal_text_color",
+      "label": "t:settings.seal_text_color",
+      "default": "#2B2A22",
+      "visible_if": "{{ block.settings.show_seal == true }}"
+    },
+    {
+      "type": "text",
+      "id": "pill_text",
+      "label": "t:settings.pill_text",
+      "default": "Bamboo viscose",
+      "visible_if": "{{ block.settings.media_shape == 'arch' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_feature_strip",
+      "label": "t:settings.show_feature_strip",
+      "default": true,
+      "visible_if": "{{ block.settings.media_shape == 'arch' }}"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_value",
+      "label": "t:settings.feature_1_value",
+      "default": "95%",
+      "visible_if": "{{ block.settings.media_shape == 'arch' and block.settings.show_feature_strip == true }}"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_label",
+      "label": "t:settings.feature_1_label",
+      "default": "Viscose of bamboo",
+      "visible_if": "{{ block.settings.media_shape == 'arch' and block.settings.show_feature_strip == true }}"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_value",
+      "label": "t:settings.feature_2_value",
+      "default": "5%",
+      "visible_if": "{{ block.settings.media_shape == 'arch' and block.settings.show_feature_strip == true }}"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_label",
+      "label": "t:settings.feature_2_label",
+      "default": "Spandex",
+      "visible_if": "{{ block.settings.media_shape == 'arch' and block.settings.show_feature_strip == true }}"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_value",
+      "label": "t:settings.feature_3_value",
+      "default": "All-in-one",
+      "visible_if": "{{ block.settings.media_shape == 'arch' and block.settings.show_feature_strip == true }}"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_label",
+      "label": "t:settings.feature_3_label",
+      "default": "Design",
+      "visible_if": "{{ block.settings.media_shape == 'arch' and block.settings.show_feature_strip == true }}"
+    },
+    {
+      "type": "range",
+      "id": "strip_radius",
+      "label": "t:settings.strip_radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 16,
+      "visible_if": "{{ block.settings.media_shape == 'arch' and block.settings.show_feature_strip == true }}"
+    },
+    {
       "type": "checkbox",
       "id": "extend_media",
       "label": "t:settings.extend_media_to_screen_edge",

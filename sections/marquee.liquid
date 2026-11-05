@@ -90,6 +90,12 @@
     }
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    marquee-component .marquee__wrapper {
+      animation: none !important;
+    }
+  }
+
   @keyframes marquee-motion {
     to {
       transform: translate3d(calc(-50% - (var(--marquee-gap) / 2)), 0, 0);

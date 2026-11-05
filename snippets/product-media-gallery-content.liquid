@@ -361,6 +361,12 @@
         {% if block_settings.media_columns == "two" and block_settings.large_first_image%}media-gallery--large-first-image{% endif %}
       {% endif %}
       media-gallery--{{ media_presentation }}
+      {% if block_settings.media_shape == 'arch' %}
+        media-gallery--arch
+        {% if block_settings.arch_outline %}
+          media-gallery--arch-outline
+        {% endif %}
+      {% endif %}
       {% if block_settings.slideshow_mobile_controls_style == 'hint' %}
         media-gallery--hint
       {% endif %}
@@ -452,63 +458,106 @@
       {% endcapture %}
     {% endif %}
 
-    {% render 'slideshow',
-      ref: 'slideshow',
-      class: slideshow_class,
-      slides: slides,
-      slide_count: sorted_media.size,
-      slideshow_arrows: slideshow_arrows,
-      arrows_position: icons_position,
-      animate_arrows: animate_arrows,
-      controls: controls
-    %}
+    <div class="kk-media-stage">
+      {% render 'slideshow',
+        ref: 'slideshow',
+        class: slideshow_class,
+        slides: slides,
+        slide_count: sorted_media.size,
+        slideshow_arrows: slideshow_arrows,
+        arrows_position: icons_position,
+        animate_arrows: animate_arrows,
+        controls: controls
+      %}
 
-    {% if media_presentation == 'grid' %}
-      <ul
-        class="media-gallery__grid list-unstyled"
-        data-testid="media-gallery-grid"
-      >
-        {% for media in sorted_media %}
-          <li
-            ref="media[]"
-            class="{{ product_media_container_class }} product-media-container--{{ media.media_type }} {% unless block_settings.aspect_ratio == 'adapt' %}product-media-container--force-aspect{% endunless %}"
-            style="{% if block_settings.aspect_ratio == 'adapt' %} --media-preview-ratio: {{ media.preview_image.aspect_ratio | default: 1.0 }};{% endif %} --media-radius: {{ block_settings.media_radius }}px;"
-            {% if settings.transition_to_main_product and forloop.first %}
-              data-view-transition-type="product-image-transition"
-            {% endif %}
-            {% if media.presentation.focal_point != blank %}
-              data-focal-point="{{ media.presentation.focal_point }}"
-            {% endif %}
-          >
-            {%- if block_settings.zoom and media.media_type == 'image' -%}
-              <button
-                type="button"
-                class="button button-unstyled product-media-container__zoom-button"
-                aria-label="{{ 'actions.zoom_media' | t: index: forloop.index }}"
-                on:click="/zoom/{{ forloop.index0 }}"
-                {% if block_settings.zoom %}
-                  on:pointerenter="/preloadImage/{{ forloop.index0 }}"
-                {% endif %}
-              ></button>
-            {%- endif -%}
-            {%- liquid
-              if needs_both_sizes and forloop.first
-                assign media_sizes = sizes_single
-              else
-                assign media_sizes = sizes
-              endif
-            -%}
-            {% if block_settings.aspect_ratio != 'adapt' and block_settings.constrain_to_viewport %}
-              <div class="product-media-constraint-wrapper">
+      {% if media_presentation == 'grid' %}
+        <ul
+          class="media-gallery__grid list-unstyled"
+          data-testid="media-gallery-grid"
+        >
+          {% for media in sorted_media %}
+            <li
+              ref="media[]"
+              class="{{ product_media_container_class }} product-media-container--{{ media.media_type }} {% unless block_settings.aspect_ratio == 'adapt' %}product-media-container--force-aspect{% endunless %}"
+              style="{% if block_settings.aspect_ratio == 'adapt' %} --media-preview-ratio: {{ media.preview_image.aspect_ratio | default: 1.0 }};{% endif %} --media-radius: {{ block_settings.media_radius }}px;"
+              {% if settings.transition_to_main_product and forloop.first %}
+                data-view-transition-type="product-image-transition"
+              {% endif %}
+              {% if media.presentation.focal_point != blank %}
+                data-focal-point="{{ media.presentation.focal_point }}"
+              {% endif %}
+            >
+              {%- if block_settings.zoom and media.media_type == 'image' -%}
+                <button
+                  type="button"
+                  class="button button-unstyled product-media-container__zoom-button"
+                  aria-label="{{ 'actions.zoom_media' | t: index: forloop.index }}"
+                  on:click="/zoom/{{ forloop.index0 }}"
+                  {% if block_settings.zoom %}
+                    on:pointerenter="/preloadImage/{{ forloop.index0 }}"
+                  {% endif %}
+                ></button>
+              {%- endif -%}
+              {%- liquid
+                if needs_both_sizes and forloop.first
+                  assign media_sizes = sizes_single
+                else
+                  assign media_sizes = sizes
+                endif
+              -%}
+              {% if block_settings.aspect_ratio != 'adapt' and block_settings.constrain_to_viewport %}
+                <div class="product-media-constraint-wrapper">
+                  {%- render 'product-media', media: media, sizes: media_sizes, is_main_product_media: forloop.first -%}
+                </div>
+              {% else %}
                 {%- render 'product-media', media: media, sizes: media_sizes, is_main_product_media: forloop.first -%}
-              </div>
-            {% else %}
-              {%- render 'product-media', media: media, sizes: media_sizes, is_main_product_media: forloop.first -%}
-            {% endif %}
-          </li>
-        {% endfor %}
-      </ul>
-    {% endif %}
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      {% if block_settings.media_shape == 'arch' %}
+        <div class="kk-media-deco" aria-hidden="true">
+          {% if block_settings.show_seal and block_settings.seal_text != blank %}
+            {% liquid
+              assign seal_bg = block_settings.seal_background | default: '#EDAA2E'
+              assign seal_fg = block_settings.seal_text_color | default: '#2B2A22'
+              if seal_bg == blank
+                assign seal_bg = '#EDAA2E'
+              endif
+              if seal_fg == blank
+                assign seal_fg = '#2B2A22'
+              endif
+            %}
+            <div
+              class="kk-media-seal"
+              style="
+                --kk-seal-size: {{ block_settings.seal_size | default: 72 }}px;
+                --kk-seal-size-mobile: {{ block_settings.seal_size_mobile | default: 56 }}px;
+                --kk-seal-bg: {{ seal_bg }};
+                --kk-seal-color: {{ seal_fg }};
+              "
+            >
+              <svg viewBox="0 0 120 120" role="img" aria-label="{{ block_settings.seal_text | escape }}">
+                <circle cx="60" cy="60" r="58" fill="var(--kk-seal-bg)"></circle>
+                <path id="kk-seal-{{ block_id }}" d="M 60,14 A 46,46 0 1 1 59.9,14" fill="none"></path>
+                <text font-size="8.6" font-weight="600" font-family="var(--font-body--family)" fill="var(--kk-seal-color)">
+                  <textPath href="#kk-seal-{{ block_id }}" textLength="285" lengthAdjust="spacing">{{ block_settings.seal_text | upcase | escape }} •</textPath>
+                </text>
+                <path d="M60 78c-12-9-20-16-20-26a12 12 0 0 1 20-8 12 12 0 0 1 20 8c0 10-8 17-20 26z" fill="none" stroke="var(--kk-seal-color)" stroke-width="2.2"></path>
+              </svg>
+            </div>
+          {% endif %}
+
+          {% if block_settings.pill_text != blank %}
+            <div class="kk-media-pill">
+              {{ block_settings.pill_text | escape }}
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
 
     {%- if block_settings.zoom -%}
       <zoom-dialog
@@ -652,6 +701,56 @@
 
         window.ProductModel.loadShopifyXR();
       </script>
+    {%- endif -%}
+
+    {%- if block_settings.media_shape == 'arch' and block_settings.show_feature_strip -%}
+      {%- liquid
+        assign has_feature = false
+        if block_settings.feature_1_value != blank or block_settings.feature_1_label != blank
+          assign has_feature = true
+        elsif block_settings.feature_2_value != blank or block_settings.feature_2_label != blank
+          assign has_feature = true
+        elsif block_settings.feature_3_value != blank or block_settings.feature_3_label != blank
+          assign has_feature = true
+        endif
+      -%}
+      {%- if has_feature -%}
+        <ul
+          class="kk-feature-strip list-unstyled"
+          style="--kk-strip-radius: {{ block_settings.strip_radius }}px;"
+        >
+          {%- if block_settings.feature_1_value != blank or block_settings.feature_1_label != blank -%}
+            <li class="kk-feature-strip__item">
+              {%- if block_settings.feature_1_value != blank -%}
+                <span class="kk-feature-strip__value">{{ block_settings.feature_1_value | escape }}</span>
+              {%- endif -%}
+              {%- if block_settings.feature_1_label != blank -%}
+                <span class="kk-feature-strip__label">{{ block_settings.feature_1_label | escape }}</span>
+              {%- endif -%}
+            </li>
+          {%- endif -%}
+          {%- if block_settings.feature_2_value != blank or block_settings.feature_2_label != blank -%}
+            <li class="kk-feature-strip__item">
+              {%- if block_settings.feature_2_value != blank -%}
+                <span class="kk-feature-strip__value">{{ block_settings.feature_2_value | escape }}</span>
+              {%- endif -%}
+              {%- if block_settings.feature_2_label != blank -%}
+                <span class="kk-feature-strip__label">{{ block_settings.feature_2_label | escape }}</span>
+              {%- endif -%}
+            </li>
+          {%- endif -%}
+          {%- if block_settings.feature_3_value != blank or block_settings.feature_3_label != blank -%}
+            <li class="kk-feature-strip__item">
+              {%- if block_settings.feature_3_value != blank -%}
+                <span class="kk-feature-strip__value">{{ block_settings.feature_3_value | escape }}</span>
+              {%- endif -%}
+              {%- if block_settings.feature_3_label != blank -%}
+                <span class="kk-feature-strip__label">{{ block_settings.feature_3_label | escape }}</span>
+              {%- endif -%}
+            </li>
+          {%- endif -%}
+        </ul>
+      {%- endif -%}
     {%- endif -%}
   </media-gallery>
 {% endif %}
@@ -1092,5 +1191,174 @@
 
   slideshow-slide.product-media-container--tallest {
     content-visibility: visible;
+  }
+
+  /* Arch design */
+  .media-gallery--arch .product-media-container:not(.dialog-zoomed-gallery *) {
+    border-radius: 999px 999px 0 0 !important;
+  }
+
+  .kk-media-stage {
+    position: relative;
+    width: 100%;
+  }
+
+  .kk-media-deco {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    aspect-ratio: var(--gallery-aspect-ratio, 1 / 1.25);
+    pointer-events: none;
+    z-index: var(--layer-flat);
+    border-radius: 999px 999px 0 0;
+  }
+
+  .media-gallery--arch-outline .kk-media-deco {
+    outline: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-25));
+    outline-offset: 10px;
+  }
+
+  .media-gallery--arch .product-media-container img {
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  @media screen and (max-width: 749px) {
+    .media-gallery--arch .kk-media-stage {
+      width: calc(100% - 32px);
+      max-width: 350px;
+      margin-inline: auto;
+    }
+
+    .media-gallery--arch .kk-feature-strip {
+      width: calc(100% - 32px);
+      max-width: 350px;
+      margin-inline: auto;
+    }
+
+    .media-gallery--arch-outline .kk-media-deco {
+      outline-offset: 6px;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .media-gallery--arch.sticky-content {
+      position: sticky;
+      top: calc(var(--header-height, 68px) + var(--gap-sm, 12px));
+      align-self: start;
+    }
+
+    .media-gallery--arch .kk-media-stage {
+      --desktop-arch-max-h: calc(100vh - var(--header-height, 68px) - 210px);
+      --desktop-arch-w: min(100%, calc(var(--desktop-arch-max-h) * 0.8), 540px);
+      width: var(--desktop-arch-w);
+      max-height: var(--desktop-arch-max-h);
+      margin-inline: auto;
+    }
+
+    .media-gallery--arch .kk-feature-strip {
+      --desktop-arch-max-h: calc(100vh - var(--header-height, 68px) - 210px);
+      --desktop-arch-w: min(100%, calc(var(--desktop-arch-max-h) * 0.8), 540px);
+      width: var(--desktop-arch-w);
+      margin-inline: auto;
+      margin-block-start: var(--gap-md, 16px);
+    }
+  }
+
+  .kk-media-seal {
+    position: absolute;
+    top: 24%;
+    inset-inline-start: 14px;
+    width: var(--kk-seal-size, 72px);
+    height: var(--kk-seal-size, 72px);
+    pointer-events: none;
+    z-index: 2;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.12));
+  }
+
+  .kk-media-seal svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+  }
+
+  @media screen and (max-width: 749px) {
+    .kk-media-seal {
+      width: var(--kk-seal-size-mobile, 56px);
+      height: var(--kk-seal-size-mobile, 56px);
+      top: 24%;
+      inset-inline-start: 12px;
+    }
+  }
+
+  .kk-media-pill {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    background: var(--color-background);
+    border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-15));
+    border-radius: 999px;
+    text-transform: uppercase;
+    font-size: var(--font-size--3xs);
+    font-family: var(--font-body--family);
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    padding: var(--padding-2xs) var(--padding-md);
+    color: var(--color-foreground);
+    line-height: 1;
+    z-index: 2;
+  }
+
+  .media-gallery--arch slideshow-controls {
+    margin-block-start: var(--gap-md);
+  }
+
+  .kk-feature-strip {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    list-style: none;
+    margin: 0;
+    margin-block-start: var(--gap-lg);
+    padding: 0;
+    border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-15));
+    border-radius: var(--kk-strip-radius, 16px);
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .kk-feature-strip__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--padding-sm) var(--padding-xs);
+    gap: var(--gap-3xs);
+    min-width: 0;
+  }
+
+  .kk-feature-strip__item:not(:last-child) {
+    border-inline-end: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-15));
+  }
+
+  .kk-feature-strip__value {
+    font-family: var(--font-heading--family);
+    font-weight: var(--font-heading--weight);
+    font-size: var(--font-size--lg);
+    line-height: 1.2;
+    color: var(--color-foreground);
+    word-break: break-word;
+  }
+
+  .kk-feature-strip__label {
+    font-size: var(--font-size--3xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+    color: var(--color-foreground);
+    word-break: break-word;
   }
 {% endstylesheet %}

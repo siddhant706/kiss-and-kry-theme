@@ -35,20 +35,37 @@
           "type": "_product-media-gallery",
           "static": true,
           "settings": {
-            "media_presentation": "grid",
+            "media_presentation": "carousel",
             "media_columns": "two",
             "image_gap": 4,
             "large_first_image": false,
             "icons_style": "arrow",
-            "slideshow_controls_style": "counter",
+            "slideshow_controls_style": "dots",
             "slideshow_mobile_controls_style": "dots",
             "thumbnail_position": "right",
             "thumbnail_width": 44,
             "thumbnail_radius": 0,
-            "aspect_ratio": "1",
-            "constrain_to_viewport": true,
+            "aspect_ratio": "1/1.25",
+            "constrain_to_viewport": false,
             "media_fit": "contain",
             "media_radius": 32,
+            "media_shape": "arch",
+            "arch_outline": true,
+            "show_seal": true,
+            "seal_text": "Super soft • Stretchy • Gentle",
+            "seal_size": 72,
+            "seal_size_mobile": 56,
+            "seal_background": "#EDAA2E",
+            "seal_text_color": "#2B2A22",
+            "pill_text": "Bamboo viscose",
+            "show_feature_strip": true,
+            "feature_1_value": "95%",
+            "feature_1_label": "Viscose of bamboo",
+            "feature_2_value": "5%",
+            "feature_2_label": "Spandex",
+            "feature_3_value": "All-in-one",
+            "feature_3_label": "Design",
+            "strip_radius": 16,
             "extend_media": false,
             "zoom": true,
             "video_loop": false,
@@ -127,29 +144,16 @@
                 "padding-inline-end": 0
               },
               "blocks": {
-                "text_xrnftG": {
-                  "type": "text",
-                  "name": "t:names.product_title",
+                "kk_title_a1": {
+                  "type": "kk-product-title",
                   "settings": {
-                    "text": "<h1>{{ closest.product.title }}</h1>",
-                    "width": "100%",
-                    "max_width": "normal",
+                    "split_mode": "first_word",
+                    "size_desktop": 48,
+                    "size_mobile": 32,
                     "alignment": "left",
-                    "type_preset": "h3",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1rem",
-                    "line_height": "normal",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "pretty",
                     "text_color": "#5B6344",
-                    "background": false,
-                    "background_color": "#00000026",
-                    "corner_radius": 0,
                     "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-block-end": 0
                   },
                   "blocks": {}
                 },
@@ -177,7 +181,7 @@
                 }
               },
               "block_order": [
-                "text_xrnftG",
+                "kk_title_a1",
                 "price_tVjtKg"
               ]
             },
@@ -276,29 +280,27 @@
               },
               "block_order": []
             },
-            "text_aEtTtq": {
-              "type": "text",
-              "name": "t:names.product_description",
+            "kk_delivery_a1": {
+              "type": "kk-delivery-returns",
               "settings": {
-                "text": "{{ closest.product.description }}",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "text_color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
+                "item_1": "Free delivery",
+                "item_2": "Cash on delivery",
+                "item_3": "7-day returns",
+                "item_4": "",
+                "accent_color": "#EDAA2E",
                 "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-block-end": 0
+              },
+              "blocks": {}
+            },
+            "kk_desc_a1": {
+              "type": "kk-product-description",
+              "settings": {
+                "list_columns_desktop": "1",
+                "accent_color": "",
+                "text_color": "",
+                "padding-block-start": 0,
+                "padding-block-end": 0
               },
               "blocks": {}
             }
@@ -308,7 +310,8 @@
             "divider_VJhene",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
-            "text_aEtTtq"
+            "kk_delivery_a1",
+            "kk_desc_a1"
           ]
         }
       },
@@ -468,10 +471,85 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "marquee_pdp": {
+      "type": "marquee",
+      "blocks": {
+        "text_item_1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Silky softness</p>",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "1.25rem",
+            "text_color": "#F6F3E5",
+            "width": "fit-content"
+          }
+        },
+        "text_item_2": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Cool and comfortable</p>",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "1.25rem",
+            "text_color": "#F6F3E5",
+            "width": "fit-content"
+          }
+        },
+        "text_item_3": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Allergy-friendly</p>",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "1.25rem",
+            "text_color": "#F6F3E5",
+            "width": "fit-content"
+          }
+        },
+        "text_item_4": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Easy dressing</p>",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "1.25rem",
+            "text_color": "#F6F3E5",
+            "width": "fit-content"
+          }
+        },
+        "text_item_5": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Eco-conscious fabric</p>",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "1.25rem",
+            "text_color": "#F6F3E5",
+            "width": "fit-content"
+          }
+        }
+      },
+      "block_order": [
+        "text_item_1",
+        "text_item_2",
+        "text_item_3",
+        "text_item_4",
+        "text_item_5"
+      ],
+      "settings": {
+        "movement_direction": "normal",
+        "background_color": "#5B6344",
+        "padding-block-start": 20,
+        "padding-block-end": 20,
+        "gap_between_elements": 40
+      }
     }
   },
   "order": [
     "main",
+    "marquee_pdp",
     "product_recommendations_qggXJq"
   ]
 }

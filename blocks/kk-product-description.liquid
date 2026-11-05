@@ -1,0 +1,185 @@
+{% doc %}
+  Product description block with custom list formatting (checkmarks and numbered steps).
+{% enddoc %}
+
+{% liquid
+  assign desc = closest.product.description
+  if closest.product == blank or desc == blank
+    assign desc = '<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>'
+  endif
+%}
+
+<rte-formatter
+  class="kk-description rte"
+  style="
+    --kk-check-icon: url({{ 'icon-checkmark.svg' | asset_url }});
+    --kk-desc-cols: {{ block.settings.list_columns_desktop | default: 2 }};
+    {% if block.settings.accent_color != blank %}
+      --kk-accent-color: {{ block.settings.accent_color }};
+    {% else %}
+      --kk-accent-color: var(--color-primary-button-background);
+    {% endif %}
+    {% if block.settings.text_color != blank %}
+      color: {{ block.settings.text_color }};
+    {% endif %}
+    padding-block-start: {{ block.settings.padding-block-start }}px;
+    padding-block-end: {{ block.settings.padding-block-end }}px;
+  "
+  {{ block.shopify_attributes }}
+>
+  {{ desc }}
+</rte-formatter>
+
+{% stylesheet %}
+  .kk-description {
+    display: block;
+    width: 100%;
+  }
+
+  .kk-description p {
+    font-size: var(--font-size--body);
+    line-height: var(--line-height--body);
+  }
+
+  .kk-description :is(h2, h3, h4) {
+    font-family: var(--font-heading--family);
+    font-weight: var(--font-heading--weight);
+    font-size: var(--font-size--md);
+    margin-block-start: var(--gap-lg);
+    margin-block-end: var(--gap-xs);
+    color: inherit;
+    letter-spacing: -0.01em;
+  }
+
+  .kk-description ul,
+  .kk-description ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-block-end: var(--gap-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+  }
+
+  .kk-description ul > li {
+    position: relative;
+    padding-inline-start: 1.85rem;
+    line-height: 1.55;
+    font-size: var(--font-size--body);
+    color: inherit;
+  }
+
+  .kk-description ul > li::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+    top: 0.22em;
+    width: 1.15rem;
+    height: 1.15rem;
+    background-color: var(--kk-accent-color);
+    mask-image: var(--kk-check-icon);
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-image: var(--kk-check-icon);
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+  }
+
+  .kk-description ol {
+    counter-reset: kk;
+  }
+
+  .kk-description ol > li {
+    counter-increment: kk;
+    position: relative;
+    padding-inline-start: 2.25rem;
+    line-height: 1.55;
+    font-size: var(--font-size--body);
+    color: inherit;
+  }
+
+  .kk-description ol > li::before {
+    content: counter(kk, decimal-leading-zero);
+    position: absolute;
+    inset-inline-start: 0;
+    top: 0;
+    font-family: var(--font-heading--family);
+    font-weight: var(--font-heading--weight);
+    color: var(--kk-accent-color);
+    font-size: 1.15rem;
+    line-height: 1.4;
+  }
+
+  .kk-description :is(ul, ol) strong {
+    font-weight: 600;
+    color: inherit;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:names.kk_product_description",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "list_columns_desktop",
+      "label": "t:settings.list_columns_desktop",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:options.one_column"
+        },
+        {
+          "value": "2",
+          "label": "t:options.two_columns"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "t:settings.accent_color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:settings.text_color"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.kk_product_description",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

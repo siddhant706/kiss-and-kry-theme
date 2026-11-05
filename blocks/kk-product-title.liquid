@@ -1,0 +1,199 @@
+{% doc %}
+  Product title block with two-tone styling (light first line, bold rest).
+{% enddoc %}
+
+{% liquid
+  assign title_raw = closest.product.title
+  if closest.product == blank
+    assign title_raw = 'placeholders.product_title' | t
+    if title_raw == blank
+      assign title_raw = 'Product title'
+    endif
+  endif
+
+  assign words = title_raw | strip | split: ' '
+  assign split_mode = block.settings.split_mode | default: 'first_word'
+  assign light_part = ''
+  assign bold_part = ''
+
+  if words.size <= 1 or split_mode == 'none'
+    assign bold_part = title_raw
+  elsif split_mode == 'first_word'
+    for word in words
+      if forloop.first
+        assign light_part = word
+      else
+        if bold_part == ''
+          assign bold_part = word
+        else
+          assign bold_part = bold_part | append: ' ' | append: word
+        endif
+      endif
+    endfor
+  elsif split_mode == 'last_word'
+    for word in words
+      if forloop.last
+        assign bold_part = word
+      else
+        if light_part == ''
+          assign light_part = word
+        else
+          assign light_part = light_part | append: ' ' | append: word
+        endif
+      endif
+    endfor
+  endif
+%}
+
+<div
+  class="kk-title-wrapper"
+  style="
+    --kk-title-size-mobile: {{ block.settings.size_mobile }}px;
+    --kk-title-size-desktop: {{ block.settings.size_desktop }}px;
+    --kk-title-align: {{ block.settings.alignment }};
+    {% if block.settings.text_color != blank %}--kk-title-color: {{ block.settings.text_color }};{% endif %}
+    padding-block-start: {{ block.settings.padding-block-start }}px;
+    padding-block-end: {{ block.settings.padding-block-end }}px;
+  "
+  {{ block.shopify_attributes }}
+>
+  <h1 class="kk-title">
+    {% if light_part != blank %}
+      <span class="kk-title__light">{{ light_part | escape }}</span>
+    {% endif %}
+    <span class="kk-title__bold">{{ bold_part | escape }}</span>
+  </h1>
+</div>
+
+{% stylesheet %}
+  .kk-title-wrapper {
+    width: 100%;
+  }
+
+  .kk-title {
+    margin: 0;
+    line-height: var(--line-height--display-tight);
+    font-size: var(--kk-title-size-mobile);
+    text-align: var(--kk-title-align, start);
+    color: var(--kk-title-color, inherit);
+    word-break: break-word;
+  }
+
+  @media screen and (min-width: 750px) {
+    .kk-title {
+      font-size: var(--kk-title-size-desktop);
+    }
+  }
+
+  .kk-title__light {
+    display: block;
+    font-family: var(--font-body--family);
+    font-weight: var(--font-body--weight);
+  }
+
+  .kk-title__bold {
+    display: block;
+    font-family: var(--font-heading--family);
+    font-weight: var(--font-heading--weight);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:names.kk_product_title",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "split_mode",
+      "label": "t:settings.split_mode",
+      "options": [
+        {
+          "value": "first_word",
+          "label": "t:options.first_word"
+        },
+        {
+          "value": "last_word",
+          "label": "t:options.last_word"
+        },
+        {
+          "value": "none",
+          "label": "t:options.none"
+        }
+      ],
+      "default": "first_word"
+    },
+    {
+      "type": "range",
+      "id": "size_desktop",
+      "label": "t:settings.size_desktop",
+      "min": 24,
+      "max": 72,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "size_mobile",
+      "label": "t:settings.size_mobile",
+      "min": 20,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "t:settings.alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:options.start"
+        },
+        {
+          "value": "center",
+          "label": "t:options.center"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:settings.text_color"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.kk_product_title",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}
