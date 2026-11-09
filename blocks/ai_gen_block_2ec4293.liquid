@@ -131,7 +131,7 @@
     display: block;
     width: 0%;
     height: 100%;
-    background: {{ block.settings.accent_color | default: '#ECAB32' }};
+    background: {{ block.settings.layout_bar_color | default: block.settings.accent_color | default: '#ECAB32' }};
   }
 
   /* Background */
@@ -182,7 +182,7 @@
     position: absolute;
     z-index: 4;
     left: 5vw;
-    top: 35%;
+    bottom: clamp(24px, 4vh, 40px);
     max-width: {{ block.settings.copy_width | default: 420 }}px;
   }
   .pr-{{ ai_gen_id }} .dh-dash {
@@ -244,8 +244,8 @@
     place-items: center;
     border: 0;
     border-radius: 50%;
-    background: {{ block.settings.accent_color | default: '#ECAB32' }};
-    color: #fff;
+    background: {{ block.settings.bookmark_bg_color | default: block.settings.accent_color | default: '#ECAB32' }};
+    color: {{ block.settings.bookmark_icon_color | default: '#FFFFFF' }};
     cursor: pointer;
     transition: transform 0.2s ease;
   }
@@ -261,19 +261,21 @@
     display: inline-flex;
     align-items: center;
     padding: 0 28px;
-    border: 1px solid rgba(255, 255, 255, 0.55);
+    background: {{ block.settings.shop_btn_bg_color | default: 'transparent' }};
+    border: 1px solid {{ block.settings.shop_btn_text_color | default: 'rgba(255, 255, 255, 0.55)' }};
     border-radius: 999px;
-    color: #fff;
+    color: {{ block.settings.shop_btn_text_color | default: '#FFFFFF' }};
     text-decoration: none;
     font-size: {{ block.settings.button_size | default: 11 }}px;
     font-weight: {{ block.settings.button_weight | default: 500 }};
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    transition: background 0.3s ease, color 0.3s ease;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
   }
   .pr-{{ ai_gen_id }} .dh-link:hover {
-    background: #fff;
-    color: #111;
+    background: {{ block.settings.shop_btn_hover_bg_color | default: '#FFFFFF' }};
+    border-color: {{ block.settings.shop_btn_hover_bg_color | default: '#FFFFFF' }};
+    color: {{ block.settings.shop_btn_hover_text_color | default: '#111111' }};
   }
 
   /* Cards Track */
@@ -281,14 +283,16 @@
     position: absolute;
     z-index: 4;
     left: 41%;
-    top: 42%;
+    bottom: calc(clamp(24px, 4vh, 40px) + clamp(46px, 3.8vw, 54px) + 20px);
     display: flex;
-    gap: 1.9vw;
+    gap: 1.8vw;
+    align-items: flex-end;
   }
   .pr-{{ ai_gen_id }} .dh-card {
     position: relative;
-    flex: 0 0 clamp(170px, 14.6vw, 240px);
+    flex: 0 0 clamp(160px, 13.8vw, 220px);
     aspect-ratio: 13/20;
+    max-height: calc(100svh - clamp(24px, 4vh, 40px) - clamp(46px, 3.8vw, 54px) - 20px - 90px);
     padding: 0;
     overflow: hidden;
     border: 0;
@@ -359,19 +363,18 @@
   /* Controls Row */
   .pr-{{ ai_gen_id }} .dh-controls {
     position: absolute;
-    z-index: 4;
+    z-index: 5;
     left: 41%;
     right: 4vw;
-    top: 91%;
-    transform: translateY(-50%);
+    bottom: clamp(24px, 4vh, 40px);
     display: flex;
     align-items: center;
     gap: 12px;
   }
   .pr-{{ ai_gen_id }} .dh-arrow {
-    width: 60px;
-    height: 60px;
-    flex: 0 0 60px;
+    width: clamp(46px, 3.8vw, 54px);
+    height: clamp(46px, 3.8vw, 54px);
+    flex: 0 0 clamp(46px, 3.8vw, 54px);
     display: grid;
     place-items: center;
     border: 1px solid rgba(255, 255, 255, 0.55);
@@ -394,7 +397,7 @@
     flex: 1;
     height: 1px;
     margin: 0 24px;
-    background: rgba(255, 255, 255, 0.35);
+    background: {{ block.settings.layout_bar_track_color | default: 'rgba(255, 255, 255, 0.35)' }};
     position: relative;
   }
   .pr-{{ ai_gen_id }} .dh-progress-fill {
@@ -403,14 +406,17 @@
     left: 0;
     width: 0%;
     height: 2px;
-    background: {{ block.settings.accent_color | default: '#ECAB32' }};
+    background: {{ block.settings.layout_bar_color | default: block.settings.accent_color | default: '#ECAB32' }};
   }
   .pr-{{ ai_gen_id }} .dh-counter-box {
-    width: 78px;
-    flex: 0 0 78px;
+    width: clamp(60px, 5vw, 78px);
+    flex: 0 0 clamp(60px, 5vw, 78px);
     overflow: hidden;
-    height: 1.15em;
+    height: calc({{ block.settings.counter_size | default: 42 }}px * 1.3);
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
   }
   .pr-{{ ai_gen_id }} .dh-counter {
     position: relative;
@@ -419,16 +425,19 @@
     font-family: {{ display_font.family | default: settings.type_header_font.family }}, sans-serif;
     font-size: {{ block.settings.counter_size | default: 42 }}px;
     font-weight: 700;
-    line-height: 1.1;
+    line-height: calc({{ block.settings.counter_size | default: 42 }}px * 1.3);
     text-align: right;
   }
   .pr-{{ ai_gen_id }} .dh-counter-digit {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     position: absolute;
     right: 0;
     top: 0;
     width: 100%;
-    line-height: 1.1;
+    height: 100%;
+    line-height: 1;
   }
 
   .pr-{{ ai_gen_id }} button:focus-visible,
@@ -443,10 +452,35 @@
       left: 46%;
     }
     .pr-{{ ai_gen_id }} .dh-card {
-      flex-basis: clamp(150px, 18vw, 190px);
+      flex: 0 0 clamp(140px, 17vw, 180px);
     }
     .pr-{{ ai_gen_id }} .dh-controls {
       left: 46%;
+    }
+  }
+
+  @media (max-height: 680px) and (min-width: 750px) {
+    .pr-{{ ai_gen_id }} .dh-content {
+      bottom: 18px;
+    }
+    .pr-{{ ai_gen_id }} .dh-title {
+      font-size: clamp(34px, 4.5vw, 50px);
+    }
+    .pr-{{ ai_gen_id }} .dh-description {
+      margin: 10px 0 16px;
+      -webkit-line-clamp: 2;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .pr-{{ ai_gen_id }} .dh-controls {
+      bottom: 18px;
+    }
+    .pr-{{ ai_gen_id }} .dh-track {
+      bottom: calc(18px + 44px + 14px);
+    }
+    .pr-{{ ai_gen_id }} .dh-card {
+      flex: 0 0 clamp(130px, 12vw, 165px);
     }
   }
 
@@ -457,7 +491,8 @@
     }
     .pr-{{ ai_gen_id }} .dh-content {
       left: 5vw;
-      top: 10%;
+      top: clamp(36px, 6vh, 60px);
+      bottom: auto;
       max-width: 90vw;
     }
     .pr-{{ ai_gen_id }} .dh-dash {
@@ -475,6 +510,10 @@
       margin: 8px 0 14px;
       font-size: 13px;
       line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
     .pr-{{ ai_gen_id }} .dh-actions {
       gap: 12px;
@@ -493,7 +532,7 @@
       left: 5vw;
       right: 0;
       top: auto;
-      bottom: 80px;
+      bottom: calc(max(16px, env(safe-area-inset-bottom, 16px)) + 44px + 14px);
       gap: 12px;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
@@ -506,6 +545,8 @@
     }
     .pr-{{ ai_gen_id }} .dh-card {
       flex: 0 0 clamp(118px, 32vw, 136px);
+      max-height: calc(100svh - 320px);
+      aspect-ratio: 13 / 20;
       scroll-snap-align: start;
     }
     .pr-{{ ai_gen_id }} .dh-card-copy {
@@ -527,14 +568,15 @@
       left: 5vw;
       right: 5vw;
       top: auto;
-      bottom: 18px;
+      bottom: max(16px, env(safe-area-inset-bottom, 16px));
       transform: none;
       gap: 8px;
+      height: 44px;
     }
     .pr-{{ ai_gen_id }} .dh-arrow {
       width: 44px;
       height: 44px;
-      flex-basis: 44px;
+      flex: 0 0 44px;
     }
     .pr-{{ ai_gen_id }} .dh-arrow svg {
       width: 15px;
@@ -544,11 +586,22 @@
       margin: 0 10px;
     }
     .pr-{{ ai_gen_id }} .dh-counter-box {
-      width: 44px;
-      flex-basis: 44px;
+      width: 48px;
+      flex: 0 0 48px;
+      height: 34px;
     }
     .pr-{{ ai_gen_id }} .dh-counter {
       font-size: 26px;
+      line-height: 34px;
+      height: 34px;
+    }
+    .pr-{{ ai_gen_id }} .dh-counter-digit {
+      font-size: 26px;
+      line-height: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
     }
   }
 {% endstyle %}
@@ -1669,6 +1722,58 @@
       "id": "accent_color",
       "label": "Accent color",
       "default": "#ECAB32"
+    },
+    {
+      "type": "header",
+      "content": "Button & bar colors"
+    },
+    {
+      "type": "color",
+      "id": "shop_btn_bg_color",
+      "label": "Shop button background",
+      "alpha": true
+    },
+    {
+      "type": "color",
+      "id": "shop_btn_text_color",
+      "label": "Shop button text & border",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "shop_btn_hover_bg_color",
+      "label": "Shop button hover background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "shop_btn_hover_text_color",
+      "label": "Shop button hover text",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "bookmark_bg_color",
+      "label": "Bookmark button background",
+      "default": "#ECAB32"
+    },
+    {
+      "type": "color",
+      "id": "bookmark_icon_color",
+      "label": "Bookmark button icon",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "layout_bar_color",
+      "label": "Layout / progress bar fill",
+      "default": "#ECAB32"
+    },
+    {
+      "type": "color",
+      "id": "layout_bar_track_color",
+      "label": "Layout bar track color",
+      "alpha": true
     },
     {
       "type": "range",
