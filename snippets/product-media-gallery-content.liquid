@@ -1249,18 +1249,19 @@
     }
 
     .media-gallery--arch {
-      --gallery-aspect-ratio-desktop: 4 / 3;
-      --desktop-arch-max-h: calc(100vh - var(--header-height, 68px) - 260px);
-      --desktop-arch-w: min(100%, calc(var(--desktop-arch-max-h) * 1.333), 640px);
+      --gallery-aspect-ratio-desktop: 1.15 / 1;
+      --gallery-aspect-ratio-desktop-val: 1.15;
+      --desktop-arch-max-h: calc(100vh - var(--header-height, 68px) - 130px);
+      --desktop-arch-w: min(calc(100% - 24px), calc(var(--desktop-arch-max-h) * var(--gallery-aspect-ratio-desktop-val)));
     }
 
     .media-gallery--arch .product-media-container:not(.dialog-zoomed-gallery *) {
-      aspect-ratio: var(--gallery-aspect-ratio-desktop, 4 / 3) !important;
+      aspect-ratio: var(--gallery-aspect-ratio-desktop, 1.15 / 1) !important;
       max-height: var(--desktop-arch-max-h);
     }
 
     .media-gallery--arch .kk-media-deco {
-      aspect-ratio: var(--gallery-aspect-ratio-desktop, 4 / 3) !important;
+      aspect-ratio: var(--gallery-aspect-ratio-desktop, 1.15 / 1) !important;
       max-height: var(--desktop-arch-max-h);
     }
 
@@ -1277,8 +1278,8 @@
     }
 
     .media-gallery--arch .kk-media-seal {
-      top: 20%;
-      inset-inline-start: 20px;
+      top: 18%;
+      inset-inline-start: 22px;
     }
   }
 
@@ -1334,7 +1335,7 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    margin-block-start: calc(var(--gap-sm, 12px) + 12px);
+    margin-block-start: calc(var(--gap-sm, 12px) + 10px);
     margin-block-end: 0;
     z-index: 2;
   }
@@ -1363,8 +1364,8 @@
   }
 
   .media-gallery--arch .slideshow-controls__thumbnail {
-    width: 68px !important;
-    height: 48px !important;
+    width: 72px !important;
+    height: 50px !important;
     aspect-ratio: unset !important;
     border-radius: 10px !important;
     overflow: hidden;

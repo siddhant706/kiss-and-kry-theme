@@ -58,7 +58,7 @@
             "seal_background": "#EDAA2E",
             "seal_text_color": "#2B2A22",
             "pill_text": "Bamboo viscose",
-            "show_feature_strip": true,
+            "show_feature_strip": false,
             "feature_1_value": "95%",
             "feature_1_label": "Viscose of bamboo",
             "feature_2_value": "5%",
