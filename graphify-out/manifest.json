@@ -882,9 +882,9 @@
     "semantic_hash": ""
   },
   "sections/header-group.json": {
-    "mtime": 1794406542.0013473,
-    "seen": 1794406749.5749295,
-    "ast_hash": "9cc87f6e8ea05e387d8c282887cdaf3f",
+    "mtime": 1794407850.915386,
+    "seen": 1794407996.2125134,
+    "ast_hash": "314c7e4eceaa0f624a7d86a1c16b52c8",
     "semantic_hash": ""
   },
   "templates/404.json": {
@@ -942,9 +942,9 @@
     "semantic_hash": "eb9984ce584bd0df3a0af0a16abd22fd"
   },
   "templates/product.json": {
-    "mtime": 1794402984.7091076,
-    "seen": 1794406749.575006,
-    "ast_hash": "9aefce3bd7aac730e59ac8ec4156a157",
+    "mtime": 1794406839.8186216,
+    "seen": 1794407996.2126458,
+    "ast_hash": "d04df86f853a2301786ea7fc3405c930",
     "semantic_hash": ""
   },
   "templates/search.json": {
@@ -1179,18 +1179,6 @@
     "mtime": 1792584663.1037045,
     "seen": 1793606207.95146,
     "ast_hash": "7f26a1d39ee948f9a981bd43dd9b4dbd",
-    "semantic_hash": ""
-  },
-  "assets/header-bg-desktop.png": {
-    "mtime": 1794405193.6504638,
-    "seen": 1794406749.5750241,
-    "ast_hash": "f069abbb33162a3f488a17509771cd7b",
-    "semantic_hash": ""
-  },
-  "assets/header-bg-mobile.png": {
-    "mtime": 1794405193.6550279,
-    "seen": 1794406749.5750272,
-    "ast_hash": "6fa1e1c28242ccbcd1ce83671ed1af6e",
     "semantic_hash": ""
   }
 }
