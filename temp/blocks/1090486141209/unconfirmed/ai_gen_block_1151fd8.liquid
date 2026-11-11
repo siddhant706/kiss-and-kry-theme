@@ -1,6 +1,127 @@
+{% doc %}
+  @prompt
+    Create a premium, fully responsive, continuously scrolling announcement marquee section for the Kiss & Kry Shopify homepage, following the provided reference design.
+    
+    ### 1. Overall Design
+    - Full-width horizontal marquee.
+    - Background: Warm ivory white (#FFFDF7).
+    - Height: 58px desktop, 48px mobile.
+    - Thin warm beige borders at the top and bottom (#E8DDC8).
+    - Minimal, elegant luxury babywear aesthetic.
+    - No cards, buttons, gradients or heavy shadows.
+    
+    ### 2. Announcement Items
+    
+    Display ONLY these five announcements in this exact order:
+    
+    1. Free Delivery
+    2. 7-Day Easy Returns
+    3. 95% Bamboo Viscose
+    4. Cloud-Soft Comfort
+    5. Secure Checkout
+    
+    IMPORTANT: Do not include Cash on Delivery (COD), payment-on-delivery messages or any additional announcement.
+    
+    ### 3. Icons
+    Use elegant Lucide outline icons inside circular pale-beige backgrounds.
+    
+    - Free Delivery: Truck
+    - 7-Day Easy Returns: Rotate/return arrow
+    - 95% Bamboo Viscose: Bamboo leaf
+    - Cloud-Soft Comfort: Feather
+    - Secure Checkout: Shield-check
+    
+    Icon specifications:
+    - Circle background: #F1F0E5.
+    - Icon color: Olive green (#626B48).
+    - Circle diameter: 30px desktop, 26px mobile.
+    - Icon size: 16–18px.
+    - Stroke width: 1.6px.
+    - All icons must have identical visual dimensions.
+    
+    ### 4. Typography
+    - Font: Montserrat.
+    - Desktop font size: 13px.
+    - Mobile font size: 11px.
+    - Font weight: 500.
+    - Text color: #45463D.
+    - Vertically center all text.
+    - No text wrapping.
+    
+    ### 5. Separators
+    - Small golden circular dots between announcement items.
+    - Color: #D9A441.
+    - Diameter: 4px.
+    - Consistent spacing between icons, text and separators.
+    
+    ### 6. Marquee Animation
+    - Continuous horizontal scrolling from right to left.
+    - Seamless infinite CSS animation.
+    - Duplicate the five-item announcement sequence to avoid blank spaces.
+    - Desktop animation duration: 38 seconds.
+    - Mobile animation duration: 28 seconds.
+    - Pause animation on hover.
+    - No flickering, jumping or sudden resets.
+    - Use CSS keyframes and transforms.
+    - Respect reduced-motion accessibility settings.
+    
+    ### 7. Responsive Behaviour
+    - Full-width on desktop, tablet and mobile.
+    - Single horizontal row at every screen size.
+    - No wrapping or vertical stacking.
+    - Prevent horizontal overflow on the website body.
+    - Maintain consistent icon and text alignment.
+    
+    ### 8. Shopify Theme Editor Settings
+    Provide editable settings for:
+    - Announcement text.
+    - Icon selection.
+    - Background color.
+    - Text color.
+    - Icon color.
+    - Separator color.
+    - Desktop/mobile font size.
+    - Marquee speed.
+    - Section height.
+    - Enable/disable animation.
+    - Add, remove and reorder announcement blocks.
+    
+    ### 9. Technical Requirements
+    - Generate complete Shopify Liquid section code.
+    - Include valid Shopify schema.
+    - Use scoped CSS to avoid affecting other theme sections.
+    - Ensure mobile responsiveness.
+    - Do not modify existing website sections or global theme styles.
+    - Ensure the marquee works without requiring external JavaScript libraries.
+    
+    FINAL DESIGN GOAL:
+    Recreate the reference as a premium, minimal announcement marquee for a luxury bamboo babywear brand. Maintain the ivory background, olive-green circular icons, dark charcoal typography, tiny golden separators and elegant spacing. The final result must look polished, uncluttered and production-ready., allow me to change icons as png, allow me to change font size and icons size also instead of dot as seperator use logo , increase the size of custom PNG icons bro
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% style %}
+.ai-marquee-{{ ai_gen_id }}{display:block;width:100%;height:{{ block.settings.desktop_height }}px;overflow:hidden;background:{{ block.settings.background_color }};border-block:1px solid {{ block.settings.border_color }};color:{{ block.settings.text_color }};--duration:{{ block.settings.duration }}s;--font-size:{{ block.settings.desktop_font_size }}px;--circle-size:{{ block.settings.desktop_icon_circle }}px;--icon-size:{{ block.settings.desktop_icon_size }}px;--png-size:{{ block.settings.desktop_png_size }}px}
+.ai-marquee-{{ ai_gen_id }}__track{display:flex;width:max-content;height:100%;animation:marquee-{{ ai_gen_id }} var(--duration) linear infinite;will-change:transform}
+.ai-marquee-{{ ai_gen_id }}:hover .ai-marquee-{{ ai_gen_id }}__track{animation-play-state:paused}
+.ai-marquee-{{ ai_gen_id }}__group{display:flex;flex:0 0 auto;align-items:center;height:100%}
+.ai-marquee-{{ ai_gen_id }}__item{display:inline-flex;flex:0 0 auto;align-items:center;gap:10px;padding:0 22px;white-space:nowrap;font-family:Montserrat,{{ settings.type_body_font.family }},sans-serif;font-size:var(--font-size);font-weight:500;line-height:1}
+.ai-marquee-{{ ai_gen_id }}__icon{display:flex;flex:0 0 var(--circle-size);width:var(--circle-size);height:var(--circle-size);align-items:center;justify-content:center;overflow:hidden;border-radius:50%;background:{{ block.settings.icon_background }};color:{{ block.settings.icon_color }}}
+.ai-marquee-{{ ai_gen_id }}__icon svg{width:var(--icon-size);height:var(--icon-size);fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.ai-marquee-{{ ai_gen_id }}__icon img{width:var(--png-size);height:var(--png-size);max-width:none;object-fit:contain}
+.ai-marquee-{{ ai_gen_id }}__separator{display:flex;flex:0 0 {{ block.settings.logo_size }}px;width:{{ block.settings.logo_size }}px;height:{{ block.settings.logo_size }}px;align-items:center;justify-content:center;margin:0 14px}
+.ai-marquee-{{ ai_gen_id }}__separator img{width:100%;height:100%;object-fit:contain}
+@keyframes marquee-{{ ai_gen_id }}{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+{% unless block.settings.enable_animation %}.ai-marquee-{{ ai_gen_id }}__track{animation:none}{% endunless %}
+@media(max-width:749px){.ai-marquee-{{ ai_gen_id }}{height:{{ block.settings.mobile_height }}px;--duration:{{ block.settings.mobile_duration }}s;--font-size:{{ block.settings.mobile_font_size }}px;--circle-size:{{ block.settings.mobile_icon_circle }}px;--icon-size:{{ block.settings.mobile_icon_size }}px;--png-size:{{ block.settings.mobile_png_size }}px}.ai-marquee-{{ ai_gen_id }}__item{gap:8px;padding-inline:15px}.ai-marquee-{{ ai_gen_id }}__separator{margin-inline:9px}}
+@media(prefers-reduced-motion:reduce){.ai-marquee-{{ ai_gen_id }}__track{animation:none!important;transform:none}.ai-marquee-{{ ai_gen_id }}__group[aria-hidden=true]{display:none}}
+{% endstyle %}
+<div class="ai-marquee-{{ ai_gen_id }}" role="region" aria-label="Store announcements" {{ block.shopify_attributes }}><div class="ai-marquee-{{ ai_gen_id }}__track">{% for copy in (1..2) %}<div class="ai-marquee-{{ ai_gen_id }}__group" {% if copy == 2 %}aria-hidden="true"{% endif %}>{% for i in (1..5) %}{% liquid
+assign text_key = 'announcement_' | append: i | append: '_text'
+assign icon_key = 'announcement_' | append: i | append: '_icon'
+assign image_key = 'announcement_' | append: i | append: '_image'
+assign announcement_text = block.settings[text_key]
+assign announcement_icon = block.settings[icon_key]
+assign announcement_image = block.settings[image_key]
+%}<span class="ai-marquee-{{ ai_gen_id }}__item"><span class="ai-marquee-{{ ai_gen_id }}__icon" aria-hidden="true">{% if announcement_image != blank %}<img src="{{ announcement_image | image_url: width: 200 }}" alt="" loading="lazy">{% else %}{% case announcement_icon %}{% when 'truck' %}<svg viewBox="0 0 24 24"><path d="M3 6h11v11H3z"/><path d="M14 10h4l3 3v4h-7z"/><circle cx="7.5" cy="18" r="1.5"/><circle cx="17.5" cy="18" r="1.5"/></svg>{% when 'return' %}<svg viewBox="0 0 24 24"><path d="M3 11a8 8 0 0 1 14-5l2 2"/><path d="M19 4v4h-4"/><path d="M21 13a8 8 0 0 1-14 5l-2-2"/><path d="M5 20v-4h4"/></svg>{% when 'leaf' %}<svg viewBox="0 0 24 24"><path d="M20 4c-8 0-14 3-14 10a6 6 0 0 0 6 6c7 0 10-6 8-16Z"/><path d="M4 21c3-5 7-8 12-11"/><path d="M12 11v8"/></svg>{% when 'feather' %}<svg viewBox="0 0 24 24"><path d="M20 4c-5-2-12 2-13 8l-3 8 8-3c6-1 10-8 8-13Z"/><path d="m4 20 11-11"/></svg>{% when 'shield' %}<svg viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="m8.5 12 2.3 2.3 4.8-5"/></svg>{% endcase %}{% endif %}</span><span>{{ announcement_text | escape }}</span></span><span class="ai-marquee-{{ ai_gen_id }}__separator" aria-hidden="true">{% assign separator_logo = block.settings.separator_logo | default: settings.logo %}{% if separator_logo != blank %}<img src="{{ separator_logo | image_url: width: 160 }}" alt="" loading="lazy">{% endif %}</span>{% endfor %}</div>{% endfor %}</div></div>
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{"name":"Announcement marquee","settings":[{"type":"header","content":"Announcements"},{"type":"text","id":"announcement_1_text","label":"Announcement 1","default":"Free Delivery"},{"type":"select","id":"announcement_1_icon","label":"Icon 1","options":[{"value":"truck","label":"Truck"},{"value":"return","label":"Return arrow"},{"value":"leaf","label":"Bamboo leaf"},{"value":"feather","label":"Feather"},{"value":"shield","label":"Shield check"}],"default":"truck"},{"type":"image_picker","id":"announcement_1_image","label":"Custom PNG icon 1"},{"type":"text","id":"announcement_2_text","label":"Announcement 2","default":"7-Day Easy Returns"},{"type":"select","id":"announcement_2_icon","label":"Icon 2","options":[{"value":"truck","label":"Truck"},{"value":"return","label":"Return arrow"},{"value":"leaf","label":"Bamboo leaf"},{"value":"feather","label":"Feather"},{"value":"shield","label":"Shield check"}],"default":"return"},{"type":"image_picker","id":"announcement_2_image","label":"Custom PNG icon 2"},{"type":"text","id":"announcement_3_text","label":"Announcement 3","default":"95% Bamboo Viscose"},{"type":"select","id":"announcement_3_icon","label":"Icon 3","options":[{"value":"truck","label":"Truck"},{"value":"return","label":"Return arrow"},{"value":"leaf","label":"Bamboo leaf"},{"value":"feather","label":"Feather"},{"value":"shield","label":"Shield check"}],"default":"leaf"},{"type":"image_picker","id":"announcement_3_image","label":"Custom PNG icon 3"},{"type":"text","id":"announcement_4_text","label":"Announcement 4","default":"Cloud-Soft Comfort"},{"type":"select","id":"announcement_4_icon","label":"Icon 4","options":[{"value":"truck","label":"Truck"},{"value":"return","label":"Return arrow"},{"value":"leaf","label":"Bamboo leaf"},{"value":"feather","label":"Feather"},{"value":"shield","label":"Shield check"}],"default":"feather"},{"type":"image_picker","id":"announcement_4_image","label":"Custom PNG icon 4"},{"type":"text","id":"announcement_5_text","label":"Announcement 5","default":"Secure Checkout"},{"type":"select","id":"announcement_5_icon","label":"Icon 5","options":[{"value":"truck","label":"Truck"},{"value":"return","label":"Return arrow"},{"value":"leaf","label":"Bamboo leaf"},{"value":"feather","label":"Feather"},{"value":"shield","label":"Shield check"}],"default":"shield"},{"type":"image_picker","id":"announcement_5_image","label":"Custom PNG icon 5"},{"type":"image_picker","id":"separator_logo","label":"Separator logo"},{"type":"range","id":"logo_size","label":"Logo separator size","min":8,"max":32,"step":2,"unit":"px","default":16},{"type":"header","content":"Appearance"},{"type":"color","id":"background_color","label":"Background","default":"#FFFDF7"},{"type":"color","id":"border_color","label":"Borders","default":"#E8DDC8"},{"type":"color","id":"text_color","label":"Text","default":"#45463D"},{"type":"color","id":"icon_background","label":"Icon background","default":"#F1F0E5"},{"type":"color","id":"icon_color","label":"Icon","default":"#626B48"},{"type":"range","id":"desktop_font_size","label":"Desktop font size","min":10,"max":18,"step":1,"unit":"px","default":13},{"type":"range","id":"mobile_font_size","label":"Mobile font size","min":9,"max":16,"step":1,"unit":"px","default":11},{"type":"range","id":"desktop_icon_circle","label":"Desktop icon circle size","min":20,"max":40,"step":2,"unit":"px","default":30},{"type":"range","id":"mobile_icon_circle","label":"Mobile icon circle size","min":18,"max":34,"step":2,"unit":"px","default":26},{"type":"range","id":"desktop_icon_size","label":"Desktop outline icon size","min":10,"max":26,"step":2,"unit":"px","default":18},{"type":"range","id":"mobile_icon_size","label":"Mobile outline icon size","min":10,"max":24,"step":2,"unit":"px","default":16},{"type":"range","id":"desktop_png_size","label":"Desktop custom PNG size","min":10,"max":50,"step":2,"unit":"px","default":30},{"type":"range","id":"mobile_png_size","label":"Mobile custom PNG size","min":10,"max":40,"step":2,"unit":"px","default":26},{"type":"range","id":"desktop_height","label":"Desktop height","min":40,"max":80,"step":2,"unit":"px","default":58},{"type":"range","id":"mobile_height","label":"Mobile height","min":40,"max":64,"step":2,"unit":"px","default":48},{"type":"checkbox","id":"enable_animation","label":"Enable animation","default":true},{"type":"range","id":"duration","label":"Desktop speed duration","min":20,"max":60,"step":1,"unit":"s","default":38},{"type":"range","id":"mobile_duration","label":"Mobile speed duration","min":15,"max":45,"step":1,"unit":"s","default":28}],"presets":[{"name":"Announcement marquee"}],"tag":null,"class":"announcement-marquee-block"}
 {% endschema %}
