@@ -383,15 +383,7 @@
   <div
     class="header__underlay header__underlay-open"
   ></div>
-  {%- liquid
-    assign desktop_bg_img = section.settings.background_image_desktop
-    assign mobile_bg_img = section.settings.background_image_mobile
-    assign has_bg_image = false
-    if desktop_bg_img != blank or mobile_bg_img != blank
-      assign has_bg_image = true
-    endif
-  -%}
-  {%- if section.settings.enable_background_image and has_bg_image -%}
+  {%- if section.settings.enable_background_image -%}
     <div
       class="header__background-media"
       aria-hidden="true"
@@ -402,6 +394,10 @@
         --header-bg-mobile-brightness: {{ section.settings.background_brightness_mobile | default: 100 | divided_by: 100.0 }};
       "
     >
+      {%- liquid
+        assign desktop_bg_img = section.settings.background_image_desktop
+        assign mobile_bg_img = section.settings.background_image_mobile
+      -%}
       {%- if desktop_bg_img != blank -%}
         {{
           desktop_bg_img
@@ -414,6 +410,16 @@
             fetchpriority: 'high',
             alt: ''
         }}
+      {%- else -%}
+        <img
+          src="{{ 'header-bg-desktop.png' | asset_url }}"
+          class="header__background-image header__background-image--desktop mobile:hidden"
+          loading="eager"
+          fetchpriority="high"
+          alt=""
+          width="1024"
+          height="99"
+        >
       {%- endif -%}
 
       {%- if mobile_bg_img != blank -%}
@@ -428,6 +434,16 @@
             fetchpriority: 'high',
             alt: ''
         }}
+      {%- else -%}
+        <img
+          src="{{ 'header-bg-mobile.png' | asset_url }}"
+          class="header__background-image header__background-image--mobile desktop:hidden"
+          loading="eager"
+          fetchpriority="high"
+          alt=""
+          width="1024"
+          height="295"
+        >
       {%- endif -%}
     </div>
   {%- endif -%}
@@ -1919,7 +1935,7 @@
       "type": "checkbox",
       "id": "enable_background_image",
       "label": "t:settings.enable_background_image",
-      "default": false
+      "default": true
     },
     {
       "type": "header",
