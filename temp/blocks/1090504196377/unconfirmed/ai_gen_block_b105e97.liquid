@@ -1,6 +1,266 @@
+{% doc %}
+  @prompt
+    Create a premium, fully responsive Shopify Liquid section for Kiss & Kry titled "Giving Back – Outgrown, Not Outworn."
+    
+    IMPORTANT: Use the uploaded reference image as the exact visual design reference. Reproduce the layout, proportions, spacing, typography, colours, card styles, image placements and overall composition as closely as possible.
+    
+    Do not redesign, simplify or reinterpret the layout.
+    
+    The section should communicate Kiss & Kry's sustainable babywear return and redistribution initiative.
+    
+    1. OVERALL DESIGN & COLOUR PALETTE
+    
+    Create a full-width premium editorial-style section.
+    
+    Main background:
+    
+    Deep muted olive green: #5E6848 (approximate).
+    
+    Primary text: Warm ivory #F6F2E5.
+    
+    Secondary text: Muted sage-beige #C7C7AD.
+    
+    Accent colour: Warm mustard gold #E9AC29.
+    
+    Light card background: #F5F0E9.
+    
+    Dark olive card: #495239.
+    
+    Borders: Subtle translucent sage/olive.
+    
+    Design characteristics:
+    
+    Luxury editorial aesthetic.
+    
+    Premium babywear branding.
+    
+    Minimal, sophisticated and spacious.
+    
+    Rounded corners.
+    
+    Subtle background decorative circular outlines.
+    
+    No unnecessary gradients.
+    
+    No excessive shadows.
+    
+    Avoid generic ecommerce layouts.
+    
+    Use Montserrat for all typography.
+    
+    2. SECTION ONE – HERO / GIVING BACK INTRODUCTION
+    
+    Create a two-column desktop layout.
+    
+    LEFT COLUMN – 48% WIDTH
+    
+    Small eyebrow heading:
+    "GIVING BACK"
+    
+    Add a short horizontal mustard-gold line before the label.
+    
+    Main heading:
+    
+    "Outgrown,
+    Not Outworn."
+    
+    Typography:
+    
+    Large, bold Montserrat.
+    
+    Approximately 40–44px desktop.
+    
+    Warm ivory colour.
+    
+    Tight line height.
+    
+    Left aligned.
+    
+    Description:
+    
+    "At Kiss & Kry, we believe true luxury goes beyond premium fabrics and adorable designs. It's compassion, community and sustainability — and it sits at the heart of our 'Giving Back' initiative."
+    
+    Use 14px text with comfortable line spacing.
+    
+    Below the description, create an editorial image composition:
+    
+    Large vertical image on the left showing a premium cardboard return box with Kiss & Kry branding.
+    
+    Smaller rectangular image on the right showing a baby garment being held or folded.
+    
+    Rounded corners.
+    
+    Subtle overlapping composition.
+    
+    Add small ivory pill labels:
+    "Step 01 · Return"
+    "Step 02 · Redistribute"
+    
+    Add a circular olive-and-gold seal overlapping the images, featuring a return/recycle arrow and small curved text:
+    "RETURN • REWARD • REDISTRIBUTE"
+    
+    RIGHT COLUMN – 52% WIDTH
+    
+    Small eyebrow heading:
+    "OUR UNIQUE INITIATIVE"
+    
+    Add a thin horizontal line extending towards the right.
+    
+    Create two vertically stacked process cards.
+    
+    STEP 01 – RETURN & REWARD
+    
+    Card styling:
+    
+    Background: #F5F0E9.
+    
+    Rounded corners: 22px.
+    
+    Generous internal padding.
+    
+    Light, premium appearance.
+    
+    Top section:
+    
+    Circular olive icon background.
+    
+    Minimal package/return box icon.
+    
+    Small label: "STEP 01"
+    
+    Heading: "Return & Reward"
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-giving-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: clamp(38px, 6vw, 88px) clamp(22px, 5vw, 76px);
+    position: relative;
+    overflow: hidden;
+    background: {{ block.settings.background_color }};
+    color: {{ block.settings.text_color }};
+    font-family: var(--font-body-family, 'Montserrat', sans-serif);
+  }
+  .ai-giving-{{ ai_gen_id }}::before,
+  .ai-giving-{{ ai_gen_id }}::after {
+    content: '';
+    position: absolute;
+    border: 1px solid rgba(199, 199, 173, .16);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .ai-giving-{{ ai_gen_id }}::before { width: 370px; height: 370px; right: -170px; top: -210px; }
+  .ai-giving-{{ ai_gen_id }}::after { width: 250px; height: 250px; left: -155px; bottom: -145px; }
+  .ai-giving-{{ ai_gen_id }}__inner { position: relative; z-index: 1; max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: .92fr 1fr; gap: clamp(38px, 7vw, 104px); align-items: start; }
+  .ai-giving-{{ ai_gen_id }}__eyebrow { display: flex; align-items: center; gap: 12px; margin: 0 0 22px; color: {{ block.settings.muted_color }}; font-size: 11px; font-weight: 600; letter-spacing: .17em; text-transform: uppercase; }
+  .ai-giving-{{ ai_gen_id }}__eyebrow::before { content: ''; width: 30px; height: 1px; background: {{ block.settings.accent_color }}; flex: 0 0 auto; }
+  .ai-giving-{{ ai_gen_id }}__title { margin: 0 0 20px; max-width: 520px; color: {{ block.settings.text_color }}; font-size: clamp(38px, 4vw, 54px); font-weight: 600; letter-spacing: -.045em; line-height: 1.02; }
+  .ai-giving-{{ ai_gen_id }}__intro { max-width: 510px; margin: 0; color: {{ block.settings.muted_color }}; font-size: 14px; line-height: 1.85; }
+  .ai-giving-{{ ai_gen_id }}__collage { position: relative; height: 350px; max-width: 525px; margin-top: 34px; }
+  .ai-giving-{{ ai_gen_id }}__image { position: absolute; overflow: hidden; border-radius: 16px; background: rgba(246,242,229,.12); }
+  .ai-giving-{{ ai_gen_id }}__image--main { left: 0; top: 0; width: 61%; height: 100%; }
+  .ai-giving-{{ ai_gen_id }}__image--small { right: 0; top: 54px; width: 47%; height: 218px; border: 5px solid {{ block.settings.background_color }}; }
+  .ai-giving-{{ ai_gen_id }}__image img, .ai-giving-{{ ai_gen_id }}__image svg { width: 100%; height: 100%; display: block; object-fit: cover; }
+  .ai-giving-{{ ai_gen_id }}__image svg { background: #ddd8cf; color: #817d70; }
+  .ai-giving-{{ ai_gen_id }}__empty { position: absolute; left: 10px; right: 10px; bottom: 10px; padding: 8px 10px; color: #fff; background: rgba(45,49,35,.78); border-radius: 8px; font-size: 11px; text-align: center; }
+  .ai-giving-{{ ai_gen_id }}__pill { position: absolute; z-index: 2; border-radius: 999px; padding: 8px 13px; background: {{ block.settings.text_color }}; color: #35402a; font-size: 10px; font-weight: 600; letter-spacing: .02em; }
+  .ai-giving-{{ ai_gen_id }}__pill--one { left: 16px; bottom: 18px; }
+  .ai-giving-{{ ai_gen_id }}__pill--two { right: 7px; bottom: 39px; }
+  .ai-giving-{{ ai_gen_id }}__seal { position: absolute; z-index: 3; left: 48%; top: 51%; width: 104px; height: 104px; transform: translate(-50%,-50%); display: grid; place-items: center; border: 1px solid {{ block.settings.accent_color }}; border-radius: 50%; background: {{ block.settings.dark_card_color }}; color: {{ block.settings.text_color }}; text-align: center; }
+  .ai-giving-{{ ai_gen_id }}__seal svg { width: 31px; height: 31px; color: {{ block.settings.accent_color }}; }
+  .ai-giving-{{ ai_gen_id }}__seal span { display: block; max-width: 76px; font-size: 8px; line-height: 1.4; letter-spacing: .11em; }
+  .ai-giving-{{ ai_gen_id }}__right .ai-giving-{{ ai_gen_id }}__eyebrow { justify-content: space-between; }
+  .ai-giving-{{ ai_gen_id }}__right .ai-giving-{{ ai_gen_id }}__eyebrow::after { content: ''; height: 1px; background: rgba(199,199,173,.4); flex: 1; }
+  .ai-giving-{{ ai_gen_id }}__cards { display: grid; gap: 16px; }
+  .ai-giving-{{ ai_gen_id }}__card { padding: clamp(24px, 3vw, 34px); border-radius: 22px; background: {{ block.settings.light_card_color }}; color: #30352a; }
+  .ai-giving-{{ ai_gen_id }}__card--dark { background: {{ block.settings.dark_card_color }}; color: {{ block.settings.text_color }}; }
+  .ai-giving-{{ ai_gen_id }}__cardtop { display: flex; align-items: center; gap: 14px; margin-bottom: 17px; }
+  .ai-giving-{{ ai_gen_id }}__icon { width: 48px; height: 48px; flex: 0 0 48px; display: grid; place-items: center; border-radius: 50%; background: #495239; color: {{ block.settings.text_color }}; }
+  .ai-giving-{{ ai_gen_id }}__card--dark .ai-giving-{{ ai_gen_id }}__icon { background: {{ block.settings.accent_color }}; color: #343a29; }
+  .ai-giving-{{ ai_gen_id }}__icon svg { width: 22px; height: 22px; }
+  .ai-giving-{{ ai_gen_id }}__step { margin: 0 0 4px; font-size: 10px; font-weight: 700; letter-spacing: .15em; color: #70745e; }
+  .ai-giving-{{ ai_gen_id }}__card--dark .ai-giving-{{ ai_gen_id }}__step { color: {{ block.settings.muted_color }}; }
+  .ai-giving-{{ ai_gen_id }}__card h3 { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -.025em; line-height: 1.2; }
+  .ai-giving-{{ ai_gen_id }}__card p { margin: 0; color: #565a4c; font-size: 13px; line-height: 1.75; }
+  .ai-giving-{{ ai_gen_id }}__card--dark p { color: {{ block.settings.muted_color }}; }
+  @media screen and (max-width: 749px) {
+    .ai-giving-{{ ai_gen_id }} { width: 100%; padding: 42px 22px; }
+    .ai-giving-{{ ai_gen_id }}__inner { grid-template-columns: 1fr; gap: 40px; }
+    .ai-giving-{{ ai_gen_id }}__title { font-size: clamp(38px, 10vw, 48px); }
+    .ai-giving-{{ ai_gen_id }}__collage { height: 300px; margin-top: 27px; }
+    .ai-giving-{{ ai_gen_id }}__image--small { top: 38px; height: 190px; }
+    .ai-giving-{{ ai_gen_id }}__seal { width: 86px; height: 86px; }
+    .ai-giving-{{ ai_gen_id }}__seal span { font-size: 7px; }
+  }
+{% endstyle %}
+
+<section class="ai-giving-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-giving-{{ ai_gen_id }}__inner">
+    <div class="ai-giving-{{ ai_gen_id }}__left">
+      <p class="ai-giving-{{ ai_gen_id }}__eyebrow">{{ block.settings.left_eyebrow | escape }}</p>
+      <h2 class="ai-giving-{{ ai_gen_id }}__title">{{ block.settings.heading | escape | newline_to_br }}</h2>
+      <div class="ai-giving-{{ ai_gen_id }}__intro">{{ block.settings.intro }}</div>
+      <div class="ai-giving-{{ ai_gen_id }}__collage" aria-label="Return and redistribution process">
+        <div class="ai-giving-{{ ai_gen_id }}__image ai-giving-{{ ai_gen_id }}__image--main">
+          {% if block.settings.return_image != blank %}<img src="{{ block.settings.return_image | image_url: width: 900 }}" alt="{{ block.settings.return_image.alt | escape }}" loading="lazy" width="{{ block.settings.return_image.width }}" height="{{ block.settings.return_image.height }}">{% else %}<div class="ai-giving-{{ ai_gen_id }}__empty-wrap">{{ 'image' | placeholder_svg_tag }}<span class="ai-giving-{{ ai_gen_id }}__empty">Add an image of your return box</span></div>{% endif %}
+        </div>
+        <div class="ai-giving-{{ ai_gen_id }}__image ai-giving-{{ ai_gen_id }}__image--small">
+          {% if block.settings.garment_image != blank %}<img src="{{ block.settings.garment_image | image_url: width: 700 }}" alt="{{ block.settings.garment_image.alt | escape }}" loading="lazy" width="{{ block.settings.garment_image.width }}" height="{{ block.settings.garment_image.height }}">{% else %}<div class="ai-giving-{{ ai_gen_id }}__empty-wrap">{{ 'image' | placeholder_svg_tag }}<span class="ai-giving-{{ ai_gen_id }}__empty">Add a garment image</span></div>{% endif %}
+        </div>
+        <span class="ai-giving-{{ ai_gen_id }}__pill ai-giving-{{ ai_gen_id }}__pill--one">Step 01 · Return</span>
+        <span class="ai-giving-{{ ai_gen_id }}__pill ai-giving-{{ ai_gen_id }}__pill--two">Step 02 · Redistribute</span>
+        <div class="ai-giving-{{ ai_gen_id }}__seal" aria-label="Return, reward, redistribute">
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.6 9A7 7 0 0 1 18 6l2 6M4 12l2 6a7 7 0 0 0 12.4-3"/></svg><span>RETURN · REWARD · REDISTRIBUTE</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="ai-giving-{{ ai_gen_id }}__right">
+      <p class="ai-giving-{{ ai_gen_id }}__eyebrow">{{ block.settings.right_eyebrow | escape }}</p>
+      <div class="ai-giving-{{ ai_gen_id }}__cards">
+        <article class="ai-giving-{{ ai_gen_id }}__card">
+          <div class="ai-giving-{{ ai_gen_id }}__cardtop"><span class="ai-giving-{{ ai_gen_id }}__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 7 9-4 9 4-9 4-9-4Z"/><path d="M3 7v10l9 4 9-4V7M12 11v10"/><path d="m8 5 9 4"/></svg></span><div><p class="ai-giving-{{ ai_gen_id }}__step">STEP 01</p><h3>{{ block.settings.card_one_title | escape }}</h3></div></div>
+          <p>{{ block.settings.card_one_text | escape }}</p>
+        </article>
+        <article class="ai-giving-{{ ai_gen_id }}__card ai-giving-{{ ai_gen_id }}__card--dark">
+          <div class="ai-giving-{{ ai_gen_id }}__cardtop"><span class="ai-giving-{{ ai_gen_id }}__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3m0 12v3M3 12h3m12 0h3"/><path d="M7 7l2 2m6 6 2 2m0-10-2 2m-6 6-2 2"/><circle cx="12" cy="12" r="5"/></svg></span><div><p class="ai-giving-{{ ai_gen_id }}__step">STEP 02</p><h3>{{ block.settings.card_two_title | escape }}</h3></div></div>
+          <p>{{ block.settings.card_two_text | escape }}</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Giving back",
+  "settings": [
+    {"type":"range","id":"desktop_width_percent","label":"Desktop width","min":50,"max":100,"step":5,"unit":"%","default":100},
+    {"type":"header","content":"Introduction"},
+    {"type":"text","id":"left_eyebrow","label":"Eyebrow","default":"GIVING BACK"},
+    {"type":"text","id":"heading","label":"Heading","default":"Outgrown,\nNot Outworn."},
+    {"type":"richtext","id":"intro","label":"Description","default":"<p>At Kiss &amp; Kry, we believe true luxury goes beyond premium fabrics and adorable designs. It's compassion, community and sustainability — and it sits at the heart of our 'Giving Back' initiative.</p>"},
+    {"type":"image_picker","id":"return_image","label":"Return box image"},
+    {"type":"image_picker","id":"garment_image","label":"Garment image"},
+    {"type":"header","content":"Process cards"},
+    {"type":"text","id":"right_eyebrow","label":"Eyebrow","default":"OUR UNIQUE INITIATIVE"},
+    {"type":"text","id":"card_one_title","label":"Step 1 title","default":"Return & Reward"},
+    {"type":"textarea","id":"card_one_text","label":"Step 1 description","default":"Send back your Kiss & Kry pieces once your little one has outgrown them. We’ll welcome each returned garment with a reward toward your next purchase."},
+    {"type":"text","id":"card_two_title","label":"Step 2 title","default":"Redistribute with care"},
+    {"type":"textarea","id":"card_two_text","label":"Step 2 description","default":"Each returned piece is given a new chapter, helping quality babywear reach another family and keeping wearable clothing in use for longer."},
+    {"type":"header","content":"Colours"},
+    {"type":"color","id":"background_color","label":"Background","default":"#5E6848"},
+    {"type":"color","id":"text_color","label":"Primary text","default":"#F6F2E5"},
+    {"type":"color","id":"muted_color","label":"Secondary text","default":"#C7C7AD"},
+    {"type":"color","id":"accent_color","label":"Accent","default":"#E9AC29"},
+    {"type":"color","id":"light_card_color","label":"Light card","default":"#F5F0E9"},
+    {"type":"color","id":"dark_card_color","label":"Dark card","default":"#495239"}
+  ],
+  "presets": [{"name":"Giving back"}],
+  "tag": null,
+  "class": "giving-back-block"
+}
 {% endschema %}
