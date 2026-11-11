@@ -1,6 +1,366 @@
+{% doc %}
+  @prompt
+    Create a premium, fully responsive Shopify Liquid section for Kiss & Kry titled "Outgrown, Not Outworn."
+    
+    STRICT INSTRUCTION: Use the uploaded reference image as the primary design reference. Recreate the exact visual structure, proportions, layout, typography, spacing, image placement, colours and styling. Do not redesign or introduce alternative layouts.
+    
+    The section should look like a luxury editorial landing page for a premium bamboo babywear brand.
+    
+    1. Overall Section Design
+    
+    Create one full-width section with two distinct horizontal areas:
+    
+    Upper area: Main Giving Back introduction and product imagery.
+    
+    Lower area: Four-step horizontal process timeline.
+    
+    Main background:
+    
+    Deep muted olive green: #5D6748.
+    
+    Primary text: #F6F2E7.
+    
+    Secondary text: #C4C6AD.
+    
+    Accent gold: #EBAE29.
+    
+    Icon outlines: #D5C99B.
+    
+    Subtle borders: rgba(235, 231, 205, 0.25).
+    
+    Use Montserrat throughout.
+    
+    Add subtle oversized circular outline decorations in the background. These should be extremely subtle and must not interfere with the content.
+    
+    2. Upper Section – Two-Column Layout
+    
+    Desktop layout:
+    
+    Left column: Approximately 46% width.
+    
+    Right column: Approximately 54% width.
+    
+    Overall content width: 92%.
+    
+    Center content within the section.
+    
+    Generous spacing between columns.
+    
+    3. Left Column – Giving Back Introduction
+    
+    At the top, create a small eyebrow label:
+    
+    "GIVING BACK"
+    
+    Place a short horizontal golden line before the label.
+    
+    Main heading:
+    
+    "Outgrown,
+    Not Outworn."
+    
+    Typography:
+    
+    Montserrat Bold.
+    
+    38–42px desktop.
+    
+    Ivory colour.
+    
+    Tight line height.
+    
+    Left aligned.
+    
+    Two-line composition exactly as shown.
+    
+    Description:
+    
+    "Send back outgrown Kiss & Kry pieces. We pass them on to families in need — and thank you with 15% off."
+    
+    Style:
+    
+    13px desktop.
+    
+    Muted sage-beige colour.
+    
+    Approximately 1.7 line height.
+    
+    Highlight "15% off" in golden yellow.
+    
+    4. Three Small Benefit Pills
+    
+    Directly below the description, create three horizontally aligned outlined pill badges.
+    
+    Each pill must have a tiny gold/olive icon and small text.
+    
+    Pill 1:
+    
+    Leaf icon.
+    
+    "Less waste"
+    
+    Pill 2:
+    
+    Community/users icon.
+    
+    "Stronger community"
+    
+    Pill 3:
+    
+    Heart icon.
+    
+    "Shared purpose"
+    
+    Styling:
+    
+    Transparent olive background.
+    
+    Thin subtle beige border.
+    
+    Rounded pill corners.
+    
+    10–11px text.
+    
+    Small gold icons.
+    
+    Consistent spacing.
+    
+    5. Primary CTA Button
+    
+    Below the three pills, create one primary button:
+    
+    "Start a return →"
+    
+    Styling:
+    
+    Warm ivory background (#F6F2E7).
+    
+    Olive-green text (#5D6748).
+    
+    Rounded pill shape.
+    
+    Approximately 112px wide and 36px high.
+    
+    Montserrat medium.
+    
+    Smooth hover transition.
+    
+    Make its URL editable in Shopify Theme Editor.
+    
+    6. Right Column – Product Image Composition
+    
+    This is a critical visual element. Reproduce the overlapping image arrangement from the reference.
+    
+    Use two product/lifestyle photographs.
+    
+    Image 1 – Return Package
+    
+    Large vertical rectangular photograph.
+    
+    Show a premium kraft cardboard return box.
+    
+    Kiss & Kry logo printed in the centre.
+    
+    Warm beige neutral background.
+    
+    Rounded corners.
+    
+    Approximate dimensions: 170px × 220px.
+    
+    Image 2 – Happy Baby
+    
+    Smaller landscape/portrait rectangular photograph.
+    
+    Show a happy smiling baby sitting in a cream Kiss & Kry outfit.
+    
+    Warm neutral nursery setting.
+    
+    Brand logo visible on the garment.
+    
+    Rounded corners.
+    
+    Approximate dimensions: 135px × 170px.
+    
+    Position:
+    
+    Return package image on the left.
+    
+    Baby image on the right.
+    
+    Slight overlap or close spacing, matching the reference.
+    
+    Align both images vertically around the centre of the right column.
+    
+    Use Shopify image picker settings for both photographs.
+    
+    7. Prominent 15% Reward Badge
+    
+    Create a large circular golden-yellow reward badge overlapping the lower-right portion of the return package image.
+    
+    Text:
+    
+    "15%"
+    
+    Below:
+    
+    "OFF YOUR
+    NEXT ORDER"
+    
+    Styling:
+    
+    Circular shape.
+    
+    Golden yellow background: #EBAE29.
+    
+    Thin olive border.
+    
+    Diameter approximately 82–90px.
+    
+    Dark olive typography.
+    
+    25px bold percentage.
+    
+    7–8px uppercase supporting text.
+    
+    Soft, subtle shadow.
+    
+    Position the circle at the intersection of the two images, slightly overlapping the lower edge.
+    
+    This badge is a key visual element and must be clearly visible.
+    
+    
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-return-{{ ai_gen_id }} {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin-inline: auto;
+    background: #5D6748;
+    color: #F6F2E7;
+    font-family: Montserrat, sans-serif;
+  }
+  .ai-return-{{ ai_gen_id }}::before,
+  .ai-return-{{ ai_gen_id }}::after {
+    content: '';
+    position: absolute;
+    width: 310px;
+    height: 310px;
+    border: 1px solid rgba(235,231,205,.08);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .ai-return-{{ ai_gen_id }}::before { top: -190px; right: -95px; }
+  .ai-return-{{ ai_gen_id }}::after { bottom: 75px; left: -230px; width: 410px; height: 410px; }
+  .ai-return-{{ ai_gen_id }}__inner { position: relative; z-index: 1; width: 92%; max-width: 1120px; margin: 0 auto; padding: 68px 0 52px; }
+  .ai-return-{{ ai_gen_id }}__intro { display: grid; grid-template-columns: 46% 54%; align-items: center; gap: clamp(30px, 6vw, 90px); }
+  .ai-return-{{ ai_gen_id }}__copy { min-width: 0; }
+  .ai-return-{{ ai_gen_id }}__eyebrow { display: flex; align-items: center; gap: 10px; margin: 0 0 18px; color: #EBAE29; font-size: 10px; font-weight: 600; letter-spacing: .19em; }
+  .ai-return-{{ ai_gen_id }}__eyebrow::before { content: ''; width: 26px; height: 1px; background: #EBAE29; }
+  .ai-return-{{ ai_gen_id }}__title { margin: 0; color: #F6F2E7; font-size: clamp(34px, 3.2vw, 42px); font-weight: 700; line-height: 1.04; letter-spacing: -.04em; }
+  .ai-return-{{ ai_gen_id }}__description { max-width: 400px; margin: 19px 0 18px; color: #D1D2C0; font-size: 13px; line-height: 1.7; }
+  .ai-return-{{ ai_gen_id }}__description strong { color: #EBAE29; font-weight: 700; }
+  .ai-return-{{ ai_gen_id }}__pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 22px; }
+  .ai-return-{{ ai_gen_id }}__pill { display: inline-flex; align-items: center; gap: 6px; min-height: 27px; padding: 5px 10px; border: 1px solid rgba(235,231,205,.3); border-radius: 99px; color: #F6F2E7; font-size: 10px; line-height: 1; white-space: nowrap; }
+  .ai-return-{{ ai_gen_id }}__pill svg { width: 13px; height: 13px; flex: 0 0 13px; fill: none; stroke: #EBAE29; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .ai-return-{{ ai_gen_id }}__cta { display: inline-flex; align-items: center; justify-content: center; min-width: 142px; min-height: 38px; padding: 0 17px; border-radius: 99px; background: #F6F2E7; color: #5D6748; font-size: 11px; font-weight: 600; text-decoration: none; transition: background-color .2s ease, transform .2s ease; }
+  .ai-return-{{ ai_gen_id }}__cta:hover { background: #EBAE29; transform: translateY(-1px); }
+  .ai-return-{{ ai_gen_id }}__cta:focus-visible { outline: 2px solid #EBAE29; outline-offset: 3px; }
+  .ai-return-{{ ai_gen_id }}__visual { position: relative; min-height: 270px; display: flex; align-items: center; justify-content: center; }
+  .ai-return-{{ ai_gen_id }}__photo { position: relative; overflow: hidden; border-radius: 7px; background: #ded6c5; box-shadow: 0 12px 28px rgba(25,30,18,.18); }
+  .ai-return-{{ ai_gen_id }}__photo--box { width: min(42%, 190px); height: 240px; z-index: 1; transform: translateX(10px); }
+  .ai-return-{{ ai_gen_id }}__photo--baby { width: min(35%, 155px); height: 182px; z-index: 2; transform: translate(-4px, 24px); }
+  .ai-return-{{ ai_gen_id }}__photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .ai-return-{{ ai_gen_id }}__placeholder { width: 100%; height: 100%; }
+  .ai-return-{{ ai_gen_id }}__placeholder svg { display: block; width: 100%; height: 100%; object-fit: cover; background: #e8e0d1; }
+  .ai-return-{{ ai_gen_id }}__empty { position: absolute; inset: auto 8px 9px; color: #5D6748; font-size: 9px; text-align: center; }
+  .ai-return-{{ ai_gen_id }}__reward { position: absolute; z-index: 3; left: 49%; bottom: 7px; display: flex; width: 88px; height: 88px; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #5D6748; border-radius: 50%; background: #EBAE29; color: #38402D; text-align: center; box-shadow: 0 5px 14px rgba(28,32,21,.22); }
+  .ai-return-{{ ai_gen_id }}__percent { font-size: 25px; font-weight: 700; line-height: 1; }
+  .ai-return-{{ ai_gen_id }}__reward-caption { margin-top: 4px; font-size: 7px; font-weight: 700; line-height: 1.2; letter-spacing: .06em; }
+  .ai-return-{{ ai_gen_id }}__steps { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 46px; padding-top: 24px; border-top: 1px solid rgba(235,231,205,.25); }
+  .ai-return-{{ ai_gen_id }}__step { position: relative; padding: 0 18px; text-align: center; }
+  .ai-return-{{ ai_gen_id }}__step + .ai-return-{{ ai_gen_id }}__step { border-left: 1px solid rgba(235,231,205,.18); }
+  .ai-return-{{ ai_gen_id }}__step-number { display: block; margin-bottom: 8px; color: #EBAE29; font-size: 10px; letter-spacing: .15em; }
+  .ai-return-{{ ai_gen_id }}__step-title { margin: 0 0 5px; color: #F6F2E7; font-size: 12px; font-weight: 600; }
+  .ai-return-{{ ai_gen_id }}__step-text { margin: 0; color: #D1D2C0; font-size: 10px; line-height: 1.5; }
+  @media screen and (max-width: 749px) {
+    .ai-return-{{ ai_gen_id }} { width: 100%; }
+    .ai-return-{{ ai_gen_id }}__inner { width: 88%; padding: 44px 0 36px; }
+    .ai-return-{{ ai_gen_id }}__intro { grid-template-columns: 1fr; gap: 23px; }
+    .ai-return-{{ ai_gen_id }}__title { font-size: clamp(34px, 10vw, 42px); }
+    .ai-return-{{ ai_gen_id }}__description { margin-top: 15px; }
+    .ai-return-{{ ai_gen_id }}__pills { gap: 6px; }
+    .ai-return-{{ ai_gen_id }}__pill { font-size: 9px; padding-inline: 8px; }
+    .ai-return-{{ ai_gen_id }}__visual { min-height: 240px; }
+    .ai-return-{{ ai_gen_id }}__photo--box { width: 42%; max-width: 170px; height: 218px; }
+    .ai-return-{{ ai_gen_id }}__photo--baby { width: 35%; max-width: 140px; height: 168px; }
+    .ai-return-{{ ai_gen_id }}__reward { width: 78px; height: 78px; left: 48%; bottom: 3px; }
+    .ai-return-{{ ai_gen_id }}__percent { font-size: 23px; }
+    .ai-return-{{ ai_gen_id }}__steps { grid-template-columns: repeat(2, 1fr); row-gap: 22px; margin-top: 30px; padding-top: 21px; }
+    .ai-return-{{ ai_gen_id }}__step { padding: 0 10px; }
+    .ai-return-{{ ai_gen_id }}__step:nth-child(3) { border-left: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ai-return-{{ ai_gen_id }}__cta { transition: none; }
+  }
+{% endstyle %}
+
+<section class="ai-return-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-return-{{ ai_gen_id }}__inner">
+    <div class="ai-return-{{ ai_gen_id }}__intro">
+      <div class="ai-return-{{ ai_gen_id }}__copy">
+        <p class="ai-return-{{ ai_gen_id }}__eyebrow">Giving back</p>
+        <h2 class="ai-return-{{ ai_gen_id }}__title">Outgrown,<br>Not Outworn.</h2>
+        <p class="ai-return-{{ ai_gen_id }}__description">Send back outgrown Kiss &amp; Kry pieces. We pass them on to families in need — and thank you with <strong>15% off</strong>.</p>
+        <div class="ai-return-{{ ai_gen_id }}__pills" aria-label="Benefits">
+          <span class="ai-return-{{ ai_gen_id }}__pill"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 2.5C7 2.5 3 5.5 3 9.5c0 2 1.5 3.5 3.5 3.5 4 0 7-4 7-10.5Z"/><path d="M2 14c2-3 4.5-5 8-7"/></svg>Less waste</span>
+          <span class="ai-return-{{ ai_gen_id }}__pill"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6" cy="5" r="2.3"/><path d="M1.8 13c.2-2.3 1.7-3.6 4.2-3.6s4 1.3 4.2 3.6M11 3.5a2 2 0 0 1 0 3.8m.8 2.2c1.4.4 2.2 1.5 2.4 3.2"/></svg>Stronger community</span>
+          <span class="ai-return-{{ ai_gen_id }}__pill"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13.7 2.2 8.3A3.4 3.4 0 0 1 7 3.5L8 4.6l1-1.1a3.4 3.4 0 0 1 4.8 4.8L8 13.7Z"/></svg>Shared purpose</span>
+        </div>
+        <a class="ai-return-{{ ai_gen_id }}__cta" href="{{ block.settings.button_link | default: '#' }}">Start a return&nbsp; →</a>
+      </div>
+      <div class="ai-return-{{ ai_gen_id }}__visual" aria-label="Return package and baby wearing Kiss & Kry">
+        <div class="ai-return-{{ ai_gen_id }}__photo ai-return-{{ ai_gen_id }}__photo--box">
+          {% if block.settings.return_image != blank %}
+            <img src="{{ block.settings.return_image | image_url: width: 700 }}" alt="{{ block.settings.return_image.alt | escape }}" loading="lazy" width="{{ block.settings.return_image.width }}" height="{{ block.settings.return_image.height }}">
+          {% else %}
+            <div class="ai-return-{{ ai_gen_id }}__placeholder">{{ 'image' | placeholder_svg_tag }}</div><span class="ai-return-{{ ai_gen_id }}__empty">Add return package photo</span>
+          {% endif %}
+        </div>
+        <div class="ai-return-{{ ai_gen_id }}__photo ai-return-{{ ai_gen_id }}__photo--baby">
+          {% if block.settings.baby_image != blank %}
+            <img src="{{ block.settings.baby_image | image_url: width: 600 }}" alt="{{ block.settings.baby_image.alt | escape }}" loading="lazy" width="{{ block.settings.baby_image.width }}" height="{{ block.settings.baby_image.height }}">
+          {% else %}
+            <div class="ai-return-{{ ai_gen_id }}__placeholder">{{ 'image' | placeholder_svg_tag }}</div><span class="ai-return-{{ ai_gen_id }}__empty">Add baby lifestyle photo</span>
+          {% endif %}
+        </div>
+        <div class="ai-return-{{ ai_gen_id }}__reward" aria-label="15% off your next order"><span class="ai-return-{{ ai_gen_id }}__percent">15%</span><span class="ai-return-{{ ai_gen_id }}__reward-caption">OFF YOUR<br>NEXT ORDER</span></div>
+      </div>
+    </div>
+    <div class="ai-return-{{ ai_gen_id }}__steps" aria-label="How the return process works">
+      <div class="ai-return-{{ ai_gen_id }}__step"><span class="ai-return-{{ ai_gen_id }}__step-number">01</span><h3 class="ai-return-{{ ai_gen_id }}__step-title">Gather their outgrown pieces</h3><p class="ai-return-{{ ai_gen_id }}__step-text">Choose gently loved Kiss &amp; Kry clothing.</p></div>
+      <div class="ai-return-{{ ai_gen_id }}__step"><span class="ai-return-{{ ai_gen_id }}__step-number">02</span><h3 class="ai-return-{{ ai_gen_id }}__step-title">Send them back to us</h3><p class="ai-return-{{ ai_gen_id }}__step-text">Pack the pieces and start your return.</p></div>
+      <div class="ai-return-{{ ai_gen_id }}__step"><span class="ai-return-{{ ai_gen_id }}__step-number">03</span><h3 class="ai-return-{{ ai_gen_id }}__step-title">We pass them along</h3><p class="ai-return-{{ ai_gen_id }}__step-text">Your pieces support families in need.</p></div>
+      <div class="ai-return-{{ ai_gen_id }}__step"><span class="ai-return-{{ ai_gen_id }}__step-number">04</span><h3 class="ai-return-{{ ai_gen_id }}__step-title">Enjoy 15% off</h3><p class="ai-return-{{ ai_gen_id }}__step-text">A little thank-you for your next order.</p></div>
+    </div>
+  </div>
+</section>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Outgrown, not outworn",
+  "settings": [
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "image_picker", "id": "return_image", "label": "Return package image" },
+    { "type": "image_picker", "id": "baby_image", "label": "Baby lifestyle image" },
+    { "type": "url", "id": "button_link", "label": "Return button link" }
+  ],
+  "presets": [{ "name": "Outgrown, not outworn" }],
+  "tag": null,
+  "class": "outgrown-not-outworn"
+}
 {% endschema %}
