@@ -1,6 +1,198 @@
-{% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
-{% endschema %}
+{% doc %}
+  @prompt
+    Create a fully customizable, horizontally scrolling announcement marquee section for the Kiss & Kry Shopify homepage, matching the provided reference image as closely as possible.
+    
+    ### 1. Layout & Structure
+    - Create a full-width horizontal announcement strip.
+    - Background: Pure white (#FFFFFF).
+    - Height: Approximately 50px on desktop and 44px on mobile.
+    - Display all announcements in a single horizontal row.
+    - Vertically center all icons and text.
+    - No wrapping, no multiple rows.
+    - Keep the marquee immediately below the hero section or announcement area.
+    
+    ### 2. Announcement Items
+    Create the following repeating announcement items in this exact order:
+    
+    1. Free Delivery – Delivery truck icon.
+    2. 7-Day Returns – Circular return arrow icon.
+    3. Cash on Delivery – Payment/card icon.
+    4. Bamboo Viscose – Bamboo leaf icon.
+    5. Ultra Soft – Feather icon.
+    6. Free Shipping – Delivery truck icon.
+    
+    Use small, elegant outline icons in muted olive green (#626B48), displayed inside subtle circular pale-beige backgrounds (#F3F1E7).
+    
+    ### 3. Typography
+    - Font family: Montserrat.
+    - Font size: 14px desktop, 12px mobile.
+    - Font weight: 400 / Regular.
+    - Text color: Dark charcoal (#34352F).
+    - Keep text on one line.
+    - Maintain consistent typography across every announcement.
+    
+    ### 4. Separators & Spacing
+    - Place a small golden-orange circular dot (•) between each announcement.
+    - Separator color: #E7A52D.
+    - Maintain approximately 20–24px spacing between announcement groups.
+    - Keep icon-to-text spacing around 9px.
+    - Keep all announcement items evenly distributed.
+    
+    ### 5. Marquee Animation
+    - Implement a continuously moving horizontal marquee from right to left.
+    - Animation must be seamless and infinite.
+    - Duplicate the announcement items to create a continuous loop without any visible gap or jump.
+    - Animation speed: 35–40 seconds per complete cycle on desktop.
+    - Slightly faster on mobile: 25–30 seconds.
+    - Pause animation on mouse hover on desktop.
+    - Avoid sudden resets, blank spaces or flickering.
+    - Respect reduced-motion accessibility preferences.
+    
+    ### 6. Responsive Design
+    - Desktop: Full-width scrolling strip with all items in a single row.
+    - Tablet: Maintain the same horizontal marquee layout.
+    - Mobile: Keep the marquee scrolling horizontally without wrapping or clipping individual text items.
+    - Maintain consistent icon and text alignment on all screen sizes.
+    
+    ### 7. Shopify Customization Requirements
+    Provide Shopify Theme Editor settings for:
+    - Background color.
+    - Text color.
+    - Icon color.
+    - Separator color.
+    - Font size.
+    - Marquee speed.
+    - Section height.
+    - Announcement text.
+    - Individual announcement icons.
+    - Enable/disable animation.
+    
+    Allow merchants to edit, add, remove and reorder announcement blocks through the Shopify Theme Editor.
+    
+    ### 8. Strict Design Restrictions
+    - Do not create cards or boxes around announcement items.
+    - Do not add borders between items.
+    - Do not use large icons.
+    - Do not add gradients or shadows.
+    - Do not add buttons or links unless explicitly configured.
+    - Do not create a static announcement bar.
+    - Do not change the requested single-line horizontal layout.
+    
+    ### Final Result
+    The final section should look like a premium, minimal, continuously scrolling announcement marquee for a luxury bamboo babywear brand. Match the reference image's white background, olive-green icons, beige circular icon backgrounds, dark typography and small golden separators. The result must be fully responsive, seamless and editable through Shopify's Theme Editor., keep only one free shipping or free delivery on order of 2999, use only this :
+    
+    01
+    95% viscose of bamboo
+    The main fibre used across the current garment line.
+    
+    02
+    5% spandex
+    A small stretch component is included in the fabric blend.
+    
+    03
+    Made for the wardrobe
+    The same blend continues across bodysuits, rompers and footies., in best way possible and in better way, Create a premium, fully responsive, continuously scrolling announcement marquee section for the Kiss & Kry Shopify homepage, following the provided reference design.
+    
+    ### 1. Overall Design
+    - Full-width horizontal marquee.
+    - Background: Warm ivory white (#FFFDF7).
+    - Height: 58px desktop, 48px mobile.
+    - Thin warm beige borders at the top and bottom (#E8DDC8).
+    - Minimal, elegant luxury babywear aesthetic.
+    - No cards, buttons, gradients or heavy shadows.
+    
+    ### 2. Announcement Items
+    
+    Display ONLY these five announcements in this exact order:
+    
+    1. Free Delivery
+    2. 7-Day Easy Returns
+    3. 95% Bamboo Viscose
+    4. Cloud-Soft Comfort
+    5. Secure Checkout
+    
+    IMPORTANT: Do not include Cash on Delivery (COD), payment-on-delivery messages or any additional announcement.
+    
+    ### 3. Icons
+    Use elegant Lucide outline icons inside circular pale-beige backgrounds.
+    
+    - Free Delivery: Truck
+    - 7-Day Easy Returns: Rotate/return arrow
+    - 95% Bamboo Viscose: Bamboo leaf
+    - Cloud-Soft Comfort: Feather
+    - Secure Checkout: Shield-check
+    
+    Icon specifications:
+    - Circle background: #F1F0E5.
+    - Icon color: Olive green (#626B48).
+    - Circle diameter: 30px desktop, 26px mobile.
+    - Icon size: 16–18px.
+    - Stroke width: 1.6px.
+    - All icons must have identical visual dimensions.
+    
+    ### 4. Typography
+    - Font: Montserrat.
+    - Desktop font size: 13px.
+    - Mobile font size: 11px.
+    - Font weight: 500.
+    - Text color: #45463D.
+    - Vertically center all text.
+    - No text wrapping.
+    
+    ### 5. Separators
+    - Small golden circular dots between announcement items.
+    - Color: #D9A441.
+    - Diameter: 4px.
+    - Consistent spacing between icons, text and separators.
+    
+    ### 6. Marquee Animation
+    - Continuous horizontal scrolling from right to left.
+    - Seamless infinite CSS animation.
+    - Duplicate the five-item announcement sequence to avoid blank spaces.
+    - Desktop animation duration: 38 seconds.
+    - Mobile animation duration: 28 seconds.
+    - Pause animation on hover.
+    - No flickering, jumping or sudden resets.
+    - Use CSS keyframes and transforms.
+    - Respect reduced-motion accessibility settings.
+    
+    ### 7. Responsive Behaviour
+    - Full-width on desktop, tablet and mobile.
+    - Single horizontal row at every screen size.
+    - No wrapping or vertical stacking.
+    - Prevent horizontal overflow on the website body.
+    - Maintain consistent icon and text alignment.
+    
+    ### 8. Shopify Theme Editor Settings
+    Provide editable settings for:
+    - Announcement text.
+    - Icon selection.
+    - Background color.
+    - Text color.
+    - Icon color.
+    - Separator color.
+    - Desktop/mobile font size.
+    - Marquee speed.
+    - Section height.
+    - Enable/disable animation.
+    - Add, remove and reorder announcement blocks.
+    
+    ### 9. Technical Requirements
+    - Generate complete Shopify Liquid section code.
+    - Include valid Shopify schema.
+    - Use scoped CSS to avoid affecting other theme sections.
+    - Ensure mobile responsiveness.
+    - Do not modify existing website sections or global theme styles.
+    - Ensure the marquee works without requiring external JavaScript libraries.
+    
+    FINAL DESIGN GOAL:
+    Recreate the reference as a premium, minimal announcement marquee for a luxury bamboo babywear brand. Maintain the ivory background, olive-green circular icons, dark charcoal typography, tiny golden separators and elegant spacing. The final result must look polished, uncluttered and production-ready., allow me to change icons as png, increase icons, roleback
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% style %}
+.ai-marquee-{{ ai_gen_id }}{display:block;width:{{ block.settings.desktop_width_percent }}%;max-width:100%;overflow:hidden;background:{{ block.settings.bg }};border-block:1px solid {{ block.settings.border }};height:{{ block.settings.height }}px;font-family:Montserrat,sans-serif;color:{{ block.settings.text_color }}}
+.ai-marquee-{{ ai_gen_id }} .track{display:flex;align-items:center;width:max-content;height:100%}.ai-marquee-{{ ai_gen_id }}[data-animate="true"] .track{animation:marquee-{{ ai_gen_id }} {{ block.settings.speed }}s linear infinite}.ai-marquee-{{ ai_gen_id }}:hover .track{animation-play-state:paused}.ai-marquee-{{ ai_gen_id }} .group{display:flex;align-items:center;flex:none}.ai-marquee-{{ ai_gen_id }} .item{display:flex;align-items:center;gap:9px;padding:0 20px;white-space:nowrap;font-size:13px;font-weight:500}.ai-marquee-{{ ai_gen_id }} .icon{width:30px;height:30px;flex:0 0 30px;border-radius:50%;background:#F1F0E5;display:grid;place-items:center;color:{{ block.settings.icon_color }}}.ai-marquee-{{ ai_gen_id }} .icon img{width:18px;height:18px;object-fit:contain}.ai-marquee-{{ ai_gen_id }} svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.ai-marquee-{{ ai_gen_id }} .dot{width:4px;height:4px;border-radius:50%;background:{{ block.settings.dot_color }};flex:0 0 4px}@keyframes marquee-{{ ai_gen_id }}{to{transform:translateX(-50%)}}@media(max-width:749px){.ai-marquee-{{ ai_gen_id }}{height:{{ block.settings.mobile_height }}px}.ai-marquee-{{ ai_gen_id }} .track{animation-duration:{{ block.settings.mobile_speed }}s}.ai-marquee-{{ ai_gen_id }} .item{font-size:11px;padding:0 13px;gap:7px}.ai-marquee-{{ ai_gen_id }} .icon{width:26px;height:26px;flex-basis:26px}.ai-marquee-{{ ai_gen_id }} .icon img{width:16px;height:16px}.ai-marquee-{{ ai_gen_id }} svg{width:16px;height:16px}}@media(prefers-reduced-motion:reduce){.ai-marquee-{{ ai_gen_id }}[data-animate="true"] .track{animation:none}}
+{% endstyle %}
+{% capture marquee_items %}{% for i in (1..5) %}{% assign text_key='text_' | append:i %}{% assign image_key='icon_image_' | append:i %}{% assign image=block.settings[image_key] %}<div class="item"><span class="icon" aria-hidden="true">{% if image %}<img src="{{ image | image_url: width: 96 }}" alt="" loading="lazy" width="18" height="18">{% else %}{% case i %}{% when 1 %}<svg viewBox="0 0 24 24"><path d="M3 6h11v12H3zM14 10h4l3 3v5h-7z"/><circle cx="7.5" cy="18" r="1.5"/><circle cx="18" cy="18" r="1.5"/></svg>{% when 2 %}<svg viewBox="0 0 24 24"><path d="M3 11a9 9 0 1 1 2.6 6.4M3 4v7h7"/></svg>{% when 3 %}<svg viewBox="0 0 24 24"><path d="M20 4C11 4 5 7 5 13a5 5 0 0 0 5 5c6 0 9-6 10-14ZM4 21c3-6 7-9 13-13"/></svg>{% when 4 %}<svg viewBox="0 0 24 24"><path d="M20 4c-6-2-13 3-14 9-.5 3 1 5 4 5 6-1 11-8 10-14ZM3 21 16 8"/></svg>{% when 5 %}<svg viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg>{% endcase %}{% endif %}</span><span>{{ block.settings[text_key] | escape }}</span></div>{% unless forloop.last %}<span class="dot" aria-hidden="true"></span>{% endunless %}{% endfor %}{% endcapture %}
+<div class="ai-marquee-{{ ai_gen_id }}" data-animate="{{ block.settings.animate }}" role="region" aria-label="Store announcements" {{ block.shopify_attributes }}><div class="track"><div class="group">{{ marquee_items }}</div><div class="group" aria-hidden="true">{{ marquee_items }}</div></div></div>
+{% schema %}{"name":"Announcement marquee","settings":[{"type":"range","id":"desktop_width_percent","label":"Desktop width","min":50,"max":100,"step":5,"unit":"%","default":100},{"type":"color","id":"bg","label":"Background","default":"#FFFDF7"},{"type":"color","id":"border","label":"Border","default":"#E8DDC8"},{"type":"color","id":"text_color","label":"Text","default":"#45463D"},{"type":"color","id":"icon_color","label":"Icon tint","default":"#626B48"},{"type":"color","id":"dot_color","label":"Separator","default":"#D9A441"},{"type":"range","id":"height","label":"Desktop height","min":50,"max":80,"step":2,"unit":"px","default":58},{"type":"range","id":"mobile_height","label":"Mobile height","min":40,"max":60,"step":2,"unit":"px","default":48},{"type":"range","id":"speed","label":"Desktop duration","min":30,"max":50,"step":1,"unit":"s","default":38},{"type":"range","id":"mobile_speed","label":"Mobile duration","min":20,"max":40,"step":1,"unit":"s","default":28},{"type":"checkbox","id":"animate","label":"Enable animation","default":true},{"type":"header","content":"Announcement 1"},{"type":"text","id":"text_1","label":"Text","default":"Free Delivery"},{"type":"image_picker","id":"icon_image_1","label":"PNG icon"},{"type":"header","content":"Announcement 2"},{"type":"text","id":"text_2","label":"Text","default":"7-Day Easy Returns"},{"type":"image_picker","id":"icon_image_2","label":"PNG icon"},{"type":"header","content":"Announcement 3"},{"type":"text","id":"text_3","label":"Text","default":"95% Bamboo Viscose"},{"type":"image_picker","id":"icon_image_3","label":"PNG icon"},{"type":"header","content":"Announcement 4"},{"type":"text","id":"text_4","label":"Text","default":"Cloud-Soft Comfort"},{"type":"image_picker","id":"icon_image_4","label":"PNG icon"},{"type":"header","content":"Announcement 5"},{"type":"text","id":"text_5","label":"Text","default":"Secure Checkout"},{"type":"image_picker","id":"icon_image_5","label":"PNG icon"}],"presets":[{"name":"Announcement marquee"}],"tag":null,"class":"announcement-marquee"}{% endschema %}
