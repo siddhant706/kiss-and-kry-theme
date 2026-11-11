@@ -1340,13 +1340,18 @@
     z-index: 2;
   }
 
+  .media-gallery--arch .slideshow-controls__thumbnails-wrapper {
+    width: 100%;
+    position: relative;
+  }
+
   .media-gallery--arch .slideshow-controls__thumbnails-container {
-    display: flex;
-    justify-content: center;
+    display: block;
     width: 100%;
     overflow-x: auto;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
 
   .media-gallery--arch .slideshow-controls__thumbnails-container::-webkit-scrollbar {
@@ -1354,13 +1359,16 @@
   }
 
   .media-gallery--arch .slideshow-controls__thumbnails {
-    display: inline-flex;
+    display: flex;
+    width: max-content;
+    min-width: 100%;
     justify-content: center;
     align-items: center;
     gap: 12px;
-    padding: 4px;
-    margin-inline: auto;
+    padding: 6px 14px;
+    margin: 0;
     height: auto;
+    box-sizing: border-box;
   }
 
   .media-gallery--arch .slideshow-controls__thumbnail {

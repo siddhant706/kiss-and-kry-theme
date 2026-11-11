@@ -378,17 +378,52 @@ class ScrollHint extends HTMLElement {
   /** @type {number | null} */
   #rafId = null;
 
+  /** @type {(() => void) | null} */
+  #cleanupThumbnailControls = null;
+
   connectedCallback() {
     this.addEventListener('scroll', this.#handleScroll);
     this.#resizeObserver.observe(this);
+    const inner = this.querySelector('.slideshow-controls__thumbnails') || this.firstElementChild;
+    if (inner) {
+      this.#resizeObserver.observe(inner);
+    }
+    this.#setupThumbnailControls();
+    this.#update();
+
+    // Observe child images loading to trigger update once rendered (critical for desktop layout)
+    this.querySelectorAll('img').forEach((img) => {
+      if (!img.complete) {
+        img.addEventListener('load', this.#handleScroll, { once: true });
+        img.addEventListener('error', this.#handleScroll, { once: true });
+      }
+    });
+
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', this.#handleScroll, { once: true });
+    }
+    window.addEventListener('load', this.#handleScroll, { once: true });
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(this.#handleScroll).catch(() => {});
+    }
+
+    setTimeout(this.#handleScroll, 50);
+    setTimeout(this.#handleScroll, 200);
+    setTimeout(this.#handleScroll, 600);
   }
 
   disconnectedCallback() {
     this.removeEventListener('scroll', this.#handleScroll);
     this.#resizeObserver.disconnect();
+    window.removeEventListener('load', this.#handleScroll);
+    window.removeEventListener('DOMContentLoaded', this.#handleScroll);
     if (this.#rafId !== null) {
       cancelAnimationFrame(this.#rafId);
       this.#rafId = null;
+    }
+    if (this.#cleanupThumbnailControls) {
+      this.#cleanupThumbnailControls();
+      this.#cleanupThumbnailControls = null;
     }
   }
 
@@ -404,6 +439,8 @@ class ScrollHint extends HTMLElement {
 
   #update = () => {
     const { scrollTop, scrollHeight, clientHeight, scrollLeft, scrollWidth, clientWidth } = this;
+    if (clientWidth === 0) return;
+
     const scrollDirection = scrollWidth > clientWidth ? 'horizontal' : 'vertical';
     // In RTL, scrollLeft is 0 at rest and goes negative, so use the absolute distance
     const rtl = scrollDirection === 'horizontal' && isRTL(this);
@@ -413,7 +450,7 @@ class ScrollHint extends HTMLElement {
         : Math.abs(scrollLeft) / (scrollWidth - clientWidth);
     const gradientDirection = scrollDirection === 'vertical' ? 'bottom' : rtl ? 'left' : 'right';
 
-    this.style.maskImage = Number.isNaN(scrollPercentage)
+    const mask = Number.isNaN(scrollPercentage)
       ? ''
       : `linear-gradient(
         to ${gradientDirection},
@@ -422,7 +459,149 @@ class ScrollHint extends HTMLElement {
         black ${scrollPercentage > 0.9 ? scrollPercentage * 100 : 90}%,
         transparent 100%
       )`;
+    this.style.maskImage = mask;
+    this.style.webkitMaskImage = mask;
+
+    const wrapper = this.closest('.slideshow-controls__thumbnails-wrapper');
+    if (wrapper) {
+      if (!this.#cleanupThumbnailControls) {
+        this.#setupThumbnailControls();
+      }
+      const isScrollable = scrollWidth > clientWidth + 4;
+      const absScroll = Math.abs(scrollLeft);
+      const maxScroll = Math.max(0, scrollWidth - clientWidth);
+      const canScrollLeft = absScroll > 4;
+      const canScrollRight = absScroll < maxScroll - 4;
+
+      wrapper.setAttribute('data-scrollable', isScrollable ? 'true' : 'false');
+      wrapper.setAttribute(
+        'data-has-more-left',
+        isScrollable && (rtl ? canScrollRight : canScrollLeft) ? 'true' : 'false'
+      );
+      wrapper.setAttribute(
+        'data-has-more-right',
+        isScrollable && (rtl ? canScrollLeft : canScrollRight) ? 'true' : 'false'
+      );
+
+      const prevBtn = wrapper.querySelector('[data-thumbnail-arrow="prev"]');
+      const nextBtn = wrapper.querySelector('[data-thumbnail-arrow="next"]');
+      if (prevBtn) prevBtn.disabled = !isScrollable || (rtl ? !canScrollRight : !canScrollLeft);
+      if (nextBtn) nextBtn.disabled = !isScrollable || (rtl ? !canScrollLeft : !canScrollRight);
+    }
   };
+
+  #setupThumbnailControls() {
+    const wrapper = this.closest('.slideshow-controls__thumbnails-wrapper');
+    if (!wrapper || this.#cleanupThumbnailControls) return;
+
+    const controller = new AbortController();
+    const { signal } = controller;
+    this.#cleanupThumbnailControls = () => controller.abort();
+
+    const prevBtn = wrapper.querySelector('[data-thumbnail-arrow="prev"]');
+    const nextBtn = wrapper.querySelector('[data-thumbnail-arrow="next"]');
+
+    if (prevBtn) {
+      prevBtn.addEventListener(
+        'click',
+        (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const step = Math.max(160, this.clientWidth * 0.75);
+          const delta = isRTL(this) ? step : -step;
+          this.scrollBy({ left: delta, behavior: 'smooth' });
+        },
+        { signal }
+      );
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener(
+        'click',
+        (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const step = Math.max(160, this.clientWidth * 0.75);
+          const delta = isRTL(this) ? -step : step;
+          this.scrollBy({ left: delta, behavior: 'smooth' });
+        },
+        { signal }
+      );
+    }
+
+    // Horizontal mouse wheel scrolling for desktop
+    this.addEventListener(
+      'wheel',
+      (e) => {
+        if (this.scrollWidth <= this.clientWidth) return;
+        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+          this.scrollLeft += e.deltaY;
+          e.preventDefault();
+        }
+      },
+      { passive: false, signal }
+    );
+
+    // Desktop click-and-drag to scroll
+    let isDown = false;
+    let startX = 0;
+    let scrollStart = 0;
+    let hasDragged = false;
+
+    this.addEventListener(
+      'mousedown',
+      (e) => {
+        if (this.scrollWidth <= this.clientWidth) return;
+        if (e.button !== 0) return;
+        isDown = true;
+        hasDragged = false;
+        startX = e.pageX - this.offsetLeft;
+        scrollStart = this.scrollLeft;
+        this.style.cursor = 'grab';
+        this.style.userSelect = 'none';
+      },
+      { signal }
+    );
+
+    window.addEventListener(
+      'mousemove',
+      (e) => {
+        if (!isDown) return;
+        const x = e.pageX - this.offsetLeft;
+        const walk = x - startX;
+        if (Math.abs(walk) > 4) {
+          hasDragged = true;
+          this.style.cursor = 'grabbing';
+        }
+        this.scrollLeft = scrollStart - walk;
+      },
+      { signal }
+    );
+
+    window.addEventListener(
+      'mouseup',
+      () => {
+        if (!isDown) return;
+        isDown = false;
+        this.style.cursor = '';
+        this.style.removeProperty('user-select');
+      },
+      { signal }
+    );
+
+    // Prevent thumbnail click if user was dragging
+    this.addEventListener(
+      'click',
+      (e) => {
+        if (hasDragged) {
+          e.preventDefault();
+          e.stopPropagation();
+          hasDragged = false;
+        }
+      },
+      { capture: true, signal }
+    );
+  }
 
   #resizeObserver = new ResizeObserver(this.#update);
 }
