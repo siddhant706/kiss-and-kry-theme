@@ -1,0 +1,104 @@
+{% doc %}
+  @prompt
+    Create a fully customizable, horizontally scrolling announcement marquee section for the Kiss & Kry Shopify homepage, matching the provided reference image as closely as possible.
+    
+    ### 1. Layout & Structure
+    - Create a full-width horizontal announcement strip.
+    - Background: Pure white (#FFFFFF).
+    - Height: Approximately 50px on desktop and 44px on mobile.
+    - Display all announcements in a single horizontal row.
+    - Vertically center all icons and text.
+    - No wrapping, no multiple rows.
+    - Keep the marquee immediately below the hero section or announcement area.
+    
+    ### 2. Announcement Items
+    Create the following repeating announcement items in this exact order:
+    
+    1. Free Delivery – Delivery truck icon.
+    2. 7-Day Returns – Circular return arrow icon.
+    3. Cash on Delivery – Payment/card icon.
+    4. Bamboo Viscose – Bamboo leaf icon.
+    5. Ultra Soft – Feather icon.
+    6. Free Shipping – Delivery truck icon.
+    
+    Use small, elegant outline icons in muted olive green (#626B48), displayed inside subtle circular pale-beige backgrounds (#F3F1E7).
+    
+    ### 3. Typography
+    - Font family: Montserrat.
+    - Font size: 14px desktop, 12px mobile.
+    - Font weight: 400 / Regular.
+    - Text color: Dark charcoal (#34352F).
+    - Keep text on one line.
+    - Maintain consistent typography across every announcement.
+    
+    ### 4. Separators & Spacing
+    - Place a small golden-orange circular dot (•) between each announcement.
+    - Separator color: #E7A52D.
+    - Maintain approximately 20–24px spacing between announcement groups.
+    - Keep icon-to-text spacing around 9px.
+    - Keep all announcement items evenly distributed.
+    
+    ### 5. Marquee Animation
+    - Implement a continuously moving horizontal marquee from right to left.
+    - Animation must be seamless and infinite.
+    - Duplicate the announcement items to create a continuous loop without any visible gap or jump.
+    - Animation speed: 35–40 seconds per complete cycle on desktop.
+    - Slightly faster on mobile: 25–30 seconds.
+    - Pause animation on mouse hover on desktop.
+    - Avoid sudden resets, blank spaces or flickering.
+    - Respect reduced-motion accessibility preferences.
+    
+    ### 6. Responsive Design
+    - Desktop: Full-width scrolling strip with all items in a single row.
+    - Tablet: Maintain the same horizontal marquee layout.
+    - Mobile: Keep the marquee scrolling horizontally without wrapping or clipping individual text items.
+    - Maintain consistent icon and text alignment on all screen sizes.
+    
+    ### 7. Shopify Customization Requirements
+    Provide Shopify Theme Editor settings for:
+    - Background color.
+    - Text color.
+    - Icon color.
+    - Separator color.
+    - Font size.
+    - Marquee speed.
+    - Section height.
+    - Announcement text.
+    - Individual announcement icons.
+    - Enable/disable animation.
+    
+    Allow merchants to edit, add, remove and reorder announcement blocks through the Shopify Theme Editor.
+    
+    ### 8. Strict Design Restrictions
+    - Do not create cards or boxes around announcement items.
+    - Do not add borders between items.
+    - Do not use large icons.
+    - Do not add gradients or shadows.
+    - Do not add buttons or links unless explicitly configured.
+    - Do not create a static announcement bar.
+    - Do not change the requested single-line horizontal layout.
+    
+    ### Final Result
+    The final section should look like a premium, minimal, continuously scrolling announcement marquee for a luxury bamboo babywear brand. Match the reference image's white background, olive-green icons, beige circular icon backgrounds, dark typography and small golden separators. The result must be fully responsive, seamless and editable through Shopify's Theme Editor., keep only one free shipping or free delivery on order of 2999, use only this :
+    
+    01
+    95% viscose of bamboo
+    The main fibre used across the current garment line.
+    
+    02
+    5% spandex
+    A small stretch component is included in the fabric blend.
+    
+    03
+    Made for the wardrobe
+    The same blend continues across bodysuits, rompers and footies., in best way possible and in better way
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% style %}
+.ai-fabric-marquee-{{ ai_gen_id }}{display:block;width:{{ block.settings.desktop_width_percent }}%;max-width:100%;height:{{ block.settings.section_height }}px;overflow:hidden;background:{{ block.settings.background_color }};color:{{ block.settings.text_color }};font-family:Montserrat,sans-serif;--duration:{{ block.settings.speed }}s}.ai-fabric-marquee-{{ ai_gen_id }} .track{display:flex;width:max-content;height:100%;align-items:stretch}.ai-fabric-marquee-{{ ai_gen_id }}[data-motion="true"] .track{animation:ai-fabric-scroll-{{ ai_gen_id }} var(--duration) linear infinite}.ai-fabric-marquee-{{ ai_gen_id }}:hover .track{animation-play-state:paused}.ai-fabric-marquee-{{ ai_gen_id }} .set{display:flex;align-items:center;flex:0 0 auto}.ai-fabric-marquee-{{ ai_gen_id }} .feature{display:flex;align-items:center;gap:14px;padding:0 34px;border-right:1px solid {{ block.settings.divider_color }}}.ai-fabric-marquee-{{ ai_gen_id }} .number{display:grid;place-items:center;width:34px;height:34px;flex:0 0 34px;border-radius:50%;background:{{ block.settings.number_background }};color:{{ block.settings.accent_color }};font-size:11px;font-weight:600;letter-spacing:.04em}.ai-fabric-marquee-{{ ai_gen_id }} .content{display:flex;align-items:baseline;gap:12px;white-space:nowrap}.ai-fabric-marquee-{{ ai_gen_id }} .title{font-size:{{ block.settings.font_size }}px;font-weight:600;white-space:nowrap}.ai-fabric-marquee-{{ ai_gen_id }} .description{font-size:13px;line-height:1.4;white-space:nowrap;color:{{ block.settings.text_color }}}@keyframes ai-fabric-scroll-{{ ai_gen_id }}{to{transform:translateX(-50%)}}@media(max-width:749px){.ai-fabric-marquee-{{ ai_gen_id }}{height:58px}.ai-fabric-marquee-{{ ai_gen_id }} .feature{gap:9px;padding:0 18px}.ai-fabric-marquee-{{ ai_gen_id }} .number{width:28px;height:28px;flex-basis:28px;font-size:10px}.ai-fabric-marquee-{{ ai_gen_id }} .content{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px}.ai-fabric-marquee-{{ ai_gen_id }} .title{font-size:12px}.ai-fabric-marquee-{{ ai_gen_id }} .description{font-size:10px}}@media(prefers-reduced-motion:reduce){.ai-fabric-marquee-{{ ai_gen_id }}[data-motion="true"] .track{animation:none}}
+{% endstyle %}
+{% capture feature_items %}{% for i in (1..3) %}{% assign nk = 'number_' | append: i %}{% assign tk = 'title_' | append: i %}{% assign dk = 'description_' | append: i %}<div class="feature"><span class="number">{{ block.settings[nk] | escape }}</span><div class="content"><span class="title">{{ block.settings[tk] | escape }}</span><span class="description">{{ block.settings[dk] | escape }}</span></div></div>{% endfor %}{% endcapture %}
+<div class="ai-fabric-marquee-{{ ai_gen_id }}" data-motion="{{ block.settings.enable_animation }}" aria-label="Fabric details" {{ block.shopify_attributes }}><div class="track"><div class="set">{{ feature_items }}</div><div class="set" aria-hidden="true">{{ feature_items }}</div></div></div>
+{% schema %}
+{"name":"Fabric details marquee","settings":[{"type":"range","id":"desktop_width_percent","label":"Desktop width","min":50,"max":100,"step":5,"unit":"%","default":100},{"type":"color","id":"background_color","label":"Background","default":"#FFFFFF"},{"type":"color","id":"text_color","label":"Text","default":"#34352F"},{"type":"color","id":"accent_color","label":"Number accent","default":"#626B48"},{"type":"color","id":"number_background","label":"Number background","default":"#F3F1E7"},{"type":"color","id":"divider_color","label":"Divider","default":"#EAE8DF"},{"type":"range","id":"font_size","label":"Heading size","min":12,"max":20,"step":1,"unit":"px","default":14},{"type":"range","id":"section_height","label":"Section height","min":44,"max":80,"step":2,"unit":"px","default":64},{"type":"range","id":"speed","label":"Marquee speed","min":30,"max":50,"step":1,"unit":"s","default":38},{"type":"checkbox","id":"enable_animation","label":"Enable animation","default":true},{"type":"text","id":"number_1","label":"Number 1","default":"01"},{"type":"text","id":"title_1","label":"Heading 1","default":"95% viscose of bamboo"},{"type":"text","id":"description_1","label":"Description 1","default":"The main fibre used across the current garment line."},{"type":"text","id":"number_2","label":"Number 2","default":"02"},{"type":"text","id":"title_2","label":"Heading 2","default":"5% spandex"},{"type":"text","id":"description_2","label":"Description 2","default":"A small stretch component is included in the fabric blend."},{"type":"text","id":"number_3","label":"Number 3","default":"03"},{"type":"text","id":"title_3","label":"Heading 3","default":"Made for the wardrobe"},{"type":"text","id":"description_3","label":"Description 3","default":"The same blend continues across bodysuits, rompers and footies."}],"presets":[{"name":"Fabric details marquee"}],"tag":null,"class":"fabric-details-marquee"}
+{% endschema %}
