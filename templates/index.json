@@ -82,6 +82,7 @@
             "right_context_color": "#58614C",
             "show_cta": true,
             "cta_label": "Shop the collection",
+            "cta_scroll_target": "179362741998f798f0",
             "cta_link": "",
             "button_background": "#5b6344",
             "button_text_color": "{{ settings.color_palette.background }}",

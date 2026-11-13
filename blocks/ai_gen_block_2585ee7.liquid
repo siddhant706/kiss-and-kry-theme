@@ -754,7 +754,20 @@
             <div class="ai-cover-{{ ai_gen_id }}__right-copy">{{ s.right_context }}</div>
           {%- endif -%}
           {%- if show_cta and s.cta_label != blank -%}
-            <a class="ai-cover-{{ ai_gen_id }}__button" href="{{ s.cta_link | default: routes.all_products_collection_url }}">
+            {%- liquid
+              assign cta_href = s.cta_link | default: routes.all_products_collection_url
+              if s.cta_scroll_target != blank
+                # JSON template sections render as shopify-section-template--<id>__<key>, so rebuild the prefix from this section's own id
+                assign scroll_key = s.cta_scroll_target | strip | remove: '#' | remove: 'shopify-section-'
+                assign section_prefix = section.id | split: '__' | first
+                if scroll_key contains '__' or section.id == section_prefix
+                  assign cta_href = '#shopify-section-' | append: scroll_key
+                else
+                  assign cta_href = '#shopify-section-' | append: section_prefix | append: '__' | append: scroll_key
+                endif
+              endif
+            -%}
+            <a class="ai-cover-{{ ai_gen_id }}__button" href="{{ cta_href | escape }}">
               <span class="ai-cover-{{ ai_gen_id }}__button-text">{{ s.cta_label | escape }}</span>
               <svg class="ai-cover-{{ ai_gen_id }}__button-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
                 <path d="M6 3.5L10.5 8L6 12.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
@@ -917,6 +930,7 @@
     { "type": "header", "content": "Button" },
     { "type": "checkbox", "id": "show_cta", "label": "Show button", "default": true },
     { "type": "text", "id": "cta_label", "label": "Label", "default": "Shop the collection" },
+    { "type": "text", "id": "cta_scroll_target", "label": "Scroll to section on this page", "info": "Key of the section to scroll to (the ID in templates/index.json), e.g. 179362741998f798f0. Overrides the link below. Leave empty to use the link." },
     { "type": "url", "id": "cta_link", "label": "Link" },
     { "type": "color", "id": "button_background", "label": "Background", "default": "#5B6344" },
     { "type": "color", "id": "button_text_color", "label": "Text", "default": "#FFFFFF" },
