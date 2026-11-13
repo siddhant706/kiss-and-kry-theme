@@ -252,7 +252,6 @@
             "autoplay": true,
             "autoplay_seconds": 6,
             "pause_on_hover": true,
-            "desktop_width_percent": 100,
             "products": [
               "tranquil-crib-sheets",
               "sumptuous-bodysuits-half-sleeves",
@@ -266,7 +265,6 @@
             "heading_richtext": "",
             "description_richtext": "",
             "button_richtext": "<p>Shop product</p>",
-            "card_richtext": "",
             "copy_width": 400,
             "heading_size": 54,
             "heading_weight": 700,

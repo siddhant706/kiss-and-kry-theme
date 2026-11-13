@@ -190,7 +190,7 @@
     width: 20px;
     height: 3px;
     margin: 0 0 18px;
-    background: #fff;
+    background: {{ block.settings.location_dash_color | default: block.settings.location_color | default: '#fff' }};
     transform-origin: left;
     will-change: transform;
   }
@@ -201,6 +201,7 @@
   .pr-{{ ai_gen_id }} .dh-location {
     font-size: {{ block.settings.location_size | default: 18 }}px;
     font-weight: {{ block.settings.location_weight | default: 300 }};
+    color: {{ block.settings.location_color | default: '#fff' }};
     line-height: 1.2;
     letter-spacing: 0.05em;
     will-change: transform;
@@ -210,6 +211,7 @@
     font-family: {{ display_font.family | default: settings.type_header_font.family }}, sans-serif;
     font-size: {{ block.settings.heading_size | default: 64 }}px;
     font-weight: {{ block.settings.heading_weight | default: 700 }};
+    color: {{ block.settings.heading_color | default: '#fff' }};
     line-height: 1.02;
     text-transform: uppercase;
   }
@@ -224,7 +226,7 @@
   .pr-{{ ai_gen_id }} .dh-description {
     max-width: 390px;
     margin: 18px 0 28px;
-    color: rgba(255, 255, 255, 0.75);
+    color: {{ block.settings.description_color | default: 'rgba(255, 255, 255, 0.75)' }};
     font-size: {{ block.settings.description_size | default: 14 }}px;
     font-weight: {{ block.settings.description_weight | default: 400 }};
     line-height: 1.75;
@@ -334,13 +336,14 @@
     width: 12px;
     height: 2px;
     margin-bottom: 8px;
-    background: #fff;
+    background: {{ block.settings.card_dash_color | default: block.settings.card_loc_color | default: '#fff' }};
   }
   .pr-{{ ai_gen_id }} .dh-card-loc {
     display: block;
     margin-bottom: 5px;
-    color: rgba(255, 255, 255, 0.85);
-    font-size: 11px;
+    color: {{ block.settings.card_loc_color | default: 'rgba(255, 255, 255, 0.85)' }};
+    font-size: {{ block.settings.card_loc_size | default: 11 }}px;
+    font-weight: {{ block.settings.card_loc_weight | default: 400 }};
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
@@ -349,6 +352,7 @@
     font-family: {{ display_font.family | default: settings.type_header_font.family }}, sans-serif;
     font-size: {{ block.settings.card_title_size | default: 18 }}px;
     font-weight: {{ block.settings.card_weight | default: 700 }};
+    color: {{ block.settings.card_title_color | default: '#fff' }};
     line-height: 1.1;
     text-transform: uppercase;
     margin-bottom: 4px;
@@ -357,7 +361,7 @@
     display: block;
     font-size: {{ block.settings.price_size | default: 13 }}px;
     font-weight: {{ block.settings.price_weight | default: 400 }};
-    color: {{ block.settings.accent_color | default: '#ECAB32' }};
+    color: {{ block.settings.card_price_color | default: block.settings.accent_color | default: '#ECAB32' }};
   }
 
   /* Controls Row */
@@ -377,16 +381,16 @@
     flex: 0 0 clamp(46px, 3.8vw, 54px);
     display: grid;
     place-items: center;
-    border: 1px solid rgba(255, 255, 255, 0.55);
+    border: 1px solid {{ block.settings.arrow_border_color | default: 'rgba(255, 255, 255, 0.55)' }};
     border-radius: 50%;
-    background: transparent;
-    color: #fff;
+    background: {{ block.settings.arrow_bg_color | default: 'transparent' }};
+    color: {{ block.settings.arrow_color | default: '#fff' }};
     cursor: pointer;
     transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
   }
   .pr-{{ ai_gen_id }} .dh-arrow:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: #fff;
+    background: {{ block.settings.arrow_hover_bg_color | default: 'rgba(255, 255, 255, 0.12)' }};
+    border-color: {{ block.settings.arrow_hover_border_color | default: '#fff' }};
     transform: scale(1.05);
   }
   .pr-{{ ai_gen_id }} .dh-arrow svg {
@@ -424,7 +428,8 @@
     height: 100%;
     font-family: {{ display_font.family | default: settings.type_header_font.family }}, sans-serif;
     font-size: {{ block.settings.counter_size | default: 42 }}px;
-    font-weight: 700;
+    font-weight: {{ block.settings.counter_weight | default: 700 }};
+    color: {{ block.settings.counter_color | default: '#fff' }};
     line-height: calc({{ block.settings.counter_size | default: 42 }}px * 1.3);
     text-align: right;
   }
@@ -763,8 +768,7 @@
       "location": {{ block.settings.location_text | strip_html | json }},
       "heading": {{ block.settings.heading_richtext | json }},
       "description": {{ block.settings.description_richtext | strip_html | json }},
-      "button": {{ block.settings.button_richtext | strip_html | json }},
-      "card": {{ block.settings.card_richtext | strip_html | json }}
+      "button": {{ block.settings.button_richtext | strip_html | json }}
     }
   </script>
 
@@ -1718,62 +1722,10 @@
       "content": "Global settings"
     },
     {
-      "type": "color",
-      "id": "accent_color",
-      "label": "Accent color",
-      "default": "#ECAB32"
-    },
-    {
-      "type": "header",
-      "content": "Button & bar colors"
-    },
-    {
-      "type": "color",
-      "id": "shop_btn_bg_color",
-      "label": "Shop button background",
-      "alpha": true
-    },
-    {
-      "type": "color",
-      "id": "shop_btn_text_color",
-      "label": "Shop button text & border",
-      "default": "#FFFFFF"
-    },
-    {
-      "type": "color",
-      "id": "shop_btn_hover_bg_color",
-      "label": "Shop button hover background",
-      "default": "#FFFFFF"
-    },
-    {
-      "type": "color",
-      "id": "shop_btn_hover_text_color",
-      "label": "Shop button hover text",
-      "default": "#111111"
-    },
-    {
-      "type": "color",
-      "id": "bookmark_bg_color",
-      "label": "Bookmark button background",
-      "default": "#ECAB32"
-    },
-    {
-      "type": "color",
-      "id": "bookmark_icon_color",
-      "label": "Bookmark button icon",
-      "default": "#FFFFFF"
-    },
-    {
-      "type": "color",
-      "id": "layout_bar_color",
-      "label": "Layout / progress bar fill",
-      "default": "#ECAB32"
-    },
-    {
-      "type": "color",
-      "id": "layout_bar_track_color",
-      "label": "Layout bar track color",
-      "alpha": true
+      "type": "product_list",
+      "id": "products",
+      "label": "Products",
+      "limit": 5
     },
     {
       "type": "range",
@@ -1808,20 +1760,8 @@
       "default": true
     },
     {
-      "type": "range",
-      "id": "desktop_width_percent",
-      "label": "Desktop width",
-      "min": 50,
-      "max": 100,
-      "step": 5,
-      "unit": "%",
-      "default": 100
-    },
-    {
-      "type": "product_list",
-      "id": "products",
-      "label": "Products",
-      "limit": 5
+      "type": "header",
+      "content": "Fonts"
     },
     {
       "type": "font_picker",
@@ -1836,8 +1776,17 @@
       "default": "montserrat_n4"
     },
     {
+      "type": "range",
+      "id": "body_weight",
+      "label": "Body font weight",
+      "min": 300,
+      "max": 700,
+      "step": 100,
+      "default": 400
+    },
+    {
       "type": "header",
-      "content": "Rich text content"
+      "content": "Location / Eyebrow"
     },
     {
       "type": "richtext",
@@ -1846,34 +1795,49 @@
       "default": "<p>Featured product</p>"
     },
     {
+      "type": "range",
+      "id": "location_size",
+      "label": "Location size",
+      "min": 12,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "location_weight",
+      "label": "Location weight",
+      "min": 300,
+      "max": 700,
+      "step": 100,
+      "default": 300
+    },
+    {
+      "type": "color",
+      "id": "location_color",
+      "label": "Location color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "location_dash_color",
+      "label": "Location dash color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Main heading"
+    },
+    {
       "type": "richtext",
       "id": "heading_richtext",
       "label": "Main heading override"
     },
     {
-      "type": "richtext",
-      "id": "description_richtext",
-      "label": "Subheading override"
-    },
-    {
-      "type": "richtext",
-      "id": "button_richtext",
-      "label": "Button label",
-      "default": "<p>Shop product</p>"
-    },
-    {
-      "type": "richtext",
-      "id": "card_richtext",
-      "label": "Card title override"
-    },
-    {
-      "type": "header",
-      "content": "Typography"
-    },
-    {
       "type": "range",
       "id": "copy_width",
-      "label": "Text width",
+      "label": "Text block width",
       "min": 250,
       "max": 600,
       "step": 25,
@@ -1900,23 +1864,19 @@
       "default": 700
     },
     {
-      "type": "range",
-      "id": "location_size",
-      "label": "Location size",
-      "min": 12,
-      "max": 30,
-      "step": 1,
-      "unit": "px",
-      "default": 18
+      "type": "color",
+      "id": "heading_color",
+      "label": "Main heading color",
+      "default": "#FFFFFF"
     },
     {
-      "type": "range",
-      "id": "location_weight",
-      "label": "Location weight",
-      "min": 300,
-      "max": 700,
-      "step": 100,
-      "default": 300
+      "type": "header",
+      "content": "Subheading / Description"
+    },
+    {
+      "type": "richtext",
+      "id": "description_richtext",
+      "label": "Subheading override"
     },
     {
       "type": "range",
@@ -1938,42 +1898,21 @@
       "default": 400
     },
     {
-      "type": "range",
-      "id": "card_title_size",
-      "label": "Card title size",
-      "min": 12,
-      "max": 32,
-      "step": 1,
-      "unit": "px",
-      "default": 20
+      "type": "color",
+      "id": "description_color",
+      "label": "Subheading color",
+      "default": "rgba(255, 255, 255, 0.75)",
+      "alpha": true
     },
     {
-      "type": "range",
-      "id": "card_weight",
-      "label": "Card title weight",
-      "min": 400,
-      "max": 900,
-      "step": 100,
-      "default": 700
+      "type": "header",
+      "content": "Shop button"
     },
     {
-      "type": "range",
-      "id": "price_size",
-      "label": "Price size",
-      "min": 10,
-      "max": 22,
-      "step": 1,
-      "unit": "px",
-      "default": 14
-    },
-    {
-      "type": "range",
-      "id": "price_weight",
-      "label": "Price weight",
-      "min": 300,
-      "max": 700,
-      "step": 100,
-      "default": 400
+      "type": "richtext",
+      "id": "button_richtext",
+      "label": "Button label",
+      "default": "<p>Shop product</p>"
     },
     {
       "type": "range",
@@ -1995,6 +1934,136 @@
       "default": 500
     },
     {
+      "type": "color",
+      "id": "shop_btn_bg_color",
+      "label": "Shop button background",
+      "alpha": true
+    },
+    {
+      "type": "color",
+      "id": "shop_btn_text_color",
+      "label": "Shop button text & border",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "shop_btn_hover_bg_color",
+      "label": "Shop button hover background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "shop_btn_hover_text_color",
+      "label": "Shop button hover text",
+      "default": "#111111"
+    },
+    {
+      "type": "header",
+      "content": "Bookmark button"
+    },
+    {
+      "type": "color",
+      "id": "bookmark_bg_color",
+      "label": "Bookmark button background",
+      "default": "#ECAB32"
+    },
+    {
+      "type": "color",
+      "id": "bookmark_icon_color",
+      "label": "Bookmark button icon",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Slider cards"
+    },
+    {
+      "type": "range",
+      "id": "card_loc_size",
+      "label": "Card location size",
+      "min": 9,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 11
+    },
+    {
+      "type": "range",
+      "id": "card_loc_weight",
+      "label": "Card location weight",
+      "min": 300,
+      "max": 700,
+      "step": 100,
+      "default": 400
+    },
+    {
+      "type": "color",
+      "id": "card_loc_color",
+      "label": "Card location color",
+      "default": "rgba(255, 255, 255, 0.85)",
+      "alpha": true
+    },
+    {
+      "type": "color",
+      "id": "card_dash_color",
+      "label": "Card dash color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "label": "Card title size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "card_weight",
+      "label": "Card title weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "default": 700
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Card title color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "price_size",
+      "label": "Price size",
+      "min": 10,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "price_weight",
+      "label": "Price weight",
+      "min": 300,
+      "max": 700,
+      "step": 100,
+      "default": 400
+    },
+    {
+      "type": "color",
+      "id": "card_price_color",
+      "label": "Card price color",
+      "default": "#ECAB32"
+    },
+    {
+      "type": "header",
+      "content": "Counter & controls"
+    },
+    {
       "type": "range",
       "id": "counter_size",
       "label": "Counter size",
@@ -2003,6 +2072,71 @@
       "step": 2,
       "unit": "px",
       "default": 42
+    },
+    {
+      "type": "range",
+      "id": "counter_weight",
+      "label": "Counter weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "default": 700
+    },
+    {
+      "type": "color",
+      "id": "counter_color",
+      "label": "Counter color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "arrow_color",
+      "label": "Arrow icon color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "arrow_border_color",
+      "label": "Arrow border color",
+      "default": "rgba(255, 255, 255, 0.55)",
+      "alpha": true
+    },
+    {
+      "type": "color",
+      "id": "arrow_bg_color",
+      "label": "Arrow background",
+      "alpha": true
+    },
+    {
+      "type": "color",
+      "id": "arrow_hover_bg_color",
+      "label": "Arrow hover background",
+      "default": "rgba(255, 255, 255, 0.12)",
+      "alpha": true
+    },
+    {
+      "type": "color",
+      "id": "arrow_hover_border_color",
+      "label": "Arrow hover border color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#ECAB32"
+    },
+    {
+      "type": "color",
+      "id": "layout_bar_color",
+      "label": "Layout / progress bar fill",
+      "default": "#ECAB32"
+    },
+    {
+      "type": "color",
+      "id": "layout_bar_track_color",
+      "label": "Layout bar track color",
+      "alpha": true
     },
     {
       "type": "header",
