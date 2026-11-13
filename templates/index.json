@@ -35,7 +35,7 @@
             "show_eyebrow": true,
             "eyebrow": "<p>&nbsp;A thoughtful collection</p>",
             "eyebrow_size": 14,
-            "eyebrow_color": "#58614C",
+            "eyebrow_color": "#5B6344",
             "show_heading": true,
             "heading": "<h1>Born From <strong>Bamboo</strong><br/>Made For <strong>Baby</strong></h1>",
             "heading_size": 64,
@@ -44,7 +44,7 @@
             "show_subheading": true,
             "subheading": "<p><strong>Ultra soft. Naturally breathable.</strong></p>",
             "subheading_size": 20,
-            "subheading_color": "#58614C",
+            "subheading_color": "#5B6344",
             "show_context": true,
             "show_context_mobile": false,
             "context": "<p><strong>Discover considered essentials, made to bring a little more meaning to every day.</strong></p>",
@@ -651,6 +651,7 @@
       "block_order": [
         "ai_gen_block_3f4e3bc_bBwMcb"
       ],
+      "name": "Product collection section",
       "settings": {
         "content_direction": "column",
         "vertical_on_mobile": true,
