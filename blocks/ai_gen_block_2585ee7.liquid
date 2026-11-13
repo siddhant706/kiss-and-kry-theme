@@ -825,6 +825,20 @@
     updateParallax();
   }
   {%- endif -%}
+
+  // In-page CTA: scroll to the section without adding #id to the URL (the href still works without JS)
+  const cta = hero.querySelector('.ai-cover-{{ ai_gen_id }}__button[href^="#"]');
+  if (cta) {
+    cta.addEventListener('click', (event) => {
+      const target = document.getElementById(decodeURIComponent(cta.getAttribute('href').slice(1)));
+      if (!target) return;
+      event.preventDefault();
+      target.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        block: 'start',
+      });
+    });
+  }
 })();
 </script>
 
